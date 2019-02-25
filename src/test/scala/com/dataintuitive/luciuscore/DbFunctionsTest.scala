@@ -42,5 +42,5 @@ class DbFunctionsTest extends FlatSpec with BaseSparkContextSpec{
     val y: RankVector = Array.fill(4){scala.util.Random.nextInt(10).asInstanceOf[Double]}
     assert(queryDbRow(newDbRow, x, y).get._2.size === 2)
   }
-    
+
 }
