@@ -41,7 +41,7 @@ object BinningFunctions {
     * @return list of squares defined by the (x, y) coordinates of their vertices
     */
   def generateSquares(xValues: List[Double], yValues: List[Double],
-                      partitionNum: Int): List[List[(Double, Double)]] = {
+                      partitionNum: Int): List[List[List[Double]]] = {
     val xStepSize = distance(xValues.min, xValues.max)/partitionNum
     val yStepSize = distance(yValues.min, yValues.max)/partitionNum
     val xSteps = xValues.min until xValues.max by xStepSize
@@ -49,9 +49,9 @@ object BinningFunctions {
     val xSlide = xValues.iterator.sliding(2).toList
     val ySlide = yValues.iterator.sliding(2).toList
     val squareList = xSlide.map{xTuple =>
-      ySlide.flatMap{
-        yTuple => xTuple.flatMap(xCoord => yTuple.map(yCoord => (xCoord, yCoord)))}
-    }
+      ySlide.map{
+        yTuple => xTuple.flatMap(xCoord => yTuple.map(yCoord => List(xCoord, yCoord))).toList}
+    }.flatten
     squareList
   }
 
