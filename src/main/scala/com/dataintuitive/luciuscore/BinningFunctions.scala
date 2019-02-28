@@ -1,6 +1,8 @@
 package com.dataintuitive.luciuscore
 
-import scala.math.{sqrt, pow}
+import com.sun.javaws.exceptions.InvalidArgumentException
+
+import scala.math.{pow, sqrt, abs}
 
 object BinningFunctions {
 
@@ -41,17 +43,22 @@ object BinningFunctions {
     * @return list of squares defined by the (x, y) coordinates of their vertices
     */
   def generateSquares(xValues: List[Double], yValues: List[Double],
-                      partitionNum: Int): List[List[List[Double]]] = {
-    val xStepSize = distance(xValues.min, xValues.max)/partitionNum
-    val yStepSize = distance(yValues.min, yValues.max)/partitionNum
-    val xSteps = xValues.min until xValues.max by xStepSize
-    val ySteps= yValues.min until yValues.max by yStepSize
-    val xSlide = xValues.iterator.sliding(2).toList
-    val ySlide = yValues.iterator.sliding(2).toList
-    val squareList = xSlide.map{xTuple =>
-      ySlide.map{
-        yTuple => xTuple.flatMap(xCoord => yTuple.map(yCoord => List(xCoord, yCoord))).toList}
-    }.flatten
+                      squareNum: Int): List[List[List[Double]]] = {
+    if (squareNum == 0) {throw new IllegalArgumentException("Can not construct 0 squares.")}
+    val (xStepSize, yStepSize) = if (squareNum == 1) {
+      (abs(xValues.max - xValues.min), abs(yValues.max - yValues.min))
+    } else {
+      (abs(xValues.max - xValues.min)/squareNum-1,  abs(xValues.max - xValues.min)/squareNum-1)
+    }
+    val xSteps = xValues.min to xValues.max by xStepSize
+    val ySteps = yValues.min to yValues.max by yStepSize
+    val xSlide = xSteps.iterator.sliding(2).toList
+    val ySlide = ySteps.iterator.sliding(2).toList
+    val squareList = xSlide.flatMap { xTuple =>
+      ySlide.map {
+        yTuple => xTuple.flatMap(xCoord => yTuple.map(yCoord => List(xCoord, yCoord))).toList
+      }
+    }
     squareList
   }
 
