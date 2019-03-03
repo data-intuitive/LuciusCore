@@ -11,9 +11,8 @@ object BinningFunctions {
     * colored by how many points fall within it, in order to visualise very dense/large datasets.
     */
 
-  def distance(min: Double, max: Double): Double = {
-    sqrt(pow(min, 2) + pow(max, 2))
-  }
+  case class Coordinate(x: Double, y: Double)
+  case class Square(leftBottom: Double, leftTop: Double, rightBottom: Double, rightTop: Double)
 
   /**
     * Checks if a point is inside an n-dimensional cube whose edges are strictly aligned with the axes
@@ -34,32 +33,39 @@ object BinningFunctions {
     }
   }
 
+  def listsToTuples(xValues: List[Double], yValues: List[Double]): List[Coordinate] = {
+    require(xValues.size == yValues.size, "Must be an x for every y.")
+    (xValues, yValues).zipped.map(Coordinate)
+  }
+
+  def tuplesToLists(XY: List[Coordinate]): (List[Double], List[Double]) = {
+    XY.unzip{case Coordinate(x, y) => (x, y)}
+  }
+
+  def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
+
+  }
+
   /**
-    * Generates a list of all the smallest possible squares in a 2D square coordinate space
-    * * x and y have to be equal lengths
+    * Generates a list of all the squares in a 2D square coordinate space
+    * x and y have to be equal lengths
     * @param xValues
     * @param yValues
-    * @param partitionNum number of bins to partition into
-    * @return list of squares defined by the (x, y) coordinates of their vertices
+    * @param partitionNum number of intervals to slice each dimension into
+    * @return list of squares, themselves lists, defined by the (x, y) coordinates of their vertices
     */
-  def generateSquares(xValues: List[Double], yValues: List[Double],
-                      squareNum: Int): List[List[List[Double]]] = {
-    if (squareNum == 0) {throw new IllegalArgumentException("Can not construct 0 squares.")}
-    val (xStepSize, yStepSize) = if (squareNum == 1) {
-      (abs(xValues.max - xValues.min), abs(yValues.max - yValues.min))
-    } else {
-      (abs(xValues.max - xValues.min)/squareNum-1,  abs(xValues.max - xValues.min)/squareNum-1)
+  def generateBottomLeftAndTopRight(xValues: List[Double], yValues: List[Double],
+                      partitionNum: Int): List[Seq[(Double, Double)]] = {
+    if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
+    val (xStepSize, yStepSize) =
+      (abs(xValues.max - xValues.min)/partitionNum,  abs(xValues.max - xValues.min)/partitionNum)
+    val (xSteps, ySteps) = (xValues.min to xValues.max by xStepSize, yValues.min to yValues.max by yStepSize)
+    if (!xSteps.contains(xValues.max) || !ySteps.contains(yValues.max)) throw new ArithmeticException{
+      "NumericRange is not inclusive as expected due to floating point arithmetic errors. Try a different " +
+      "partition number."
     }
-    val xSteps = xValues.min to xValues.max by xStepSize
-    val ySteps = yValues.min to yValues.max by yStepSize
-    val xSlide = xSteps.iterator.sliding(2).toList
-    val ySlide = ySteps.iterator.sliding(2).toList
-    val squareList = xSlide.flatMap { xTuple =>
-      ySlide.map {
-        yTuple => xTuple.flatMap(xCoord => yTuple.map(yCoord => List(xCoord, yCoord))).toList
-      }
-    }
-    squareList
+    val (xSlide, ySlide) = (xSteps.iterator.sliding(2).toList, ySteps.iterator.sliding(2).toList)
+    xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
   }
 
 
