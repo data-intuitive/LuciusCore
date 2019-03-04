@@ -4,6 +4,7 @@ import org.scalatest.FlatSpec
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.Matchers._
 import com.dataintuitive.luciuscore.BinningFunctions._
+import scala.math.pow
 
 import scala.math.abs
 
@@ -11,12 +12,6 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
 
   val X = List(BigDecimal(-1.0), BigDecimal(0.0), BigDecimal(1.0), BigDecimal(2.5))
   val Y = List(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0))
-  /**
-  "generateSquares function" should "create a list of squares, themselves lists of length 4, " +
-    "defined by their vertices, which should be x, y coordinate tuples" in {
-    assert(generateSquares(X, Y, 1) ==
-      List(List(List(-1.0, -0.5), List(-1.0, 4.0), List(2.5, -0.5), List(2.5, 4.0))))
-  }*/
 
   "listsToTuples" should "correctly convert X vector and Y vector to (X, Y)" in {
     assert(listsToTuples(X, Y) == List(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
@@ -44,11 +39,12 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
       Coordinate(BigDecimal(0.75), BigDecimal(-1.0)), Coordinate(BigDecimal(0.75), BigDecimal(0.75)))
   }
 
-  val incompleteSquares = generateBottomLeftAndTopRight(X, Y, 5)
+  val partitions = 2
+  val incompleteSquares = generateBottomLeftAndTopRight(X, Y, partitions)
   incompleteSquares shouldBe a [List[_]]
-
   val completeSquares = incompleteSquares.map(twoCoordinates => imputeTopLeftAndBottomRight(twoCoordinates(0), twoCoordinates(1)))
   completeSquares shouldBe a [List[_]]
   completeSquares.head shouldBe a [Square]
+  completeSquares.size shouldBe pow(2, partitions)
 
 }

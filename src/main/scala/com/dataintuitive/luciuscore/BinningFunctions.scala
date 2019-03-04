@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import scala.math.BigDecimal._
+
 
 object BinningFunctions {
 
