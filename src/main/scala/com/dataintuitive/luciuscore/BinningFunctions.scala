@@ -1,8 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.sun.javaws.exceptions.InvalidArgumentException
-
-import scala.math.{pow, sqrt, abs}
+import scala.math.BigDecimal._
 
 object BinningFunctions {
 
@@ -11,8 +9,8 @@ object BinningFunctions {
     * colored by how many points fall within it, in order to visualise very dense/large datasets.
     */
 
-  case class Coordinate(x: Double, y: Double)
-  case class Square(leftBottom: Double, leftTop: Double, rightBottom: Double, rightTop: Double)
+  case class Coordinate(x: BigDecimal, y: BigDecimal)
+  case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate)
 
   /**
     * Checks if a point is inside an n-dimensional cube whose edges are strictly aligned with the axes
@@ -20,7 +18,7 @@ object BinningFunctions {
     * @param hypercubeEdges
     * @return
     */
-  def isInsideAxisAlignedHypercube(point: List[Double], hypercubeVertices: List[List[Double]]): Boolean = {
+  def isInsideAxisAlignedHypercube(point: List[BigDecimal], hypercubeVertices: List[List[BigDecimal]]): Boolean = {
     val dimensionIndex = point.indices
     val verticesByDimension = dimensionIndex.map(index => hypercubeVertices.map{x => x(index)})
     val extrema = verticesByDimension.map(x => (x.min, x.max))
@@ -33,17 +31,13 @@ object BinningFunctions {
     }
   }
 
-  def listsToTuples(xValues: List[Double], yValues: List[Double]): List[Coordinate] = {
+  def listsToTuples(xValues: List[BigDecimal], yValues: List[BigDecimal]): List[Coordinate] = {
     require(xValues.size == yValues.size, "Must be an x for every y.")
     (xValues, yValues).zipped.map(Coordinate)
   }
 
-  def tuplesToLists(XY: List[Coordinate]): (List[Double], List[Double]) = {
+  def tuplesToLists(XY: List[Coordinate]): (List[BigDecimal], List[BigDecimal]) = {
     XY.unzip{case Coordinate(x, y) => (x, y)}
-  }
-
-  def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
-
   }
 
   /**
@@ -54,18 +48,22 @@ object BinningFunctions {
     * @param partitionNum number of intervals to slice each dimension into
     * @return list of squares, themselves lists, defined by the (x, y) coordinates of their vertices
     */
-  def generateBottomLeftAndTopRight(xValues: List[Double], yValues: List[Double],
-                      partitionNum: Int): List[Seq[(Double, Double)]] = {
+  def generateBottomLeftAndTopRight(xValues: List[BigDecimal], yValues: List[BigDecimal],
+                      partitionNum: BigDecimal): List[Seq[Coordinate]] = {
     if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
+    val (xDiff, yDiff) = (xValues.max - xValues.min, xValues.max - xValues.min)
     val (xStepSize, yStepSize) =
-      (abs(xValues.max - xValues.min)/partitionNum,  abs(xValues.max - xValues.min)/partitionNum)
-    val (xSteps, ySteps) = (xValues.min to xValues.max by xStepSize, yValues.min to yValues.max by yStepSize)
-    if (!xSteps.contains(xValues.max) || !ySteps.contains(yValues.max)) throw new ArithmeticException{
-      "NumericRange is not inclusive as expected due to floating point arithmetic errors. Try a different " +
-      "partition number."
-    }
-    val (xSlide, ySlide) = (xSteps.iterator.sliding(2).toList, ySteps.iterator.sliding(2).toList)
-    xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
+      (xDiff.abs/partitionNum, yDiff.abs/partitionNum)
+    val (xSteps, ySteps) = (xValues.min to xValues.max by xStepSize toList, yValues.min to yValues.max by yStepSize toList)
+    val xStepsSafe = if (!xSteps.contains(xValues.max)) xSteps.init ::: List(xValues.max) else xSteps
+    val yStepsSafe = if (!ySteps.contains(yValues.max)) ySteps.init ::: List(yValues.max) else ySteps
+    val (xSlide, ySlide) = (xStepsSafe.iterator.sliding(2).toList, yStepsSafe.iterator.sliding(2).toList)
+    val asLists = xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
+    asLists.map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)))
+  }
+
+  def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
+    Square(bottomLeft, Coordinate(bottomLeft.x, topRight.y), Coordinate(topRight.x, bottomLeft.y), topRight)
   }
 
 
