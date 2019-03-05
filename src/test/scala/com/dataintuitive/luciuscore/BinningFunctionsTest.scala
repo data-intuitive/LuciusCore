@@ -22,10 +22,11 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
 
   "generateBottomLeftAndTopRight" should "correctly return the coordinates of the bottom left and top right " +
     "corners of the smallest set of squares" in {
-    // lower than 5 partitions will generate a non-inclusive range due to arithmetic errors
     assert(generateBottomLeftAndTopRight(X, Y, 2) ==
-      List(Seq(Coordinate(-1.0, -0.5), Coordinate(0.75, 1.25)), Seq(Coordinate(-1.0, 1.25), Coordinate(0.75, 4.00)),
-        Seq(Coordinate(0.75, -0.5), Coordinate(2.5, 1.25)), Seq(Coordinate(0.75, 1.25), Coordinate(2.5, 4.00))))
+      List(List(Coordinate(-1.0,-0.5), Coordinate(0.75,1.75)),
+        List(Coordinate(-1.0,1.75), Coordinate(0.75,4.00)),
+        List(Coordinate(0.75,-0.5), Coordinate(2.50,1.75)),
+        List(Coordinate(0.75,1.75), Coordinate(2.50,4.00))))
   }
 
   "imputeTopLeftAndBottomRight" should "correctly impute a simple square" in {
@@ -50,6 +51,14 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
     assert(centroidMapper(List(square1, square2)) == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
   }
 
+  "generateSquares" should "correctly generate squares" in {
+    val squares = generateSquares(X, Y, 2)
+    assert(squares == List(
+      Square(Coordinate(-1.0,-0.5),Coordinate(-1.0,1.75),Coordinate(0.75,-0.5),Coordinate(0.75,1.75)),
+      Square(Coordinate(-1.0,1.75),Coordinate(-1.0,4.00),Coordinate(0.75,1.75),Coordinate(0.75,4.00)),
+      Square(Coordinate(0.75,-0.5),Coordinate(0.75,1.75),Coordinate(2.50,-0.5),Coordinate(2.50,1.75)),
+      Square(Coordinate(0.75,1.75),Coordinate(0.75,4.00),Coordinate(2.50,1.75),Coordinate(2.50,4.00))))
+  }
 
 
 }

@@ -43,7 +43,7 @@ object BinningFunctions {
   def generateBottomLeftAndTopRight(xValues: List[BigDecimal], yValues: List[BigDecimal],
                       partitionNum: BigDecimal): List[Seq[Coordinate]] = {
     if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
-    val (xDiff, yDiff) = (xValues.max - xValues.min, xValues.max - xValues.min)
+    val (xDiff, yDiff) = (xValues.max - xValues.min, yValues.max - yValues.min)
     val (xStepSize, yStepSize) =
       (xDiff.abs/partitionNum, yDiff.abs/partitionNum)
     val (xSteps, ySteps) = (xValues.min to xValues.max by xStepSize toList, yValues.min to yValues.max by yStepSize toList)
@@ -58,14 +58,16 @@ object BinningFunctions {
     Square(bottomLeft, Coordinate(bottomLeft.x, topRight.y), Coordinate(topRight.x, bottomLeft.y), topRight)
   }
 
+  def generateSquares(xValues: List[BigDecimal], yValues: List[BigDecimal], partitionNum: BigDecimal): List[Square] = {
+    generateBottomLeftAndTopRight(xValues, yValues, partitionNum).map(incompleteSquare =>
+      imputeTopLeftAndBottomRight(incompleteSquare.head, incompleteSquare.last))
+  }
+
   def centroidMapper(squares: List[Square]): Map[Coordinate, Square] = {
     val centroidAndSquares:Map[Coordinate, Square] = squares.map(square =>
       (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
         square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))(breakOut)
     centroidAndSquares
   }
-
-
-
 
 }
