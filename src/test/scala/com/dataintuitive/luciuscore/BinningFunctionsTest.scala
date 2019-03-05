@@ -4,9 +4,6 @@ import org.scalatest.FlatSpec
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.Matchers._
 import com.dataintuitive.luciuscore.BinningFunctions._
-import scala.math.pow
-
-import scala.math.abs
 
 class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
 
@@ -34,9 +31,9 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
   "imputeTopLeftAndBottomRight" should "correctly impute a simple square" in {
     val bottomLeft = Coordinate(BigDecimal(-1.0), BigDecimal(-1.0))
     val topRight = Coordinate(BigDecimal(0.75), BigDecimal(0.75))
-    imputeTopLeftAndBottomRight(bottomLeft, topRight) ==
+    assert(imputeTopLeftAndBottomRight(bottomLeft, topRight) ==
       Square(Coordinate(BigDecimal(-1.0), BigDecimal(-1.0)), Coordinate(BigDecimal(-1.0), BigDecimal(0.75)),
-      Coordinate(BigDecimal(0.75), BigDecimal(-1.0)), Coordinate(BigDecimal(0.75), BigDecimal(0.75)))
+      Coordinate(BigDecimal(0.75), BigDecimal(-1.0)), Coordinate(BigDecimal(0.75), BigDecimal(0.75))))
   }
 
   val partitions = 2
@@ -45,6 +42,14 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
   val completeSquares = incompleteSquares.map(twoCoordinates => imputeTopLeftAndBottomRight(twoCoordinates(0), twoCoordinates(1)))
   completeSquares shouldBe a [List[_]]
   completeSquares.head shouldBe a [Square]
-  completeSquares.size shouldBe pow(2, partitions)
+  completeSquares.size shouldBe 4
+
+  "centroidMapper" should "correctly create a Map of square centers and the associated squares" in {
+    val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
+    val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
+    assert(centroidMapper(List(square1, square2)) == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
+  }
+
+
 
 }

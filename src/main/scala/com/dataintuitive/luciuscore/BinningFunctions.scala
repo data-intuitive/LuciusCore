@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-
+import scala.collection.breakOut
 
 object BinningFunctions {
 
@@ -40,14 +40,6 @@ object BinningFunctions {
     XY.unzip{case Coordinate(x, y) => (x, y)}
   }
 
-  /**
-    * Generates a list of all the squares in a 2D square coordinate space
-    * x and y have to be equal lengths
-    * @param xValues
-    * @param yValues
-    * @param partitionNum number of intervals to slice each dimension into
-    * @return list of squares, themselves lists, defined by the (x, y) coordinates of their vertices
-    */
   def generateBottomLeftAndTopRight(xValues: List[BigDecimal], yValues: List[BigDecimal],
                       partitionNum: BigDecimal): List[Seq[Coordinate]] = {
     if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
@@ -65,6 +57,15 @@ object BinningFunctions {
   def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
     Square(bottomLeft, Coordinate(bottomLeft.x, topRight.y), Coordinate(topRight.x, bottomLeft.y), topRight)
   }
+
+  def centroidMapper(squares: List[Square]): Map[Coordinate, Square] = {
+    val centroidAndSquares:Map[Coordinate, Square] = squares.map(square =>
+      (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
+        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))(breakOut)
+    centroidAndSquares
+  }
+
+
 
 
 }
