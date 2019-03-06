@@ -32,6 +32,16 @@ object BinningFunctions {
     }
   }
 
+  def isInsideSquare(point: Coordinate, square: Square): Boolean = {
+    val (xSquare, ySquare) = squareToXY(square)
+    if ((xSquare.min <= point.x && point.x <= xSquare.max) && (ySquare.min <= point.y && point.y <= ySquare.max)) true
+    else false
+  }
+
+  def squareToXY(square: Square): (List[BigDecimal], List[BigDecimal]) = {
+    (List(square.leftBottom.x, square.rightTop.x), List(square.leftBottom.y, square.rightTop.y))
+  }
+
   def listsToTuples(xValues: List[BigDecimal], yValues: List[BigDecimal]): List[Coordinate] = {
     require(xValues.size == yValues.size, "Must be an x for every y.")
     (xValues, yValues).zipped.map(Coordinate)
@@ -77,9 +87,15 @@ object BinningFunctions {
         square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))
   }
 
-  def whichSquare(aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]): (Coordinate, Square) = {
-    squaresMap.keysIterator
-    (Coordinate(0,0), Square(Coordinate(0, 0),Coordinate(0, 0),Coordinate(0,0),Coordinate(0,0)))
+  def whichSquare(aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]): (Coordinate, Option[Square]) = {
+    val matchingSquareKeyList = squaresMap.keysIterator.takeWhile(square =>
+      isInsideSquare(aCoordinate, squaresMap(square))).toList
+    if (matchingSquareKeyList.size > 1) throw new IllegalArgumentException("Point belonging to more than one square!")
+    //TODO: define a proper Coordinate and Square classes which include a None coordinate definition to avoid this?
+    // otherwise this is a complete mess
+    val matchingSquareKey = matchingSquareKeyList.headOption.getOrElse(Coordinate(-999,-999))
+    (aCoordinate, Option(squaresMap.getOrElse(matchingSquareKey, Square(Coordinate(-999,-999), Coordinate(-999,-999),
+      Coordinate(-999,-999), Coordinate(-999,-999)))))
   }
 
 

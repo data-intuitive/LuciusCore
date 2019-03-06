@@ -67,6 +67,14 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
     assert(pairsRDD.collectAsMap == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
   }
 
+  "whichSquare" should "correctly determine a coordinate is inside a square" in {
+    val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
+    val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
+    val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
+    val coordinateInsideSquare1 = Coordinate(0, 1.5)
+    assert(whichSquare(coordinateInsideSquare1, squareCentroidMap) == (coordinateInsideSquare1, Option(square1)))
+  }
+
 
 
 }
