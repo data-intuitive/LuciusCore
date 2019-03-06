@@ -51,7 +51,7 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
     assert(centroidMapper(List(square1, square2)) == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
   }
 
-  "generateSquares" should "correctly generate squares" in {
+  "generateSquares" should "correctly generate squares when each dim has two partitions" in {
     val squares = generateSquares(X, Y, 2)
     assert(squares == List(
       Square(Coordinate(-1.0,-0.5),Coordinate(-1.0,1.75),Coordinate(0.75,-0.5),Coordinate(0.75,1.75)),
@@ -59,6 +59,14 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
       Square(Coordinate(0.75,-0.5),Coordinate(0.75,1.75),Coordinate(2.50,-0.5),Coordinate(2.50,1.75)),
       Square(Coordinate(0.75,1.75),Coordinate(0.75,4.00),Coordinate(2.50,1.75),Coordinate(2.50,4.00))))
   }
+
+  "centroidMapperRDD" should "correctly create a Map of square centers and the associated squares" in {
+    val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
+    val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
+    val pairsRDD = centroidMapperRDD(sc, List(square1, square2))
+    assert(pairsRDD.collectAsMap == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
+  }
+
 
 
 }

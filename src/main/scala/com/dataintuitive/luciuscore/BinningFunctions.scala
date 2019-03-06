@@ -1,6 +1,7 @@
 package com.dataintuitive.luciuscore
 
-import scala.collection.breakOut
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 
 object BinningFunctions {
 
@@ -64,10 +65,22 @@ object BinningFunctions {
   }
 
   def centroidMapper(squares: List[Square]): Map[Coordinate, Square] = {
-    val centroidAndSquares:Map[Coordinate, Square] = squares.map(square =>
+    Map(squares.map{square =>
       (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
-        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))(breakOut)
-    centroidAndSquares
+        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square)
+    }:_*)
   }
+
+  def centroidMapperRDD(sc: SparkContext, squares: List[Square]): RDD[(Coordinate, Square)] = {
+    val squaresRDD = sc.parallelize(squares)
+    squaresRDD.map(square => (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
+        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))
+  }
+
+  def whichSquare(aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]): (Coordinate, Square) = {
+    squaresMap.keysIterator
+    (Coordinate(0,0), Square(Coordinate(0, 0),Coordinate(0, 0),Coordinate(0,0),Coordinate(0,0)))
+  }
+
 
 }
