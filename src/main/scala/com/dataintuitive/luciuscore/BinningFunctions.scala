@@ -94,8 +94,11 @@ object BinningFunctions {
     //TODO: define a proper Coordinate and Square classes which include a None coordinate definition to avoid this?
     // otherwise this is a complete mess
     val matchingSquareKey = matchingSquareKeyList.headOption.getOrElse(Coordinate(-999,-999))
-    (aCoordinate, Option(squaresMap.getOrElse(matchingSquareKey, Square(Coordinate(-999,-999), Coordinate(-999,-999),
-      Coordinate(-999,-999), Coordinate(-999,-999)))))
+    try {
+    (aCoordinate, squaresMap.get(matchingSquareKey))
+    } catch {
+      case noSuchElementException: NoSuchElementException => (aCoordinate, None)
+    }
   }
 
 
