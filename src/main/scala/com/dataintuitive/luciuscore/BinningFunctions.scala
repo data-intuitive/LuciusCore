@@ -101,5 +101,19 @@ object BinningFunctions {
     }
   }
 
+  def whichSquareRDD(sc: SparkContext, aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]):
+  (Coordinate, Option[Square]) = {
+    val squaresMapRDD = sc.parallelize(squaresMap.toSeq)
+    val matchingSquareKeyList = squaresMapRDD.filter(square =>
+      isInsideSquare(aCoordinate, squaresMap(square._1))).collect
+    if (matchingSquareKeyList.size > 1) throw new IllegalArgumentException("Point belonging to more than one square!")
+    val matchingSquareKey:Coordinate = matchingSquareKeyList.headOption.get._1
+    try {
+      (aCoordinate, squaresMap.get(matchingSquareKey))
+    } catch {
+      case noSuchElementException: NoSuchElementException => (aCoordinate, None)
+    }
+  }
+
 
 }
