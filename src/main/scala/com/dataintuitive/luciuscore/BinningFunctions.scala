@@ -3,7 +3,7 @@ package com.dataintuitive.luciuscore
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
-object BinningFunctions {
+object BinningFunctions extends Serializable {
 
   /**
     * assumptions: We would like to reduce a scatter plot of many points to a heat map of squares, with each square
