@@ -12,6 +12,8 @@ object BinningFunctions {
 
   case class Coordinate(x: BigDecimal, y: BigDecimal)
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate)
+  case class SquareWithCentroid(centroid: Coordinate, square: Square)
+  case class BinnedCoordinate(theCoordinate: Coordinate, containingSquare: Square)
 
   /**
     * Checks if a point is inside an n-dimensional cube whose edges are strictly aligned with the axes
@@ -113,6 +115,15 @@ object BinningFunctions {
     } catch {
       case noSuchElementException: NoSuchElementException => (aCoordinate, None)
     }
+  }
+
+  def assignCoordinatesToSquares(sc: SparkContext, coordinateList: List[Coordinate],
+                                 squaresMap: Map[Coordinate, Square]): List[BinnedCoordinate] = {
+    val listOfBinnedCoordinates:List[(Coordinate, Option[Square])] =  coordinateList.map{
+      aCoordinate => whichSquareRDD(sc, aCoordinate, squaresMap)
+    }
+    listOfBinnedCoordinates.map(binnedCoordinateTuple =>
+      BinnedCoordinate(binnedCoordinateTuple._1, binnedCoordinateTuple._2.get))
   }
 
 
