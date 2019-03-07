@@ -12,7 +12,6 @@ object BinningFunctions extends Serializable {
 
   case class Coordinate(x: BigDecimal, y: BigDecimal)
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate)
-  case class SquareWithCentroid(centroid: Coordinate, square: Square)
   case class BinnedCoordinate(theCoordinate: Coordinate, containingSquare: Square)
 
   /**
@@ -104,26 +103,22 @@ object BinningFunctions extends Serializable {
   }
 
   def whichSquareRDD(sc: SparkContext, aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]):
-  (Coordinate, Option[Square]) = {
+  (Coordinate, Square) = {
     val squaresMapRDD = sc.parallelize(squaresMap.toSeq)
-    val matchingSquareKeyList = squaresMapRDD.filter(square =>
-      isInsideSquare(aCoordinate, squaresMap(square._1))).collect
-    if (matchingSquareKeyList.size > 1) throw new IllegalArgumentException("Point belonging to more than one square!")
-    val matchingSquareKey:Coordinate = matchingSquareKeyList.headOption.get._1
-    try {
-      (aCoordinate, squaresMap.get(matchingSquareKey))
-    } catch {
-      case noSuchElementException: NoSuchElementException => (aCoordinate, None)
-    }
+    val matchingSquareKeyList = squaresMapRDD.filter(square => isInsideSquare(aCoordinate, square._2)).collect
+    if (matchingSquareKeyList.length > 1) throw new IllegalArgumentException("Point belonging to more than one square!")
+    // this returns the centroid of the square with the square but what we want is the coordinate with the square
+    val MatchingSquare = matchingSquareKeyList.headOption.get
+    (aCoordinate, MatchingSquare._2)
   }
 
   def assignCoordinatesToSquares(sc: SparkContext, coordinateList: List[Coordinate],
                                  squaresMap: Map[Coordinate, Square]): List[BinnedCoordinate] = {
-    val listOfBinnedCoordinates:List[(Coordinate, Option[Square])] =  coordinateList.map{
+    val listOfBinnedCoordinates:List[(Coordinate, Square)] =  coordinateList.map{
       aCoordinate => whichSquareRDD(sc, aCoordinate, squaresMap)
     }
     listOfBinnedCoordinates.map(binnedCoordinateTuple =>
-      BinnedCoordinate(binnedCoordinateTuple._1, binnedCoordinateTuple._2.get))
+      BinnedCoordinate(binnedCoordinateTuple._1, binnedCoordinateTuple._2))
   }
 
 
