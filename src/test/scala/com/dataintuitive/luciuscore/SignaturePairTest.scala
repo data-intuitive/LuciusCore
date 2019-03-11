@@ -11,8 +11,8 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
   val Y = Vector(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0))
   val pair1 = new SignaturePair(X, Y)
 
-  "listsToTuples" should "correctly convert X vector and Y vector to (X, Y)" in {
-    assert(pair1.listsToTuples(X, Y) == Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
+  "SignaturePair primary constructor" should "correctly convert X vector and Y vector to (X, Y)" in {
+    assert(pair1.XY == Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
       Coordinate(1.0, 2.0), Coordinate(2.5, 4.0)))
   }
 
@@ -29,7 +29,7 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
   }
 
   "generateSquares" should "correctly generate squares when each dim has two partitions" in {
-    val squares = pair1.generateSquares(X, Y, 2)
+    val squares = pair1.generateSquares(X, Y, 2).get
     assert(squares == Vector(
       Square(Coordinate(-1.0,-0.5),Coordinate(-1.0,1.75),Coordinate(0.75,-0.5),Coordinate(0.75,1.75)),
       Square(Coordinate(-1.0,1.75),Coordinate(-1.0,4.00),Coordinate(0.75,1.75),Coordinate(0.75,4.00)),
@@ -44,28 +44,20 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
     assert(pairsRDD.collectAsMap == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
   }
 
-  "whichSquare" should "correctly determine a coordinate is inside a square" in {
-    val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
-    val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
-    val coordinateInsideSquare1 = Coordinate(0, 1.5)
-    assert(pair1.whichSquare(coordinateInsideSquare1, squareCentroidMap) == (coordinateInsideSquare1, Option(square1)))
-  }
-
   "whichSquare" should "gracefully return None if coordinate is outside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
     val coordinateOutsideSquare1 = Coordinate(-6, -9)
-    assert(pair1.whichSquare(coordinateOutsideSquare1, squareCentroidMap) == (coordinateOutsideSquare1, None))
+    assert(pair1.whichSquare(sc, coordinateOutsideSquare1, squareCentroidMap) == None)
   }
 
-  "whichSquareRDD" should "correctly determine a coordinate is inside a square" in {
+  "whichSquare" should "correctly determine a coordinate is inside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
     val coordinateInsideSquare1 = Coordinate(0, 1.5)
-    assert(pair1.whichSquareRDD(sc, coordinateInsideSquare1, squareCentroidMap) == (coordinateInsideSquare1, square1))
+    assert(pair1.whichSquare(sc, coordinateInsideSquare1, squareCentroidMap).get == (coordinateInsideSquare1, square1))
   }
 
   "assignCoordinatesToSquares" should "correctly assign a group of points to a group of squares" in {
