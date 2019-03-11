@@ -3,7 +3,7 @@ package com.dataintuitive.luciuscore
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
-object BinningFunctions extends Serializable {
+class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
 
   /**
     * assumptions: We would like to reduce a scatter plot of many points to a heat map of squares, with each square
@@ -11,6 +11,7 @@ object BinningFunctions extends Serializable {
     */
 
   case class Coordinate(x: BigDecimal, y: BigDecimal)
+  case class XY(XY: Vector[BigDecimal])
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate)
   case class BinnedCoordinate(theCoordinate: Coordinate, containingSquare: Square)
 
@@ -52,7 +53,7 @@ object BinningFunctions extends Serializable {
     XY.unzip{case Coordinate(x, y) => (x, y)}
   }
 
-  def generateBottomLeftAndTopRight(xValues: List[BigDecimal], yValues: List[BigDecimal],
+  private def generateBottomLeftAndTopRight(xValues: List[BigDecimal], yValues: List[BigDecimal],
                       partitionNum: BigDecimal): List[Seq[Coordinate]] = {
     if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
     val (xDiff, yDiff) = (xValues.max - xValues.min, yValues.max - yValues.min)
@@ -66,7 +67,7 @@ object BinningFunctions extends Serializable {
     asLists.map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)))
   }
 
-  def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
+  private def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
     Square(bottomLeft, Coordinate(bottomLeft.x, topRight.y), Coordinate(topRight.x, bottomLeft.y), topRight)
   }
 

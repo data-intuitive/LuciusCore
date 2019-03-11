@@ -1,11 +1,12 @@
 package com.dataintuitive.luciuscore
 
 import org.scalatest.FlatSpec
+import org.scalatest.PrivateMethodTester
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.Matchers._
-import com.dataintuitive.luciuscore.BinningFunctions._
+import com.dataintuitive.luciuscore.SignaturePair._
 
-class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
+class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec with PrivateMethodTester{
 
   val X = List(BigDecimal(-1.0), BigDecimal(0.0), BigDecimal(1.0), BigDecimal(2.5))
   val Y = List(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0))
@@ -22,7 +23,8 @@ class BinningFunctionsTest extends FlatSpec with BaseSparkContextSpec{
 
   "generateBottomLeftAndTopRight" should "correctly return the coordinates of the bottom left and top right " +
     "corners of the smallest set of squares" in {
-    assert(generateBottomLeftAndTopRight(X, Y, 2) ==
+    val BinningFuncs = new SignaturePair.
+    assert(PrivateMethod[BinningFunctions]('generateBottomLeftAndTopRight')(X, Y, 2) ==
       List(List(Coordinate(-1.0,-0.5), Coordinate(0.75,1.75)),
         List(Coordinate(-1.0,1.75), Coordinate(0.75,4.00)),
         List(Coordinate(0.75,-0.5), Coordinate(2.50,1.75)),
