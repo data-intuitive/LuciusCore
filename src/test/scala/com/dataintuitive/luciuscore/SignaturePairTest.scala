@@ -20,48 +20,6 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
     assert(pair1.tuplesToLists(Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
       Coordinate(1.0, 2.0), Coordinate(2.5, 4.0))) == (X, Y))
   }
-  /*
-  "generateBottomLeftAndTopRight" should "correctly return the coordinates of the bottom left and top right " +
-    "corners of the smallest set of squares" in {
-    val generateBottomLeftAndTopRight = PrivateMethod[Vector[Vector[Coordinate]]]('generateBottomLeftAndTopRight)
-    val res1 = SignaturePair invokePrivate generateBottomLeftAndTopRight(X, Y, BigDecimal(2.0))
-    assert(res1 ===
-      Vector(Vector(Coordinate(-1.0,-0.5), Coordinate(0.75,1.75)),
-        Vector(Coordinate(-1.0,1.75), Coordinate(0.75,4.00)),
-        Vector(Coordinate(0.75,-0.5), Coordinate(2.50,1.75)),
-        Vector(Coordinate(0.75,1.75), Coordinate(2.50,4.00))))
-  }
-
-  "generateBottomLeftAndTopRight" should "create a vector" in {
-    val partitions = BigDecimal(2.0)
-    val generateBottomLeftAndTopRight = PrivateMethod[Vector[Vector[Coordinate]]]('generateBottomLeftAndTopRight)
-    val incompleteSquares = SignaturePair invokePrivate generateBottomLeftAndTopRight(X, Y, partitions)
-    incompleteSquares shouldBe a [List[_]]
-  }
-
-
-  "imputeTopLeftAndBottomRight" should "correctly impute a simple square" in {
-    val imputeTopLeftAndBottomRight = PrivateMethod[Square]('imputeTopLeftAndBottomRight)
-    val bottomLeft = Coordinate(BigDecimal(-1.0), BigDecimal(-1.0))
-    val topRight = Coordinate(BigDecimal(0.75), BigDecimal(0.75))
-    val res1= SignaturePair invokePrivate imputeTopLeftAndBottomRight(bottomLeft, topRight)
-    assert(res1 ===
-      Square(Coordinate(BigDecimal(-1.0), BigDecimal(-1.0)), Coordinate(BigDecimal(-1.0), BigDecimal(0.75)),
-      Coordinate(BigDecimal(0.75), BigDecimal(-1.0)), Coordinate(BigDecimal(0.75), BigDecimal(0.75))))
-  }
-
-  "imputeTopLeftAndBottomRight" should "correctly impute squares" in {
-    val partitions = 2
-    val generateBottomLeftAndTopRight = PrivateMethod[Vector[Seq[Coordinate]]]('generateBottomLeftAndTopRight)
-    val incompleteSquares = SignaturePair invokePrivate generateBottomLeftAndTopRight(X, Y, partitions)
-    val imputeTopLeftAndBottomRight = PrivateMethod[Square]('imputeTopLeftAndBottomRight)
-    /*val completeSquares = incompleteSquares.map(twoCoordinates =>
-      SignaturePair invokePrivate imputeTopLeftAndBottomRight(twoCoordinates(0), twoCoordinates(1)))
-    completeSquares shouldBe a [List[_]]
-    completeSquares.head shouldBe a [Square]
-    completeSquares.size shouldBe 4*/
-  }
-  */
 
   "centroidMapper" should "correctly create a Map of square centers and the associated squares" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
