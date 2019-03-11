@@ -62,24 +62,21 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
         square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))
   }
 
-  def whichSquare(sc: SparkContext, aCoordinate: Coordinate, squaresMap: Map[Coordinate, Square]):
+  def whichSquare(aCoordinate: Coordinate, squares: Vector[Square]):
   Option[(Coordinate, Square)] = {
-    val squaresMapRDD = sc.parallelize(squaresMap.toSeq)
-    val matchingSquareKeyList = squaresMapRDD.filter(square => isInsideSquare(aCoordinate, square._2)).collect
-    if (matchingSquareKeyList.length != 1) None
+    val matchingSquares = squares.filter(isInsideSquare(aCoordinate, _))
+    if (matchingSquares.length != 1) None
     else Some {
-      val MatchingSquare = matchingSquareKeyList.headOption.get
-      (aCoordinate, MatchingSquare._2)
+      (aCoordinate, matchingSquares.head)
     }
   }
 
   def assignCoordinatesToSquares(sc: SparkContext, coordinateList: Vector[Coordinate],
-                                 squaresMap: Map[Coordinate, Square]): Vector[BinnedCoordinate] = {
-    val listOfBinnedCoordinates =  coordinateList.map{
-      aCoordinate => whichSquare(sc, aCoordinate, squaresMap)
-    }.map(_.get)
-    listOfBinnedCoordinates.map(binnedCoordinateTuple =>
-      BinnedCoordinate(binnedCoordinateTuple._1, binnedCoordinateTuple._2))
+                                 squares: Vector[Square]): Vector[BinnedCoordinate] = {
+    sc.parallelize(coordinateList).map{aCoordinate => whichSquare(aCoordinate, squares)}
+      .map(binnedCoordinateTuple =>
+      BinnedCoordinate(binnedCoordinateTuple.get._1, binnedCoordinateTuple.get._2))
+      .collect.toVector
   }
 
 }

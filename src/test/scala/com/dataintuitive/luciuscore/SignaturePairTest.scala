@@ -47,25 +47,22 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
   "whichSquare" should "gracefully return None if coordinate is outside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
     val coordinateOutsideSquare1 = Coordinate(-6, -9)
-    assert(pair1.whichSquare(sc, coordinateOutsideSquare1, squareCentroidMap) == None)
+    assert(pair1.whichSquare(coordinateOutsideSquare1, Vector(square1, square2)).isEmpty)
   }
 
   "whichSquare" should "correctly determine a coordinate is inside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
     val coordinateInsideSquare1 = Coordinate(0, 1.5)
-    assert(pair1.whichSquare(sc, coordinateInsideSquare1, squareCentroidMap).get == (coordinateInsideSquare1, square1))
+    assert(pair1.whichSquare(coordinateInsideSquare1, Vector(square1, square2)).get == (coordinateInsideSquare1, square1))
   }
 
   "assignCoordinatesToSquares" should "correctly assign a group of points to a group of squares" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    val squareCentroidMap = Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2)
     val coordList = Vector(Coordinate(0, 1.5), Coordinate(0, 0))
-    assert(pair1.assignCoordinatesToSquares(sc, coordList, squareCentroidMap) ==
+    assert(pair1.assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)) ==
       Vector(BinnedCoordinate(Coordinate(0,1.5),
         Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5))),
         BinnedCoordinate(Coordinate(0,0),
