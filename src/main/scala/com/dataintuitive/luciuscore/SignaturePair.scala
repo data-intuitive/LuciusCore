@@ -40,8 +40,8 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
     else false
   }
 
-  private def generateBottomLeftAndTopRight(xValues: Vector[BigDecimal], yValues: Vector[BigDecimal],
-                      partitionNum: BigDecimal): Vector[Vector[Coordinate]] = {
+  def generateSquares(xValues: Vector[BigDecimal], yValues: Vector[BigDecimal],
+                      partitionNum: BigDecimal): Vector[Square] = {
     if (partitionNum == 0) throw new IllegalArgumentException("Can not partition a dimension into 0 intervals.")
     val (xDiff, yDiff) = (xValues.max - xValues.min, yValues.max - yValues.min)
     val (xStepSize, yStepSize) =
@@ -51,17 +51,10 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
     val yStepsSafe = if (!ySteps.contains(yValues.max)) ySteps.init ::: List(yValues.max) else ySteps
     val (xSlide, ySlide) = (xStepsSafe.iterator.sliding(2).toVector, yStepsSafe.iterator.sliding(2).toVector)
     val asLists = xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
-    asLists.map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)).toVector)
-  }
-
-  private def imputeTopLeftAndBottomRight(bottomLeft: Coordinate, topRight: Coordinate): Square = {
-    Square(bottomLeft, Coordinate(bottomLeft.x, topRight.y), Coordinate(topRight.x, bottomLeft.y), topRight)
-  }
-
-  def generateSquares(xValues: Vector[BigDecimal], yValues: Vector[BigDecimal],
-                      partitionNum: BigDecimal): Vector[Square] = {
-    generateBottomLeftAndTopRight(xValues, yValues, partitionNum).map(incompleteSquare =>
-      imputeTopLeftAndBottomRight(incompleteSquare.head, incompleteSquare.last))
+    val incompleteSquares = asLists.map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)).toVector)
+    incompleteSquares.map(incompleteSquare =>
+      Square(incompleteSquare.head, Coordinate(incompleteSquare.head.x, incompleteSquare.last.y),
+        Coordinate(incompleteSquare.last.x, incompleteSquare.head.y), incompleteSquare.last))
   }
 
   def centroidMapper(squares: Vector[Square]): Map[Coordinate, Square] = {
