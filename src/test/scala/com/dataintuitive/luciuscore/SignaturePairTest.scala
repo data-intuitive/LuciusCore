@@ -62,11 +62,19 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val coordList = Vector(Coordinate(0, 1.5), Coordinate(0, 0))
-    assert(pair1.assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)) ==
-      Vector(BinnedCoordinate(Coordinate(0,1.5),
-        Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5))),
-        BinnedCoordinate(Coordinate(0,0),
-          Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)))))
+    assert(pair1.assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)).collect.toVector ==
+      Vector((Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5)), Coordinate(0,1.5)),
+        (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0,0))))
+  }
+
+  "squaresWithAllPoints" should "correctly aggregate every coordinate into vectors in their squares" in {
+    val squaresAndPoints = Vector((Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5)), Coordinate(0,1.5)),
+    (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0,0)),
+      (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0.01,0.01)))
+    val squaresAndPointsRDD = sc.parallelize(squaresAndPoints)
+    val res1 = pair1.squaresWithAllPoints(sc, squaresAndPointsRDD).collectAsMap
+    assert(res1 ==  Map(Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5)) -> Vector(Coordinate(0,1.5)),
+      Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)) -> Vector(Coordinate(0,0),Coordinate(0.01,0.01))))
   }
 
 }

@@ -11,7 +11,6 @@ object SignaturePair {
       (Vector(this.leftBottom.x, this.rightTop.x), Vector(this.leftBottom.y, this.rightTop.y))
     }
   }
-  case class BinnedCoordinate(theCoordinate: Coordinate, containingSquare: Square)
 }
 
 sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
@@ -72,11 +71,15 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
   }
 
   def assignCoordinatesToSquares(sc: SparkContext, coordinateList: Vector[Coordinate],
-                                 squares: Vector[Square]): Vector[BinnedCoordinate] = {
+                                 squares: Vector[Square]): RDD[(Square,Coordinate)] = {
     sc.parallelize(coordinateList).map{aCoordinate => whichSquare(aCoordinate, squares)}
-      .map(binnedCoordinateTuple =>
-      BinnedCoordinate(binnedCoordinateTuple.get._1, binnedCoordinateTuple.get._2))
-      .collect.toVector
+      .map(binnedCoordinateTuple => (binnedCoordinateTuple.get._2, binnedCoordinateTuple.get._1 ))
+  }
+
+  def squaresWithAllPoints(sc: SparkContext, binnedCoords: RDD[(Square, Coordinate)]): RDD[(Square, Vector[Coordinate])] = {
+    val addFunction = (vector1: Vector[Coordinate], coord: Coordinate) => vector1++Vector(coord)
+    val mergeFunction = (vector1: Vector[Coordinate], vector2: Vector[Coordinate]) => vector1++vector2
+    binnedCoords.aggregateByKey(Vector[Coordinate]())(addFunction, mergeFunction)
   }
 
 }
