@@ -5,7 +5,11 @@ import org.apache.spark.rdd.RDD
 
 
 object SignaturePair {
-  case class Coordinate(x: BigDecimal, y: BigDecimal)
+  case class Coordinate(x: BigDecimal, y: BigDecimal) {
+    def toTuple: (BigDecimal, BigDecimal) = {
+      (this.x, this.y)
+    }
+  }
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate) {
     def squareToXY: (Vector[BigDecimal], Vector[BigDecimal]) = {
       (Vector(this.leftBottom.x, this.rightTop.x), Vector(this.leftBottom.y, this.rightTop.y))
@@ -17,10 +21,6 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
 
   import SignaturePair._
   val XY: Vector[Coordinate] = (this.X, this.Y).zipped.map(Coordinate)
-
-  def tuplesToLists(XY: Vector[Coordinate]): (Vector[BigDecimal], Vector[BigDecimal]) = {
-    XY.unzip{case Coordinate(x, y) => (x, y)}
-  }
 
   def isInsideSquare(point: Coordinate, square: Square): Boolean = {
     val (xSquare, ySquare) = square.squareToXY

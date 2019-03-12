@@ -16,9 +16,10 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
       Coordinate(1.0, 2.0), Coordinate(2.5, 4.0)))
   }
 
-  "tuplesToLists" should "correctly transform (X, Y) into two vectors" in {
-    assert(pair1.tuplesToLists(Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
-      Coordinate(1.0, 2.0), Coordinate(2.5, 4.0))) == (X, Y))
+  "group of coordinates" should "correctly transform from (X, Y) into two vectors using toTuples" in {
+    val coordVec = Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
+      Coordinate(1.0, 2.0), Coordinate(2.5, 4.0))
+    assert(coordVec.map(_.toTuple).unzip == (X, Y))
   }
 
   "centroidMapper" should "correctly create a Map of square centers and the associated squares" in {
