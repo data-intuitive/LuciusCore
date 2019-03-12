@@ -22,11 +22,11 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
     assert(coordVec.map(_.toTuple).unzip == (X, Y))
   }
 
-  "centroidMapper" should "correctly create a Map of square centers and the associated squares" in {
+  "Square case class" should "correctly compute centers " in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    assert(pair1.centroidMapper(Vector(square1, square2)) ==
-      Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
+    assert(Vector(square1.center, square2.center) ==
+      Vector(Coordinate(-0.125, 1.625), Coordinate(-0.125, -0.125)))
   }
 
   "generateSquares" should "correctly generate squares when each dim has two partitions" in {

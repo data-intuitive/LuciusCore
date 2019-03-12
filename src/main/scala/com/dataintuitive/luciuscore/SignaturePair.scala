@@ -11,7 +11,9 @@ object SignaturePair {
     }
   }
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate) {
-    def squareToXY: (Vector[BigDecimal], Vector[BigDecimal]) = {
+    val center = Coordinate(this.leftBottom.x + (this.rightBottom.x-this.leftBottom.x)/2,
+      this.leftBottom.y + (this.leftTop.y - this.leftBottom.y)/2)
+    def toXY: (Vector[BigDecimal], Vector[BigDecimal]) = {
       (Vector(this.leftBottom.x, this.rightTop.x), Vector(this.leftBottom.y, this.rightTop.y))
     }
   }
@@ -23,7 +25,7 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
   val XY: Vector[Coordinate] = (this.X, this.Y).zipped.map(Coordinate)
 
   def isInsideSquare(point: Coordinate, square: Square): Boolean = {
-    val (xSquare, ySquare) = square.squareToXY
+    val (xSquare, ySquare) = square.toXY
     if ((xSquare.min <= point.x && point.x <= xSquare.max) &&
       (ySquare.min <= point.y && point.y <= ySquare.max)) true
     else false
@@ -47,19 +49,6 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
     }
   }
 
-  def centroidMapper(squares: Vector[Square]): Map[Coordinate, Square] = {
-    Map(squares.map{square =>
-      (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
-        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square)
-    }:_*)
-  }
-
-  def centroidMapperRDD(sc: SparkContext, squares: Vector[Square]): RDD[(Coordinate, Square)] = {
-    val squaresRDD = sc.parallelize(squares)
-    squaresRDD.map(square => (Coordinate(square.leftBottom.x + (square.rightBottom.x-square.leftBottom.x)/2,
-        square.leftBottom.y + (square.leftTop.y - square.leftBottom.y)/2), square))
-  }
-
   def whichSquare(aCoordinate: Coordinate, squares: Vector[Square]):
   Option[(Coordinate, Square)] = {
     val matchingSquares = squares.filter(isInsideSquare(aCoordinate, _))
@@ -71,7 +60,8 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
 
   def assignCoordinatesToSquares(sc: SparkContext, coordinateList: Vector[Coordinate],
                                  squares: Vector[Square]): RDD[(Square,Coordinate)] = {
-    sc.parallelize(coordinateList).map{aCoordinate => whichSquare(aCoordinate, squares)}
+    sc.parallelize(coordinateList)
+      .map{aCoordinate => whichSquare(aCoordinate, squares)}
       .map(binnedCoordinateTuple => (binnedCoordinateTuple.get._2, binnedCoordinateTuple.get._1 ))
   }
 
