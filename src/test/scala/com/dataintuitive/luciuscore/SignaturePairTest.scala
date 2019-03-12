@@ -38,32 +38,25 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
       Square(Coordinate(0.75,1.75),Coordinate(0.75,4.00),Coordinate(2.50,1.75),Coordinate(2.50,4.00))))
   }
 
-  "centroidMapperRDD" should "correctly create a Map of square centers and the associated squares" in {
-    val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
-    val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
-    val pairsRDD = pair1.centroidMapperRDD(sc, Vector(square1, square2))
-    assert(pairsRDD.collectAsMap == Map(Coordinate(-0.125, 1.625) -> square1, Coordinate(-0.125, -0.125) -> square2))
-  }
-
   "whichSquare" should "gracefully return None if coordinate is outside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val coordinateOutsideSquare1 = Coordinate(-6, -9)
-    assert(pair1.whichSquare(coordinateOutsideSquare1, Vector(square1, square2)).isEmpty)
+    assert(whichSquare(coordinateOutsideSquare1, Vector(square1, square2)).isEmpty)
   }
 
   "whichSquare" should "correctly determine a coordinate is inside a square" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val coordinateInsideSquare1 = Coordinate(0, 1.5)
-    assert(pair1.whichSquare(coordinateInsideSquare1, Vector(square1, square2)).get == (coordinateInsideSquare1, square1))
+    assert(whichSquare(coordinateInsideSquare1, Vector(square1, square2)).get == (coordinateInsideSquare1, square1))
   }
 
   "assignCoordinatesToSquares" should "correctly assign a group of points to a group of squares" in {
     val square1 = Square(Coordinate(-1.0, 0.75), Coordinate(-1.0, 2.5), Coordinate(0.75, 0.75), Coordinate(0.75, 2.5))
     val square2 = Square(Coordinate(-1.0, -1.0), Coordinate(-1.0, 0.75), Coordinate(0.75, -1.0), Coordinate(0.75, 0.75))
     val coordList = Vector(Coordinate(0, 1.5), Coordinate(0, 0))
-    assert(pair1.assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)).collect.toVector ==
+    assert(assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)).collect.toVector ==
       Vector((Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5)), Coordinate(0,1.5)),
         (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0,0))))
   }
@@ -73,7 +66,7 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
     (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0,0)),
       (Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)), Coordinate(0.01,0.01)))
     val squaresAndPointsRDD = sc.parallelize(squaresAndPoints)
-    val res1 = pair1.squaresWithAllPoints(sc, squaresAndPointsRDD).collectAsMap
+    val res1 = squaresWithAllPoints(sc, squaresAndPointsRDD).collectAsMap
     assert(res1 ==  Map(Square(Coordinate(-1.0,0.75),Coordinate(-1.0,2.5),Coordinate(0.75,0.75),Coordinate(0.75,2.5)) -> Vector(Coordinate(0,1.5)),
       Square(Coordinate(-1.0,-1.0),Coordinate(-1.0,0.75),Coordinate(0.75,-1.0),Coordinate(0.75,0.75)) -> Vector(Coordinate(0,0),Coordinate(0.01,0.01))))
   }

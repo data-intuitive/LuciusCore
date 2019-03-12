@@ -17,36 +17,12 @@ object SignaturePair {
       (Vector(this.leftBottom.x, this.rightTop.x), Vector(this.leftBottom.y, this.rightTop.y))
     }
   }
-}
-
-sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
-
-  import SignaturePair._
-  val XY: Vector[Coordinate] = (this.X, this.Y).zipped.map(Coordinate)
 
   def isInsideSquare(point: Coordinate, square: Square): Boolean = {
     val (xSquare, ySquare) = square.toXY
     if ((xSquare.min <= point.x && point.x <= xSquare.max) &&
       (ySquare.min <= point.y && point.y <= ySquare.max)) true
     else false
-  }
-
-  def generateSquares(partitionNum: BigDecimal): Option[Vector[Square]] = {
-    if (partitionNum <= 0) None
-    else Some{
-      val (xDiff, yDiff) = (this.X.max - this.X.min, this.Y.max - this.Y.min)
-      val (xStepSize, yStepSize) =
-        (xDiff.abs/partitionNum, yDiff.abs/partitionNum)
-      val (xSteps, ySteps) = (this.X.min to this.X.max by xStepSize toList, this.Y.min to this.Y.max by yStepSize toList)
-      val xStepsSafe = if (!xSteps.contains(this.X.max)) xSteps.init ::: List(this.X.max) else xSteps
-      val yStepsSafe = if (!ySteps.contains(this.Y.max)) ySteps.init ::: List(this.Y.max) else ySteps
-      val (xSlide, ySlide) = (xStepsSafe.iterator.sliding(2).toVector, yStepsSafe.iterator.sliding(2).toVector)
-      xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
-        .map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)).toVector)
-        .map(incompleteSquare =>
-        Square(incompleteSquare.head, Coordinate(incompleteSquare.head.x, incompleteSquare.last.y),
-          Coordinate(incompleteSquare.last.x, incompleteSquare.head.y), incompleteSquare.last))
-    }
   }
 
   def whichSquare(aCoordinate: Coordinate, squares: Vector[Square]):
@@ -69,6 +45,31 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
     val addFunction = (vector1: Vector[Coordinate], coord: Coordinate) => vector1++Vector(coord)
     val mergeFunction = (vector1: Vector[Coordinate], vector2: Vector[Coordinate]) => vector1++vector2
     binnedCoords.aggregateByKey(Vector[Coordinate]())(addFunction, mergeFunction)
+  }
+
+}
+
+sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
+
+  import SignaturePair._
+  val XY: Vector[Coordinate] = (this.X, this.Y).zipped.map(Coordinate)
+
+  def generateSquares(partitionNum: BigDecimal): Option[Vector[Square]] = {
+    if (partitionNum <= 0) None
+    else Some{
+      val (xDiff, yDiff) = (this.X.max - this.X.min, this.Y.max - this.Y.min)
+      val (xStepSize, yStepSize) =
+        (xDiff.abs/partitionNum, yDiff.abs/partitionNum)
+      val (xSteps, ySteps) = (this.X.min to this.X.max by xStepSize toList, this.Y.min to this.Y.max by yStepSize toList)
+      val xStepsSafe = if (!xSteps.contains(this.X.max)) xSteps.init ::: List(this.X.max) else xSteps
+      val yStepsSafe = if (!ySteps.contains(this.Y.max)) ySteps.init ::: List(this.Y.max) else ySteps
+      val (xSlide, ySlide) = (xStepsSafe.iterator.sliding(2).toVector, yStepsSafe.iterator.sliding(2).toVector)
+      xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
+        .map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)).toVector)
+        .map(incompleteSquare =>
+        Square(incompleteSquare.head, Coordinate(incompleteSquare.head.x, incompleteSquare.last.y),
+          Coordinate(incompleteSquare.last.x, incompleteSquare.head.y), incompleteSquare.last))
+    }
   }
 
 }
