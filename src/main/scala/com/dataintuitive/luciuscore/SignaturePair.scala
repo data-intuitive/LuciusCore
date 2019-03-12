@@ -29,16 +29,15 @@ sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends
     else false
   }
 
-  def generateSquares(xValues: Vector[BigDecimal], yValues: Vector[BigDecimal],
-                      partitionNum: BigDecimal): Option[Vector[Square]] = {
+  def generateSquares(partitionNum: BigDecimal): Option[Vector[Square]] = {
     if (partitionNum <= 0) None
     else Some{
-      val (xDiff, yDiff) = (xValues.max - xValues.min, yValues.max - yValues.min)
+      val (xDiff, yDiff) = (this.X.max - this.X.min, this.Y.max - this.Y.min)
       val (xStepSize, yStepSize) =
         (xDiff.abs/partitionNum, yDiff.abs/partitionNum)
-      val (xSteps, ySteps) = (xValues.min to xValues.max by xStepSize toList, yValues.min to yValues.max by yStepSize toList)
-      val xStepsSafe = if (!xSteps.contains(xValues.max)) xSteps.init ::: List(xValues.max) else xSteps
-      val yStepsSafe = if (!ySteps.contains(yValues.max)) ySteps.init ::: List(yValues.max) else ySteps
+      val (xSteps, ySteps) = (this.X.min to this.X.max by xStepSize toList, this.Y.min to this.Y.max by yStepSize toList)
+      val xStepsSafe = if (!xSteps.contains(this.X.max)) xSteps.init ::: List(this.X.max) else xSteps
+      val yStepsSafe = if (!ySteps.contains(this.Y.max)) ySteps.init ::: List(this.Y.max) else ySteps
       val (xSlide, ySlide) = (xStepsSafe.iterator.sliding(2).toVector, yStepsSafe.iterator.sliding(2).toVector)
       xSlide.flatMap(xWindow => ySlide.map(yWindow => xWindow.zip(yWindow)))
         .map(twoPoints => twoPoints.map(aCoordinate => Coordinate(aCoordinate._1, aCoordinate._2)).toVector)

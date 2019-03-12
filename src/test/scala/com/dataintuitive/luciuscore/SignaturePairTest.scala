@@ -30,7 +30,7 @@ class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateM
   }
 
   "generateSquares" should "correctly generate squares when each dim has two partitions" in {
-    val squares = pair1.generateSquares(X, Y, 2).get
+    val squares = pair1.generateSquares(2).get
     assert(squares == Vector(
       Square(Coordinate(-1.0,-0.5),Coordinate(-1.0,1.75),Coordinate(0.75,-0.5),Coordinate(0.75,1.75)),
       Square(Coordinate(-1.0,1.75),Coordinate(-1.0,4.00),Coordinate(0.75,1.75),Coordinate(0.75,4.00)),
