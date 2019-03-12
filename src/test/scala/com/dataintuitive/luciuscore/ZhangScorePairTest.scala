@@ -3,15 +3,15 @@ package com.dataintuitive.luciuscore
 import org.scalatest.{FlatSpec, PrivateMethodTester}
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.Matchers._
-import com.dataintuitive.luciuscore.SignaturePair._
+import com.dataintuitive.luciuscore.ZhangScorePair._
 
-class SignaturePairTest extends FlatSpec with BaseSparkContextSpec with PrivateMethodTester{
+class ZhangScorePairTest extends FlatSpec with BaseSparkContextSpec with PrivateMethodTester{
 
   val X = Vector(BigDecimal(-1.0), BigDecimal(0.0), BigDecimal(1.0), BigDecimal(2.5))
   val Y = Vector(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0))
-  val pair1 = new SignaturePair(X, Y)
+  val pair1 = new ZhangScorePair(X, Y)
 
-  "SignaturePair primary constructor" should "correctly convert X vector and Y vector to (X, Y)" in {
+  "ZhangScorePair primary constructor" should "correctly convert X vector and Y vector to (X, Y)" in {
     assert(pair1.XY == Vector(Coordinate(-1.0, -0.5), Coordinate(0.0, 0.5),
       Coordinate(1.0, 2.0), Coordinate(2.5, 4.0)))
   }

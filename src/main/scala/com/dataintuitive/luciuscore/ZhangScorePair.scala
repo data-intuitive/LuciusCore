@@ -4,12 +4,14 @@ import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
 
-object SignaturePair {
+object ZhangScorePair {
+
   case class Coordinate(x: BigDecimal, y: BigDecimal) {
     def toTuple: (BigDecimal, BigDecimal) = {
       (this.x, this.y)
     }
   }
+
   case class Square(leftBottom: Coordinate, leftTop: Coordinate, rightBottom: Coordinate, rightTop: Coordinate) {
     val center = Coordinate(this.leftBottom.x + (this.rightBottom.x-this.leftBottom.x)/2,
       this.leftBottom.y + (this.leftTop.y - this.leftBottom.y)/2)
@@ -49,9 +51,9 @@ object SignaturePair {
 
 }
 
-sealed class SignaturePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
+sealed class ZhangScorePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
 
-  import SignaturePair._
+  import ZhangScorePair._
   val XY: Vector[Coordinate] = (this.X, this.Y).zipped.map(Coordinate)
 
   def generateSquares(partitionNum: BigDecimal): Option[Vector[Square]] = {
