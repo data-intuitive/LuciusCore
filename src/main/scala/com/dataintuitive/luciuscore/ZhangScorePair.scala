@@ -36,9 +36,9 @@ object ZhangScorePair {
     }
   }
 
-  def assignCoordinatesToSquares(sc: SparkContext, coordinateList: Vector[Point],
+  def assignCoordinatesToSquares(sc: SparkContext, coordinateList: RDD[Point],
                                  squares: Vector[Square]): RDD[(Square,Point)] = {
-    sc.parallelize(coordinateList)
+    coordinateList
       .map{aCoordinate => whichSquare(aCoordinate, squares)}
       .map(binnedCoordinateTuple => (binnedCoordinateTuple.get._2, binnedCoordinateTuple.get._1 ))
   }
@@ -51,10 +51,10 @@ object ZhangScorePair {
 
 }
 
-sealed class ZhangScorePair(X: Vector[BigDecimal], Y: Vector[BigDecimal]) extends Serializable {
+sealed class ZhangScorePair(X: RDD[BigDecimal], Y: RDD[BigDecimal]) extends Serializable {
 
   import ZhangScorePair._
-  val XY: Vector[Point] = (this.X, this.Y).zipped.map(Point)
+  val XY: RDD[Point] = this.X zip this.Y map{ case (x, y) => Point(x, y)}
 
   def generateSquares(partitionNum: BigDecimal): Option[Vector[Square]] = {
     if (partitionNum <= 0) None

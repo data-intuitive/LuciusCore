@@ -4,22 +4,23 @@ import org.scalatest.{FlatSpec, PrivateMethodTester}
 import org.scalatest.Matchers._
 import com.dataintuitive.test.BaseSparkContextSpec
 import com.dataintuitive.luciuscore.ZhangScorePair._
+import org.apache.spark.rdd.RDD
 
 class ZhangScorePairTest extends FlatSpec with BaseSparkContextSpec with PrivateMethodTester{
 
-  val X = Vector(BigDecimal(-1.0), BigDecimal(0.0), BigDecimal(1.0), BigDecimal(2.5))
-  val Y = Vector(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0))
+  val X: RDD[BigDecimal] = sc.parallelize(Vector(BigDecimal(-1.0), BigDecimal(0.0), BigDecimal(1.0), BigDecimal(2.5)))
+  val Y: RDD[BigDecimal] = sc.parallelize(Vector(BigDecimal(-0.5), BigDecimal(0.5), BigDecimal(2.0), BigDecimal(4.0)))
   val pair1 = new ZhangScorePair(X, Y)
 
   "ZhangScorePair primary constructor" should "correctly convert X vector and Y vector to (X, Y)" in {
-    assert(pair1.XY == Vector(Point(-1.0, -0.5), Point(0.0, 0.5),
+    assert(pair1.XY.collect.toVector == Vector(Point(-1.0, -0.5), Point(0.0, 0.5),
       Point(1.0, 2.0), Point(2.5, 4.0)))
   }
 
   "group of coordinates" should "correctly transform from (X, Y) into two vectors using toTuples" in {
     val coordVec = Vector(Point(-1.0, -0.5), Point(0.0, 0.5),
       Point(1.0, 2.0), Point(2.5, 4.0))
-    assert(coordVec.map(_.toTuple).unzip == (X, Y))
+    assert(coordVec.map(_.toTuple).unzip == (X.collect.toVector, Y.collect.toVector))
   }
 
   "Square case class" should "correctly compute centers " in {
@@ -55,7 +56,7 @@ class ZhangScorePairTest extends FlatSpec with BaseSparkContextSpec with Private
   "assignCoordinatesToSquares" should "correctly assign a group of points to a group of squares" in {
     val square1 = Square(Point(-1.0, 0.75), Point(-1.0, 2.5), Point(0.75, 0.75), Point(0.75, 2.5))
     val square2 = Square(Point(-1.0, -1.0), Point(-1.0, 0.75), Point(0.75, -1.0), Point(0.75, 0.75))
-    val coordList = Vector(Point(0, 1.5), Point(0, 0))
+    val coordList = sc.parallelize(Vector(Point(0, 1.5), Point(0, 0)))
     assert(assignCoordinatesToSquares(sc, coordList, Vector(square1, square2)).collect.toVector ==
       Vector((Square(Point(-1.0,0.75),Point(-1.0,2.5),Point(0.75,0.75),Point(0.75,2.5)), Point(0,1.5)),
         (Square(Point(-1.0,-1.0),Point(-1.0,0.75),Point(0.75,-1.0),Point(0.75,0.75)), Point(0,0))))
