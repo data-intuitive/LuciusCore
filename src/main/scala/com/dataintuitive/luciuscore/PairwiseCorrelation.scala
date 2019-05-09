@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import scala.math.{sqrt, pow}
+import scala.math.{sqrt, pow, BigDecimal}
 
 object PairwiseCorrelation extends Serializable {
 
@@ -10,15 +10,9 @@ object PairwiseCorrelation extends Serializable {
     val x: A = this.tuple._1
     val y: A = this.tuple._2
   }
-  /**
-  implicit def Tuple2Point[A](tuple: (A, A))(implicit evidence: A => Numeric[A]): Point[A] = {
-    new Point(tuple)
-  }**/
 
-  implicit class Bin (val bin: (Int, Int)) {???}
-
-  case class AxisAlignedSquare[A](leftBottom: Point[A], leftTop: Point[A], rightBottom: Point[A], rightTop: Point[A])
-                            (implicit ordering: Ordering[A]) {
+  case class AxisAlignedBin[A](leftBottom: Point[A], leftTop: Point[A], rightBottom: Point[A], rightTop: Point[A])
+                              (implicit ordering: Ordering[A]) {
     import ordering._
     require{ leftBottom.x == leftTop.x &&
       rightBottom.x == rightTop.x &&
@@ -31,8 +25,33 @@ object PairwiseCorrelation extends Serializable {
 
     def this(leftBottom: Point[A], rightTop: Point[A])(implicit num: Numeric[A], ordering: Ordering[A]) = this(leftBottom,
       (leftBottom.x, rightTop.y), (rightTop.x, leftBottom.y), rightTop)
+
+    def toXY: (Vector[A], Vector[A]) = {
+      (Vector(this.leftBottom.x, this.rightTop.x), Vector(this.leftBottom.y, this.rightTop.y))
+    }
+
   }
 
+  /**
+    * see https://www.oreilly.com/library/view/algorithms-in-a/9780596516246/ch04s08.html
+    * @param datum
+    * @param buckets
+    * @param num
+    * @tparam A
+    * @return
+    */
+  def SuperHashFunction[A](datum: Point[A], buckets: Int)(implicit num: Numeric[A]): Int = {
+    import num._
+    val res =
+      (datum.x.toDouble * buckets.toDouble * buckets.toDouble + datum.y.toDouble) +
+      (datum.x.toDouble * buckets.toDouble + datum.y.toDouble) +
+      datum.y.toDouble
+    res.toInt
+  }
+
+  def HashSort[A](data: Vector[(A, A)], hashFunction: ((A, A), Int) => Int): Map[Int, (A, A)] = {
+    ???
+  }
 
 
 
