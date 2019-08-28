@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import genes.GeneModel._
+import genes._
 
 /**
   * The types and classes used throughout Lucius.

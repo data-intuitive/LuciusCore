@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore.io
 
-import com.dataintuitive.luciuscore.genes.GeneModel._
+import com.dataintuitive.luciuscore.genes._
 import ParseFunctions._
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD

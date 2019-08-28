@@ -1,6 +1,5 @@
 package com.dataintuitive.luciuscore.genes
 
-import GeneModel._
 import org.scalatest.FlatSpec
 
 class GeneModelTest extends FlatSpec {

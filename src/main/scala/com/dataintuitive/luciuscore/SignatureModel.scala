@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.genes.GeneModel._
+import com.dataintuitive.luciuscore.genes._
 import com.dataintuitive.luciuscore.utilities.SignedString
 import com.dataintuitive.luciuscore.Model._
 
