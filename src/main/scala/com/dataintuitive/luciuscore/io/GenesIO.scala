@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore.io
 
-import com.dataintuitive.luciuscore.GeneModel._
+import com.dataintuitive.luciuscore.genes.GeneModel._
 import ParseFunctions._
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
@@ -56,7 +56,7 @@ object GenesIO {
 
       val asArray: Array[GeneAnnotation] = genes.collect()
 
-      new Genes(asArray)
+      new Genes(asArray.map(_.toGeneAnnotationV2))
   }
 
 }

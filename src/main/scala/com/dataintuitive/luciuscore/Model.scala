@@ -1,5 +1,7 @@
 package com.dataintuitive.luciuscore
 
+import genes.GeneModel._
+
 /**
   * The types and classes used throughout Lucius.
   *
@@ -14,21 +16,6 @@ object Model extends Serializable {
   // A RankVector contains ranks.
   type Rank = Double
   type RankVector = Array[Rank]
-
-  // A GeneVector is an ordered list of Genes (aka signature)
-  type Gene = String
-  type GeneVector = Array[Gene]
-
-  type Probesetid = String
-  type Symbol = String
-
-  type GeneDictionary = Map[Symbol, Probesetid]
-  type InverseGeneDictionary = Map[Probesetid,Symbol]
-
-  type NotationType = String
-  val SYMBOL = "symbol"
-  val PROBESETID = "probesetid"
-  val INDEX = "index"
 
   type SignatureType = GeneVector
 

@@ -1,11 +1,8 @@
-package com.dataintuitive.luciuscore
+package com.dataintuitive.luciuscore.genes
 
-import com.dataintuitive.luciuscore.GeneModel._
+import GeneModel._
 import org.scalatest.FlatSpec
 
-/**
-  * Created by toni on 22/04/16.
-  */
 class GeneModelTest extends FlatSpec {
 
   info("Test model for gene annotations")

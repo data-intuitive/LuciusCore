@@ -1,5 +1,6 @@
 package com.dataintuitive.luciuscore.io
 
+import com.dataintuitive.luciuscore.genes.GeneModel.Gene
 import org.apache.spark.SparkContext
 import com.dataintuitive.luciuscore.io.ParseFunctions._
 import com.dataintuitive.luciuscore.Model._

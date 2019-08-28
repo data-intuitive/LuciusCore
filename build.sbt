@@ -1,14 +1,16 @@
 name := "LuciusCore"
 
-version := "3.1.0"
+version := "3.1.6"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 
 // crossScalaVersions := Seq("2.10.6", "2.11.8")
 
 libraryDependencies ++= Seq(
-  ("org.scalactic"      %% "scalactic"       % "3.0.7")
-    .exclude("org.scala-lang", "scala-reflect"),
+  //(
+  "org.scalactic"      %% "scalactic"       % "3.0.7", 
+  //)
+    /* .exclude("org.scala-lang", "scala-reflect"), */
   "org.scalatest"      %% "scalatest"       % "3.0.7"      % "test",
   "org.apache.spark"   %% "spark-core"      % "2.4.0"      % "provided"
 )
@@ -16,5 +18,8 @@ libraryDependencies ++= Seq(
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
 organization := "com.data-intuitive"
+
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
-bintrayPackageLabels := Seq("scala", "l1000", "spark", "lucius")
+
+/* bintrayPackageLabels := Seq("scala", "l1000", "spark", "lucius") */
+
