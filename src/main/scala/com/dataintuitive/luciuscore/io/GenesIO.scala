@@ -13,19 +13,7 @@ object GenesIO {
   /**
     * IO convenience and demonstration function. Reading gene annotations from a file and parsing it
     * to a `Genes` datastructure.
-    *
-    * Please note that missing values are converted to `NA`.
-    *
-    * The default value of the features to extract are for a file of the following format (tab-separated):
-    *
-    * {{{
-    * probesetid  entrezid  ensemblid symbol  name
-    * psid1 entrezid1 ens1  symbol1 name1
-    * psid2 entrezid2 ens2  symbol2 name2
-    * psid3 entrezid3 ens3  symbol3 name3
-    * }}}
-    *
-    * Remark: Even if the input does not contain all info to fill the datastructure, we need to provide a features vector of size 5!
+    * Remark: Even if the input does not contain all info to fill the datastructure, we need to provide a features vector of size 7!
     *
     * @param sc SparkContext
     * @param geneAnnotationsFile The location of the file
@@ -36,27 +24,46 @@ object GenesIO {
                geneAnnotationsFile: String,
                delimiter: String = "\t"): Genes = {
 
-//      require(features.length == 5, "The length of the features vector needs to 5")
+    val featuresToExtract = Seq(
+      "probesetID", 
+      "dataType", 
+      "ENTREZID", 
+      "ENSEMBL", 
+      "SYMBOL", 
+      "GENENAME", 
+      "GENEFAMILY")
 
-      val featuresToExtract = Seq("probesetID", "ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")
+    val rawGenesRdd = sc.textFile(geneAnnotationsFile).map(_.split(delimiter))
 
-      val rawGenesRdd = sc.textFile(geneAnnotationsFile).map(_.split(delimiter))
+    val splitGenesRdd = extractFeatures(rawGenesRdd, featuresToExtract, includeHeader=false)
 
-      val splitGenesRdd = extractFeatures(rawGenesRdd, featuresToExtract, includeHeader=false)
+    // Turn into RDD containing objects
+    val genes: RDD[GeneAnnotationV2] =
+      splitGenesRdd.zipWithIndex.map{ case (x,i) => new GeneAnnotationV2(
+        i.toInt,
+        x(0).getOrElse("N/A"),
+        x(1).getOrElse("N/A"),
+        x(2).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
+        x(3).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
+        x(4).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
+        x(5).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
+        x(6).flatMap(convertOption(_))
+      )
+    }
 
-      // Turn into RDD containing objects
-      val genes: RDD[GeneAnnotation] =
-        splitGenesRdd.map(x => new GeneAnnotation(
-          x(0).getOrElse("NA"),
-          x(1).getOrElse("NA"),
-          x(2).getOrElse("NA"),
-          x(3).getOrElse("NA"),
-          x(4).getOrElse("NA"))
-        )
+    val asArray: Array[GeneAnnotationV2] = genes.collect()
 
-      val asArray: Array[GeneAnnotation] = genes.collect()
+    new Genes(asArray)
+}
 
-      new Genes(asArray.map(_.toGeneAnnotationV2))
-  }
+  /*
+   * Split on the seconary field delimiter
+   */
+  def secondarySplit(s:String, delimiter:String = "///"):Option[Set[String]] = Some(s.split(delimiter).toSet)
+
+  /*
+   * The data contains fields with --- signifying no data, we convert this to None options.
+   */
+  def convertOption(o: String, noValue:String = "---"):Option[String] = if (o == noValue) None else Some(o)
 
 }

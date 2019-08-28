@@ -20,17 +20,20 @@ package object genes {
 
   /**
     * Class for holding information about a gene.
+    *
+    * Variables modelled with a `Set` may contain multiple entries.
     */
   class GeneAnnotationV2(
+                        val index: Int,
                         val probesetid: Probesetid,
                         val dataType: String,
-                        val entrezid: Option[String],
-                        val ensemblid: Option[String],
-                        val symbol: Option[Symbol],
-                        val name: Option[String],
+                        val entrezid: Option[Set[String]],
+                        val ensemblid: Option[Set[String]],
+                        val symbol: Option[Set[Symbol]],
+                        val name: Option[Set[String]],
                         val geneFamily: Option[String]) extends Serializable {
 
-    override def toString = s"${probesetid} (entrezid = ${entrezid}, dataType = ${dataType}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name}, family = ${geneFamily})"
+    override def toString = s"${probesetid} (index = ${index}, entrezid = ${entrezid}, dataType = ${dataType}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name}, family = ${geneFamily})"
 
   }
 
@@ -45,8 +48,8 @@ package object genes {
                         val name: String) extends Serializable {
 
     override def toString = s"${probesetid} (entrezid = ${entrezid}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name})"
-    
-    def toGeneAnnotationV2 = new GeneAnnotationV2(probesetid, "LM", Some(entrezid), Some(ensemblid), Some(symbol), Some(name), None)
+
+    def toGeneAnnotationV2 = new GeneAnnotationV2(0, probesetid, "LM", Some(Set(entrezid)), Some(Set(ensemblid)), Some(Set(symbol)), Some(Set(name)), None)
 
   }
 

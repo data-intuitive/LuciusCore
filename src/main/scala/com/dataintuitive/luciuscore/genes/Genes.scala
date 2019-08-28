@@ -1,29 +1,26 @@
 package com.dataintuitive.luciuscore.genes
 
-/**
-  * A model for a gene annotation and a collection of genes.
-  */
-
- class Genes(val genes: Array[GeneAnnotationV2]) {
+class Genes(val genes: Array[GeneAnnotationV2]) {
 
   /**
    * The input contains entries with multiple symbol names, separated by `///`.
    */
   private def splitGeneAnnotationSymbols(in: String, ga: GeneAnnotationV2): Array[(String, GeneAnnotationV2)] = {
     val arrayString = in.split("///").map(_.trim)
-      return arrayString.flatMap(name => Map(name -> ga))
+    arrayString.flatMap(name => Map(name -> ga))
   }
 
   /**
    * Create a dictionary
-   * 
+   *
    * Filter out entries that do not contain a SYMBOL representation of the gene.
    * When multiple SYMBOLS are present, duplicate the entry.
    */
   def createSymbolDictionary: SimpleGeneDictionary = {
     genes
       .filter(ga => ga.symbol != None)
-      .flatMap(ga => splitGeneAnnotationSymbols(ga.symbol.get, ga))
+      .map(ga => ga.symbol.get.map( s => (s, ga)))
+      .flatMap(x => x)
       .toMap
   }
 
@@ -53,5 +50,3 @@ package com.dataintuitive.luciuscore.genes
   val probesetidVector = genes.map(_.probesetid)
 
 }
-
-// }
