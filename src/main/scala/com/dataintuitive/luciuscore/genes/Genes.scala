@@ -11,7 +11,7 @@ class Genes(val genes: Array[GeneAnnotationV2]) {
   }
 
   /**
-   * Create a dictionary
+   * Create a dictionary symbol -> record
    *
    * Filter out entries that do not contain a SYMBOL representation of the gene.
    * When multiple SYMBOLS are present, duplicate the entry.
@@ -25,24 +25,31 @@ class Genes(val genes: Array[GeneAnnotationV2]) {
   }
 
   /**
-   * Dictionary to translate symbols to probsetids
+   * Create a dictionary index -> record
    */
-  val symbol2ProbesetidDict = createSymbolDictionary.map{ case (s,ga) => (s, ga.probesetid)}.toMap
+  def createIndexDictionary: Map[Int, GeneAnnotationV2] = {
+    genes
+      .map(ga => (ga.index, ga))
+      .toMap
+  }
+
+  /**
+   * Dictionary to translate symbols to probsetids
+   *
+   * Please note the relation probesetid <-> symbol is n-m
+   */
+  val symbol2ProbesetidDict = 
+    createSymbolDictionary
+      .map{ case (s, ga) => (s, ga.probesetid) }
 
   /**
    * Dictionary to translate indices to probesetids.
    *
-   * Remark: offset 1 is important for consistency when translating between dense and sparse format
-   * 
-   * Note: This is a simple copy from the first iteration of this class. Please refer to the indexed versions.
+   * This mapping is 1-1
    */
   val index2ProbesetidDict: Map[Int, Probesetid] =
-    genes
-      .map(_.probesetid)
-      .zipWithIndex
-      .map(tuple => (tuple._1, tuple._2 + 1))
-      .map(_.swap)
-      .toMap
+    createIndexDictionary
+      .map{ case (i, ga) => (i, ga.probesetid) }
 
   /**
    * A vector containing the probesetids representing the genes.

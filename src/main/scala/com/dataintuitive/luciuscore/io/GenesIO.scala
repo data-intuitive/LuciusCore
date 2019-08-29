@@ -40,7 +40,7 @@ object GenesIO {
     // Turn into RDD containing objects
     val genes: RDD[GeneAnnotationV2] =
       splitGenesRdd.zipWithIndex.map{ case (x,i) => new GeneAnnotationV2(
-        i.toInt,
+        i.toInt + 1,              // index offset 1
         x(0).getOrElse("N/A"),
         x(1).getOrElse("N/A"),
         x(2).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
