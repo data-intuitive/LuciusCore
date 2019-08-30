@@ -33,7 +33,7 @@ object GenesIO {
       "GENENAME", 
       "GENEFAMILY")
 
-    val rawGenesRdd = sc.textFile(geneAnnotationsFile).map(_.split(delimiter))
+    val rawGenesRdd = sc.textFile(geneAnnotationsFile).map(_.split(delimiter).map(_.trim))
 
     val splitGenesRdd = extractFeatures(rawGenesRdd, featuresToExtract, includeHeader=false)
 
@@ -59,7 +59,8 @@ object GenesIO {
   /*
    * Split on the seconary field delimiter
    */
-  def secondarySplit(s:String, delimiter:String = "///"):Option[Set[String]] = Some(s.split(delimiter).toSet)
+  def secondarySplit(s:String, delimiter:String = "///"):Option[Set[String]] = 
+    Some(s.split(delimiter).map(_.trim).toSet)
 
   /*
    * The data contains fields with --- signifying no data, we convert this to None options.

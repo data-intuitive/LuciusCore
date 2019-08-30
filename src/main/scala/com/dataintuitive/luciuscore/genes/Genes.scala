@@ -33,6 +33,7 @@ class Genes(val genes: Array[GeneAnnotationV2]) {
       .toMap
   }
 
+
   /**
    * Dictionary to translate symbols to probsetids
    *
@@ -50,6 +51,14 @@ class Genes(val genes: Array[GeneAnnotationV2]) {
   val index2ProbesetidDict: Map[Int, Probesetid] =
     createIndexDictionary
       .map{ case (i, ga) => (i, ga.probesetid) }
+
+  /**
+   * Dictionary to translate indices to probesetids.
+   *
+   * This mapping is 1-1
+   */
+  val probesetid2Index: Map[Probesetid, Int] =
+    for ((k,v) <- index2ProbesetidDict) yield (v, k)
 
   /**
    * A vector containing the probesetids representing the genes.
