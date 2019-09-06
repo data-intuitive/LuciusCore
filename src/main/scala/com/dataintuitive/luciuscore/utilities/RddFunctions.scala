@@ -20,6 +20,47 @@ object RddFunctions {
       .map( _.toArray )
   }
 
+  /**
+    * Helper function
+    */
+   def transposeBatch( rdd: RDD[Array[String]],
+                       from: Int,
+                       till: Int):RDD[Array[String]] = {
+
+    val subset = rdd.map(_.slice(from, till+1))
+    transpose(subset)
+
+  }
+
+  /**
+   * Calculate the slices intervals for an array of length l with slices of slice size.
+   * The resulting indices are for arrays and thus zero-based.
+   * The last slice is till the end of the array, so does not necessary have the same size.
+   */
+  def slices(l:Int, size:Int):Seq[(Int, Int)] = {
+
+    val nrBatches = l / size
+    val remainder = l % size
+    val intervals = (0 to nrBatches - 1).map(batch => (batch * size, (batch + 1) * size - 1)).toSeq
+    if (remainder > 0)
+      intervals ++ Seq((nrBatches * size, l - 1))
+    else
+      intervals
+
+  }
+
+  /**
+    * Load batches of data in order to make transposition possible.
+    * API is the same as before except we have an option for the batch size.
+    */
+  def transposeInBatches( rdd: RDD[Array[String]],
+                          batchSize:Int = 50000):RDD[Array[String]] = {
+
+    val intervals = slices(rdd.first.length, batchSize)
+    val results = intervals.map(batch => transposeBatch(rdd, batch._1, batch._2))
+    results.reduce(_ union _)
+
+  }
 
   // Given two RDDs and a function for their keys, 'update' the first by adding information from the second.
   // The order of the to-be-joined RDDs is important as we are using a lefOutJoin here!
