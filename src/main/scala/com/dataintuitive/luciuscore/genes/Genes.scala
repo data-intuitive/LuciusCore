@@ -1,11 +1,11 @@
 package com.dataintuitive.luciuscore.genes
 
-class Genes(val genes: Array[GeneAnnotationV2]) {
+class Genes(val genes: Array[Gene]) {
 
   /**
    * The input contains entries with multiple symbol names, separated by `///`.
    */
-  private def splitGeneAnnotationSymbols(in: String, ga: GeneAnnotationV2): Array[(String, GeneAnnotationV2)] = {
+  private def splitGeneAnnotationSymbols(in: String, ga: Gene): Array[(String, Gene)] = {
     val arrayString = in.split("///").map(_.trim)
     arrayString.flatMap(name => Map(name -> ga))
   }
@@ -27,12 +27,11 @@ class Genes(val genes: Array[GeneAnnotationV2]) {
   /**
    * Create a dictionary index -> record
    */
-  def createIndexDictionary: Map[Int, GeneAnnotationV2] = {
+  def createIndexDictionary: Map[Int, Gene] = {
     genes
       .map(ga => (ga.index, ga))
       .toMap
   }
-
 
   /**
    * Dictionary to translate symbols to probsetids

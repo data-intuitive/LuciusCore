@@ -25,18 +25,18 @@ class GenesIOTest extends FlatSpec with BaseSparkContextSpec with Matchers {
     assert(genesV2.genes.length === 22215)
   }
 
-  it should "be parsed with the new fields" in {
-    assert(genesV2.createSymbolDictionary("PSME1").dataType === "LM")
-    assert(genesV2.createSymbolDictionary("PSME1").ensemblid.get === Set("ENSG00000092010"))
-  }
+  // it should "be parsed with the new fields" in {
+  //   assert(genesV2.createSymbolDictionary("PSME1").dataType === "LM")
+  //   assert(genesV2.createSymbolDictionary("PSME1").ensemblid.get === Set("ENSG00000092010"))
+  // }
 
-  it should "attach an index with offset 1 to all records" in {
-    genesV2.genes.head.index should equal (1)
-  }
+  // it should "attach an index with offset 1 to all records" in {
+  //   genesV2.genes.head.index should equal (1)
+  // }
 
-  "The Genes class" should "create an index dictionary" in {
-    genesV2.createIndexDictionary(1).index should equal (1)
-    genesV2.createIndexDictionary(1).symbol.get should equal (Set("PSME1"))
-  }
+  // "The Genes class" should "create an index dictionary" in {
+  //   genesV2.createIndexDictionary(1).index should equal (1)
+  //   genesV2.createIndexDictionary(1).symbol.get should equal (Set("PSME1"))
+  // }
 
 }

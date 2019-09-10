@@ -22,7 +22,7 @@ object GenesIO {
     */
     def loadGenesFromFile(sc: SparkContext,
                geneAnnotationsFile: String,
-               delimiter: String = "\t"): Genes = {
+               delimiter: String = "\t"): StageGenes = {
 
     val featuresToExtract = Seq(
       "probesetID", 
@@ -38,8 +38,8 @@ object GenesIO {
     val splitGenesRdd = extractFeatures(rawGenesRdd, featuresToExtract, includeHeader=false)
 
     // Turn into RDD containing objects
-    val genes: RDD[GeneAnnotationV2] =
-      splitGenesRdd.zipWithIndex.map{ case (x,i) => new GeneAnnotationV2(
+    val genes: RDD[StageGene] =
+      splitGenesRdd.zipWithIndex.map{ case (x,i) => new StageGene(
         i.toInt + 1,              // index offset 1
         x(0).getOrElse("N/A"),
         x(1).getOrElse("N/A"),
@@ -51,9 +51,9 @@ object GenesIO {
       )
     }
 
-    val asArray: Array[GeneAnnotationV2] = genes.collect()
+    val asArray: Array[StageGene] = genes.collect()
 
-    new Genes(asArray)
+    new StageGenes(asArray)
 }
 
   /*
