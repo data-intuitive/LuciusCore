@@ -1,6 +1,5 @@
 package com.dataintuitive.luciuscore.signatures
 
-import SignedTypes._
 import org.scalatest.{FlatSpec, Matchers}
 
 class SignedTypesTest extends FlatSpec with Matchers {

@@ -6,7 +6,16 @@ package object signatures {
 
   type GeneVector = Array[GeneType]
 
-  import SignedTypes._
-  import Signatures._
+  object Sign extends Enumeration {
+        type Sign = Value
+        val PLUS, MINUS = Value
+    }
+
+  import Sign._
+
+  // Concrete types
+  type SignedSymbol = SignedString
+  type SignedProbesetid = SignedString
+  type SignedIndex = SignedInt
 
 }

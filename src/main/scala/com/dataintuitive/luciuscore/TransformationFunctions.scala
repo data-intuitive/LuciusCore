@@ -142,7 +142,6 @@ object TransformationFunctions {
     asSeq.toArray
   }
 
-
   // Be careful: offset 1 for vectors for consistency!
   def nonZeroElements(v: RankVector, offset:Int = 1): Array[(Index, Rank)] = {
     v.zipWithIndex

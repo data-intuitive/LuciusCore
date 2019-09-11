@@ -2,18 +2,6 @@ package com.dataintuitive.luciuscore.signatures
 
 import com.dataintuitive.luciuscore.genes._
 import com.dataintuitive.luciuscore.signatures._
-import com.dataintuitive.luciuscore.signatures.SignedTypes._
-import com.dataintuitive.luciuscore.signatures.Signatures._
-
-// import Signatures._
-// import SignedTypes._
-
-// import signatures.SignedTypes._
-// import signature.Signatures
-// import com.dataintuitive.luciuscore.genes.Genes
-// import com.dataintuitive.luciuscore.genes.Gene
-// import Signatures._
-// import SignedTypes._
 
 import org.scalatest.{FlatSpec, Matchers}
 
