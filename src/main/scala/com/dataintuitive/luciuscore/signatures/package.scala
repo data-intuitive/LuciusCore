@@ -8,6 +8,5 @@ package object signatures {
 
   import SignedTypes._
   import Signatures._
-  // import Signatures.SymbolSignature._
 
 }

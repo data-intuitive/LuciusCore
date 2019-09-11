@@ -41,9 +41,6 @@ object Signatures {
           val dict = for ((k,v) <- genes.symbol2ProbesetidDict) yield (v, k)
           val translated = signature.map { g =>
               val translation = dict.get(g.abs)
-              println(g)
-              println(g.abs)
-              println(translation)
               translation.map(ug => SignedString(g.sign, ug)).getOrElse(SignedString(failover))
           }
           SymbolSignature(translated)
