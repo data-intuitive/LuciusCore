@@ -47,7 +47,7 @@ object CompoundAnnotationsIO extends Serializable {
 
   }
 
-  def ca2DbRow(ca:DbRow, update:(Option[String], Option[String],Option[String],Option[Seq[Gene]])) = {
+  def ca2DbRow(ca:DbRow, update:(Option[String], Option[String],Option[String],Option[Seq[GeneType]])) = {
     ca.copy(
       compoundAnnotations=ca.compoundAnnotations.copy(compound=ca.compoundAnnotations.compound.copy(
                 inchikey=update._2,
@@ -57,7 +57,7 @@ object CompoundAnnotationsIO extends Serializable {
   }
 
   // Key for compound ID in DB
-  def caKeyFunction(x:(Option[String], Option[String],Option[String],Option[Seq[Gene]])):Option[String] = x._1
+  def caKeyFunction(x:(Option[String], Option[String],Option[String],Option[Seq[GeneType]])):Option[String] = x._1
   // Key for compound ID in new data to be joined
   def dbKeyFunction(x:DbRow):Option[String] = x.compoundAnnotations.compound.jnjs
 

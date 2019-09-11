@@ -1,7 +1,6 @@
 package com.dataintuitive.luciuscore.utilities
 
 import org.apache.spark.rdd.RDD
-
 import scala.reflect.ClassTag
 
 /**

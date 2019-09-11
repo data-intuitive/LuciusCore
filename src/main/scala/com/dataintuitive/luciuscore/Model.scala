@@ -1,6 +1,7 @@
 package com.dataintuitive.luciuscore
 
 import genes._
+import signatures._
 
 /**
   * The types and classes used throughout Lucius.
@@ -70,8 +71,8 @@ object Model extends Serializable {
 
   case class CompoundAnnotations(
                        val compound: Compound,
-                       val knownTargets: Option[Seq[Gene]] = None,
-                       val predictedTargets: Option[Seq[Gene]] = None
+                       val knownTargets: Option[Seq[GeneType]] = None,
+                       val predictedTargets: Option[Seq[GeneType]] = None
                       ) extends Serializable {
 
     // Convenience method: usually jnjs is used as identifier
