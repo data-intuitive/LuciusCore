@@ -1,14 +1,15 @@
 package com.dataintuitive.luciuscore
 
 import com.dataintuitive.luciuscore.Model._
-import com.dataintuitive.luciuscore.SignatureModel._
+import signatures._
 import com.dataintuitive.luciuscore.TransformationFunctions._
-import org.scalatest.FlatSpec
+
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by toni on 27/04/16.
   */
-class TransformationFunctionsTest extends FlatSpec {
+class TransformationFunctionsTest extends FlatSpec with Matchers {
 
   info("Test aggregateStats")
 
@@ -95,8 +96,9 @@ class TransformationFunctionsTest extends FlatSpec {
     assert(stats2RankVector(tp) === Array(-3.0,1.0,2.0,0.0,0.0))
   }
 
-  val indexSignature = new IndexSignature(Array("1", "-3"))
-  val rankVector = signature2OrderedRankVector(indexSignature, 3) // Array(2.0, 0.0, -1.0)
+  val indexSignature = new IndexSignature(Array(1, -3))
+  val indexSignature2 = new IndexSignature(Array(3, -1))
+  val rankVector = indexSignature.toOrderedRankVector(3) // Array(2.0, 0.0, -1.0)
   val rankVector2 = Array(-1.0, 0.0, 2.0)
 
   "Nonzero elements" should "return an array of non-zero elements" in {
@@ -104,11 +106,11 @@ class TransformationFunctionsTest extends FlatSpec {
   }
 
   "A rankVector" should "convert to a sparse signature" in {
-    assert(rankVector2IndexSignature(rankVector).signature === Array("1", "-3"))
+    rankVector2IndexSignature(rankVector).toString should equal (indexSignature.toString)
   }
 
   it should "convert to a sparse signature in different order" in {
-    assert(rankVector2IndexSignature(rankVector2).signature === Array("3", "-1"))
+    rankVector2IndexSignature(rankVector2).toString should equal (indexSignature2.toString)
   }
 
 }

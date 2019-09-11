@@ -63,6 +63,14 @@ class SignaturesTest extends FlatSpec with Matchers {
 
   }
 
+  "Translation" should "return OOPS for unknown entries" in {
+    val invalidSSignature = new SymbolSignature(Array("-SYM1", "OOPS"))
+    val invalidPSignature = new ProbesetidSignature(Array("-psid1", "NA"))
+
+    invalidPSignature.toSymbolSignature.toString should equal (invalidSSignature.toString)
+
+  }
+
   val indexSignature = new IndexSignature(Array(1, -3))
   val rankVector = indexSignature.toOrderedRankVector(3) // Array(2.0, 0.0, -1.0)
   val rankVector2 = Array(-1.0, 0.0, 2.0)

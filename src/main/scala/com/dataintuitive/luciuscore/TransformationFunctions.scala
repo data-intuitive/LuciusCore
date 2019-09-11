@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore
 
 import com.dataintuitive.luciuscore.Model._
-import com.dataintuitive.luciuscore.SignatureModel._
+import com.dataintuitive.luciuscore.signatures._
 import com.dataintuitive.luciuscore.utilities.Statistics.median
 import scala.math.{abs,max}
 import com.dataintuitive.luciuscore.Implicits._
@@ -104,44 +104,6 @@ object TransformationFunctions {
       .toArray
   }
 
-  /**
-    * Convert an index-based signature to an ordered rank vector.
-    *
-    * Remark 1: We need to provide the length of the resulting RankVector.
-    *
-    * Remark 2: Indices are 1-based.
-    */
-  def signature2OrderedRankVector(s: IndexSignature, length: Int): RankVector = {
-    val sLength = s.signature.length
-    val ranks = (sLength to 1 by -1).map(_.toDouble)
-    val unsignedRanks = s.signature zip ranks
-    val signedRanks = unsignedRanks
-      .map { case (signedIndex, unsignedRank) =>
-        (signedIndex.abs.toInt, (signedIndex.sign + unsignedRank).toDouble)
-      }.toMap
-    val asSeq = for (el <- 1 to length by 1) yield signedRanks.getOrElse(el, 0.0)
-    asSeq.toArray
-  }
-
-  /**
-    * Convert an index-based signature to an unordered rank vector.
-    *
-    * Remark 1: We need to provide the length of the resulting RankVector.
-    *
-    * Remark 2: Indices are 1-based.
-    */
-  def signature2UnorderedRankVector(s: IndexSignature, length: Int): RankVector = {
-    val sLength = s.signature.length
-    val ranks = (sLength to 1 by -1).map(_ => 1.0)  // This is the only difference with the above, all ranks are 1
-    val unsignedRanks = s.signature zip ranks
-    val signedRanks = unsignedRanks
-      .map { case (signedIndex, unsignedRank) =>
-        (signedIndex.abs.toInt, (signedIndex.sign + unsignedRank).toDouble)
-      }.toMap
-    val asSeq = for (el <- 1 to length by 1) yield signedRanks.getOrElse(el, 0.0)
-    asSeq.toArray
-  }
-
   // Be careful: offset 1 for vectors for consistency!
   def nonZeroElements(v: RankVector, offset:Int = 1): Array[(Index, Rank)] = {
     v.zipWithIndex
@@ -156,7 +118,7 @@ object TransformationFunctions {
   // Bug correction: The order of the resulting signature was wrong !!!
   def rankVector2IndexSignature(v: RankVector): IndexSignature = {
     val nonzero = nonZeroElements(v)
-    val asArrayInt =
+    val asArray =
       nonzero
         .sortBy{
           case (unsignedIndex, signedRank) => -signedRank.abs
@@ -164,9 +126,7 @@ object TransformationFunctions {
         .map {
           case (unsignedIndex, signedRank) => ((signedRank.abs / signedRank) * unsignedIndex).toInt
         }
-    val asArrayString = asArrayInt.map(_.toString)
-    new IndexSignature(asArrayString)
+    new IndexSignature(asArray)
   }
-
 
 }
