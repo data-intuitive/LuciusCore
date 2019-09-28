@@ -28,7 +28,7 @@ package object genes {
 
     override def toString = s"${probesetid} (entrezid = ${entrezid}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name})"
 
-    def toGeneAnnotationV2 = new StageGene(0, probesetid, "LM", Some(Set(entrezid)), Some(Set(ensemblid)), Some(Set(symbol)), Some(Set(name)), None)
+    def toGeneAnnotationV2 = new Gene(0, probesetid, "LM", Some(Set(entrezid)), Some(Set(ensemblid)), Some(Set(symbol)), Some(Set(name)), None)
 
   }
 

@@ -96,6 +96,33 @@ class TransformationFunctionsTest extends FlatSpec with Matchers {
     assert(stats2RankVector(tp) === Array(-3.0,1.0,2.0,0.0,0.0))
   }
 
+  info("Test stats2SignificantRankVector")
+
+  "stats2SignificantRankVector" should "take into account pvalues" in {
+    val v = Array(-1.0, -0.5, 2.0, -4.0, 5.0)
+    val p = Array( 0.0,  0.0, 0.0,  0.1, 0.0)
+    assert(stats2SignificantRankVector(v, p) === Array(-2.0,-1,3.0,0.0,4.0))
+  }
+
+  it should "convert a value vector to the rank vector with duplicates and pvalues" in {
+    val v = Array(-1.0, 2.0, 2.0, -4.0, 5.0)
+    val p = Array( 0.0, 0.0, 0.0,  0.1, 0.0)
+    assert(stats2SignificantRankVector(v, p) === Array(-1.0,2.5,2.5,0.0,4.0))
+  }
+
+  it should "convert an empty value vector to the empty rank vector " in {
+    val v:ValueVector = Array()
+    val p = Array(0.0,0.0,0.0,0.0,0.0)
+    assert(stats2SignificantRankVector(v, p) === Array())
+  }
+
+  it should "convert to all-zero ranks if pvalues are too big" in {
+    val v = Array(-1.0, 2.0, 2.0, -4.0, 5.0)
+    val p = Array( 0.1, 0.1, 0.1,  0.1, 0.1)
+    assert(stats2SignificantRankVector(v, p) === Array(0.0,0.0,0.0,0.0,0.0))
+  }
+
+
   val indexSignature = new IndexSignature(Array(1, -3))
   val indexSignature2 = new IndexSignature(Array(3, -1))
   val rankVector = indexSignature.toOrderedRankVector(3) // Array(2.0, 0.0, -1.0)

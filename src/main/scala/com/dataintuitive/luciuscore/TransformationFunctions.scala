@@ -4,7 +4,6 @@ import com.dataintuitive.luciuscore.Model._
 import com.dataintuitive.luciuscore.signatures._
 import com.dataintuitive.luciuscore.utilities.Statistics.median
 import scala.math.{abs,max}
-import com.dataintuitive.luciuscore.Implicits._
 
 /**
   * Transformations on (collections of) statistics, usually involving both t-stats and p-stats.
@@ -49,7 +48,9 @@ object TransformationFunctions {
   }
 
   /**
-    * Convert t-stats into a rank vector. Take into account zero values of t-stats.
+    * Convert t-stats into a rank vector. 
+    *
+    * Take into account zero values of t-stats, but not significance.
     *
     * Remark: Ranks start at 1.
     */
@@ -102,6 +103,23 @@ object TransformationFunctions {
       x => if (x("value") >= 0) x("avgUnsignedRank") else -x("avgUnsignedRank")
     }
       .toArray
+  }
+
+  /**
+    * Convert t-stats into a rank vector. 
+    *
+    * Take into account zero values of t-stats, and significance.
+    *
+    * Remark: Ranks start at 1.
+    */
+  def stats2SignificantRankVector(t: ValueVector, p: ValueVector, significanceThreshold: Double = 0.05): RankVector = {
+
+    // 0.0 t values are given rank 0, so we set every non-significant value to 0
+    val tSignificant = t.zip(p)
+      .map{case (tValue, pValue) => if (pValue <= significanceThreshold) tValue else 0.0}
+
+    stats2RankVector((tSignificant, p))
+
   }
 
   // Be careful: offset 1 for vectors for consistency!

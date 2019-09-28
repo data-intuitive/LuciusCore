@@ -1,7 +1,6 @@
 package com.dataintuitive.luciuscore.signatures
 
 import com.dataintuitive.luciuscore.genes._
-import com.dataintuitive.luciuscore.signatures._
 
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -16,7 +15,7 @@ class SignaturesTest extends FlatSpec with Matchers {
     new Gene(6, "psid6", "AF", None, None, Some(Set("SYM6")), None, None)
   )
 
-  implicit val genes = new Genes(listOfGenes)
+  implicit val genes = new GenesDB(listOfGenes)
 
   "Instantiation" should "create the correct symbol objects" in {
 

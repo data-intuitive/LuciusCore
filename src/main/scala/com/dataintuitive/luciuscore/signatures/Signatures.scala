@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore.signatures
 
 import com.dataintuitive.luciuscore.Model._
-import com.dataintuitive.luciuscore.genes.Genes
+import com.dataintuitive.luciuscore.genes.GenesDB
 
 sealed trait Signature[A] extends Serializable {
 
@@ -15,7 +15,7 @@ case class SymbolSignature(signature: Array[SignedSymbol]) extends Signature[Sig
 
     def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
 
-    def toProbesetidSignature(implicit genes: Genes, failover: String = "OOPS"):ProbesetidSignature = {
+    def toProbesetidSignature(implicit genes: GenesDB, failover: String = "OOPS"):ProbesetidSignature = {
         val dict = genes.symbol2ProbesetidDict
         val translated = signature.map { g =>
             val translation = dict.get(g.abs)
@@ -24,7 +24,7 @@ case class SymbolSignature(signature: Array[SignedSymbol]) extends Signature[Sig
         ProbesetidSignature(translated)
     }
 
-    def toIndexSignature(implicit genes: Genes, failover: Int = 0):IndexSignature =
+    def toIndexSignature(implicit genes: GenesDB, failover: Int = 0):IndexSignature =
         toProbesetidSignature.toIndexSignature
 
 }
@@ -33,7 +33,7 @@ case class ProbesetidSignature(signature: Array[SignedProbesetid]) extends Signa
 
     def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
 
-    def toSymbolSignature(implicit genes: Genes, failover: String = "OOPS"):SymbolSignature = {
+    def toSymbolSignature(implicit genes: GenesDB, failover: String = "OOPS"):SymbolSignature = {
         // TODO : inverse dict should be handled by Genes, not here!
         val dict = for ((k,v) <- genes.symbol2ProbesetidDict) yield (v, k)
         val translated = signature.map { g =>
@@ -44,7 +44,7 @@ case class ProbesetidSignature(signature: Array[SignedProbesetid]) extends Signa
 
     }
 
-    def toIndexSignature(implicit genes: Genes, failover: Int = 0):IndexSignature = {
+    def toIndexSignature(implicit genes: GenesDB, failover: Int = 0):IndexSignature = {
         val dict = for ((k,v) <- genes.index2ProbesetidDict) yield (v, k)
         val translated = signature.map { g =>
             val translation = dict.get(g.abs)
@@ -60,7 +60,7 @@ case class IndexSignature(signature: Array[SignedInt]) extends Signature[SignedI
 
   def this(signature: Array[Int]) { this(signature.map(g => SignedInt(g))) }
 
-  def toProbesetidSignature(implicit genes: Genes, failover: String = "OOPS"):ProbesetidSignature = {
+  def toProbesetidSignature(implicit genes: GenesDB, failover: String = "OOPS"):ProbesetidSignature = {
       val dict = genes.index2ProbesetidDict
       val translated = signature.map { g =>
           val translation = dict.get(g.abs)
@@ -69,7 +69,7 @@ case class IndexSignature(signature: Array[SignedInt]) extends Signature[SignedI
       ProbesetidSignature(translated)
   }
 
-  def toSymbolSignature(implicit genes: Genes, failover: Int = 0):SymbolSignature = 
+  def toSymbolSignature(implicit genes: GenesDB, failover: Int = 0):SymbolSignature = 
       toProbesetidSignature.toSymbolSignature
 
   /**

@@ -18,11 +18,11 @@ object GenesIO {
     * @param sc SparkContext
     * @param geneAnnotationsFile The location of the file
     * @param delimiter The delimiter to use when parsing the input file. Default is `tab`
-    * @return `Genes` datastructure (in-memory array of `GeneAnnotation`)
+    * @return Array of Gene, to be parsed to a GenesDB
     */
     def loadGenesFromFile(sc: SparkContext,
                geneAnnotationsFile: String,
-               delimiter: String = "\t"): StageGenes = {
+               delimiter: String = "\t"): Array[Gene] = {
 
     val featuresToExtract = Seq(
       "probesetID", 
@@ -37,34 +37,25 @@ object GenesIO {
 
     val splitGenesRdd = extractFeatures(rawGenesRdd, featuresToExtract, includeHeader=false)
 
-    // Turn into RDD containing objects
-    val genes: RDD[StageGene] =
-      splitGenesRdd.zipWithIndex.map{ case (x,i) => new StageGene(
+    val genesRaw:RDD[GeneRaw] = 
+      splitGenesRdd.zipWithIndex.map{ case (x,i) => new GeneRaw(
         i.toInt + 1,              // index offset 1
         x(0).getOrElse("N/A"),
         x(1).getOrElse("N/A"),
-        x(2).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
-        x(3).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
-        x(4).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
-        x(5).flatMap(convertOption(_)).flatMap(secondarySplit(_)),
-        x(6).flatMap(convertOption(_))
+        x(2),
+        x(3),
+        x(4),
+        x(5),
+        x(6)
       )
     }
 
-    val asArray: Array[StageGene] = genes.collect()
 
-    new StageGenes(asArray)
+    // Turn into RDD containing objects
+    val genes: RDD[Gene] = genesRaw.map( _.toGene )
+
+    genes.collect()
+
 }
-
-  /*
-   * Split on the seconary field delimiter
-   */
-  def secondarySplit(s:String, delimiter:String = "///"):Option[Set[String]] = 
-    Some(s.split(delimiter).map(_.trim).toSet)
-
-  /*
-   * The data contains fields with --- signifying no data, we convert this to None options.
-   */
-  def convertOption(o: String, noValue:String = "---"):Option[String] = if (o == noValue) None else Some(o)
 
 }

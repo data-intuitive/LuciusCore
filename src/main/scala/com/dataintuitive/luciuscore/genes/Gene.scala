@@ -17,5 +17,5 @@ class Gene(
 
   override def toString = s"${probesetid} (index = ${index}, entrezid = ${entrezid}, dataType = ${dataType}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name}, family = ${geneFamily})"
 
-}
 
+}

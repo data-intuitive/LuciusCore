@@ -6,7 +6,7 @@ import signatures._
 /**
   * The types and classes used throughout Lucius.
   *
-  * Be aware: The gene-model and signature model are not included here.
+  * Be aware: The gene model and signature model are in separate packages.
   */
 object Model extends Serializable {
 
@@ -14,11 +14,16 @@ object Model extends Serializable {
   type Value = Double
   type ValueVector = Array[Value]
 
-  // A RankVector contains ranks.
+  /**
+   * A RankVector is just an array of Ranks, being Double values.
+   *
+   * Please note that we wrap signatures but RankVectors because we can't afford
+   * the overhead when running in a distributed way.
+   */
   type Rank = Double
   type RankVector = Array[Rank]
 
-  type SignatureType = GeneVector
+  // type SignatureType = GeneVector
 
   type Index = Int
 
