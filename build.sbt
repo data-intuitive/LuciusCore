@@ -5,10 +5,7 @@ version := "3.2.10"
 scalaVersion := "2.11.12"
 
 libraryDependencies ++= Seq(
-  //(
   "org.scalactic"      %% "scalactic"       % "3.0.7"      % "test",
-  //)
-    /* .exclude("org.scala-lang", "scala-reflect"), */
   "org.scalatest"      %% "scalatest"       % "3.0.7"      % "test",
   "org.apache.spark"   %% "spark-core"      % "2.4.0"      % "provided"
 )

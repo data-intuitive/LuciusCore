@@ -59,14 +59,28 @@ object ParseFunctions extends Serializable {
                       features:Seq[String],
                       includeHeader:Boolean = false
                    ): RDD[Array[Option[String]]] = {
-    val header = rdd.first.map(_.trim)  // Be on the safe side !
+    val header = rdd.first.map(_.trim)          // Be on the safe side !
     val featureIndices = features.map(value => header.indexOf(value))
     val selectionRdd = rdd
       .map(row => featureIndices.map(valueIndex => row.lift(valueIndex)).toArray)
+      .map(_.map(_.map(_.replace("\"", ""))))   // Remove quotes
     if (!includeHeader)
       selectionRdd.zipWithIndex.filter(_._2 > 0).keys
     else
       selectionRdd
+
   }
 
+  /**
+   * Load a textfile using some seperator (tab be default)
+   */
+  def loadTSV(_sc: SparkContext,
+              filePath: String,
+              delimiter: String = "\t"):RDD[Array[String]] = {
+
+      _sc.textFile(filePath)
+        .map(_.split(delimiter))
+        .map(_.map(_.trim))
+
+  }
 }

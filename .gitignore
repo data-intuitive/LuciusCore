@@ -22,3 +22,7 @@ dist/*
 *.log
 
 .ws
+
+.metals/
+.bloop/
+project/metals.sbt
