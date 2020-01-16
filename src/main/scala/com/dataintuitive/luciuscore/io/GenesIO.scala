@@ -20,9 +20,10 @@ object GenesIO {
     * @param delimiter The delimiter to use when parsing the input file. Default is `tab`
     * @return Array of Gene, to be parsed to a GenesDB
     */
-    def loadGenesFromFile(sc: SparkContext,
-               geneAnnotationsFile: String,
-               delimiter: String = "\t"): Array[Gene] = {
+  def loadGenesFromFile(
+           sc: SparkContext,
+           geneAnnotationsFile: String,
+           delimiter: String = "\t"): Array[Gene] = {
 
     val featuresToExtract = Seq(
       "probesetID", 
@@ -56,6 +57,6 @@ object GenesIO {
 
     genes.collect()
 
-}
+  }
 
 }

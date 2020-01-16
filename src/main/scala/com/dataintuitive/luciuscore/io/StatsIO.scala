@@ -19,7 +19,12 @@ object StatsIO {
     * Load batches of data in order to make transposition possible.
     * API is the same as before except we have an option for the batch size.
     */
-  def loadStatsFromFileInBatches(sc: SparkContext, fileName:String, toTranspose:Boolean = true, batchSize:Int = 50000):RDD[Array[String]] = {
+  def loadStatsFromFileInBatches(
+                          sc: SparkContext, 
+                          fileName:String, 
+                          toTranspose:Boolean = true, 
+                          batchSize:Int = 50000):RDD[Array[String]] = {
+
     val raw = sc.textFile(fileName).map(_.split("\t").map(_.trim))
     // Prepend an empty entry in the header
     val correctedHeader = raw.zipWithIndex.map{case (v, i) => if (i == 0) "" +: v else v}
@@ -28,17 +33,23 @@ object StatsIO {
     } else {
       raw
     }
+
   }
 
   /**
     * Primary entry point to loading t and p statistics. The difference is only made upon updating the database.
     */
-  def loadStatsFromFile(sc: SparkContext, fileName:String, toTranspose:Boolean = true):RDD[Array[String]] = {
+  def loadStatsFromFile(
+                      sc: SparkContext,
+                      fileName:String,
+                      toTranspose:Boolean = true):RDD[Array[String]] = {
+
     val raw = sc.textFile(fileName).map(_.split("\t").map(_.trim))
     if (toTranspose)
       transpose(raw)
     else
       raw
+
   }
 
   def statsKey(x:Array[String]):Option[String] = Some(x.head)
