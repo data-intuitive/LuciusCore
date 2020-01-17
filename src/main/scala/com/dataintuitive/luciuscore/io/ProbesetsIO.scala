@@ -13,7 +13,8 @@ object ProbesetsIO {
   /**
     * IO convenience and demonstration function. Reading gene annotations from a file and parsing it
     * to a `Probesets` datastructure.
-    * Remark: Even if the input does not contain all info to fill the datastructure, we need to provide a features vector of size 7!
+    * Remark: Even if the input does not contain all info to fill the datastructure,
+    * we need to provide a features vector of size 7!
     *
     * @param sc SparkContext
     * @param geneAnnotationsFile The location of the file
@@ -50,9 +51,9 @@ object ProbesetsIO {
             dataType     = row(2).getOrElse("NA"),
             entrezID     = row(3).map(_.split("//")).getOrElse(Array()).toList,
             ensemblID    = row(4).map(_.split("//")).getOrElse(Array()).toList,
-            symbol       = row(5).map(_.split("//")).getOrElse(Array()).toList,
-            name         = row(6).getOrElse(""),
-            swissprotID         = row(7).map(_.split("//")).getOrElse(Array()).toList,
+            swissprotID  = row(5).map(_.split("///")).getOrElse(Array()).toList,
+            symbol       = row(6).map(_.split("//")).getOrElse(Array()).toList,
+            name         = row(7).getOrElse(""),
             unigeneClusterType  = row(8).getOrElse(""),
             chromosomalLocation = row(9).getOrElse(""),
             geneOntologyBiologicalProcess = row(10).getOrElse("")
