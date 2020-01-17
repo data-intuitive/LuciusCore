@@ -4,10 +4,14 @@ import com.dataintuitive.luciuscore.io.ParseFunctions._
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.{FunSpec, Matchers}
 
-/**
-  * Created by toni on 07/09/16.
-  */
 class ParseFunctionsTest extends FunSpec with BaseSparkContextSpec with Matchers {
+
+  describe("loadTSV") {
+
+    // TODO
+
+  }
+
 
   val arr = Array(
     Array("col1", "col2", "col3"),

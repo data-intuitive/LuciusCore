@@ -10,20 +10,6 @@ import org.apache.spark.rdd.RDD
   */
 object ProbesetsIO {
 
-  case class Probeset (
-          index: Int,
-          probesetID: String,
-          dataType: String,
-          entrezID: List[String],
-          ensemblID: List[String],
-          swissprotID: List[String],
-          symbol: List[String],
-          name: String,
-          unigeneClusterType: String, 
-          chromosomalLocation: String,
-          geneOntologyBiologicalProcess: String
-  ) extends Serializable
-
   /**
     * IO convenience and demonstration function. Reading gene annotations from a file and parsing it
     * to a `Probesets` datastructure.
@@ -71,7 +57,7 @@ object ProbesetsIO {
             chromosomalLocation = row(9).getOrElse(""),
             geneOntologyBiologicalProcess = row(10).getOrElse("")
         )
-    )
+      )
 
     probesets
 

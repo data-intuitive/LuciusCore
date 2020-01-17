@@ -1,9 +1,11 @@
 package com.dataintuitive.luciuscore.io
 
 import org.apache.spark.rdd.RDD
+import org.apache.spark.SparkContext
 
 /**
-  * A set of functions that parse an `RDD[String]` by using the column names in the `RDD`.
+  * A set of functions for loading a csv/tsv file into and array and
+  * parse the resulting `RDD[Array[String]]` by using the column names in the header.
   *
   * Two variants exist:
   *
@@ -58,7 +60,8 @@ object ParseFunctions extends Serializable {
   def extractFeatures(rdd:RDD[Array[String]],
                       features:Seq[String],
                       includeHeader:Boolean = false
-                   ): RDD[Array[Option[String]]] = {
+                      ): RDD[Array[Option[String]]] = {
+
     val header = rdd.first.map(_.trim)          // Be on the safe side !
     val featureIndices = features.map(value => header.indexOf(value))
     val selectionRdd = rdd
@@ -72,13 +75,19 @@ object ParseFunctions extends Serializable {
   }
 
   /**
-   * Load a textfile using some seperator (tab be default)
+   * Load a textfile using some seperator (tab by default)
+   *
+   * @param sc The `SparkContext`
+   * @param filePath The path to the file to parse, something Spark can interpret
+   * @param delimiter The delimiter to use, default is `\t`
+   * @return `RDD[Array[String]]` as parsed
    */
-  def loadTSV(_sc: SparkContext,
+  def loadTSV(sc: SparkContext,
               filePath: String,
-              delimiter: String = "\t"):RDD[Array[String]] = {
+              delimiter: String = "\t"
+              ):RDD[Array[String]] = {
 
-      _sc.textFile(filePath)
+      sc.textFile(filePath)
         .map(_.split(delimiter))
         .map(_.map(_.trim))
 

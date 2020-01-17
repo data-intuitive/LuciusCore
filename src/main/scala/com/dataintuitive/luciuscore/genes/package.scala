@@ -16,6 +16,20 @@ package object genes {
   val PROBESETID = "probesetid"
   val INDEX = "index"
 
+  case class Probeset (
+          index: Int,
+          probesetID: String,
+          dataType: String,
+          entrezID: List[String],
+          ensemblID: List[String],
+          swissprotID: List[String],
+          symbol: List[String],
+          name: String,
+          unigeneClusterType: String, 
+          chromosomalLocation: String,
+          geneOntologyBiologicalProcess: String
+  ) extends Serializable
+
   /**
     * Class for holding information about a gene, old version with only LM genes.
     */
