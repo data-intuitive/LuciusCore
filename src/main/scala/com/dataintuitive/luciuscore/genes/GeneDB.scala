@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore.genes
 
-class GenesDB(val genes: Array[Gene]) {
+class GeneDB(val genes: Array[Gene]) {
 
   /**
    * The input contains entries with multiple symbol names, separated by `///`.
