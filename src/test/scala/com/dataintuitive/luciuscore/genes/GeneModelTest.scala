@@ -6,32 +6,29 @@ class StageGenesTest extends FlatSpec {
 
   info("Test model for gene annotations")
 
-  val gene: GeneAnnotation = new GeneAnnotation("probesetidString",
-    "entrezidString",
-    "ensemblidString",
-    "symbolString",
-    "nameString")
+  val gene: Gene = Gene(
+    201,
+    "symbol",
+    List("probesets"),
+    List(1,2,3))
 
   "methods on a gene" should "return the method field" in {
-    assert(gene.name === "nameString")
-    assert(gene.symbol === "symbolString")
-    assert(gene.ensemblid === "ensemblidString")
-    assert(gene.entrezid === "entrezidString")
-    assert(gene.probesetid === "probesetidString")
+    assert(gene.index === 201)
+    assert(gene.symbol === "symbol")
+    assert(gene.probesetIDs === List("probesets"))
+    assert(gene.probesetIndices === List(1,2,3))
   }
 
   val listOfGenes = Array(
-    new Gene(0, "psid1", "AF", None, None, Some(Set("SYM1")), None, None),
-    new Gene(1, "psid2", "AF", None, None, Some(Set("SYM2")), None, None),
-    new Gene(2, "psid3", "AF", None, None, Some(Set("SYM3")), None, None),
-    new Gene(3, "psid4", "AF", None, None, Some(Set("SYM4")), None, None),
-    new Gene(4, "psid5", "AF", None, None, Some(Set("SYM5")), None, None),
-    new Gene(5, "psid6", "AF", None, None, Some(Set("SYM6")), None, None)
+    Gene(1, "symbol1"),
+    Gene(2, "symbol2"),
+    Gene(3, "symbol3"),
+    Gene(4, "symbol4")
   )
 
   "A Genes object" should "be created" in {
-    val genes = new GenesDB(listOfGenes)
-    assert(genes.genes(0).index === 0)
+    val genes = new GeneDB(listOfGenes)
+    assert(genes.lookup("symbol1").index === 1)
   }
 
 }

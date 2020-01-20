@@ -18,4 +18,6 @@ package object signatures {
   type SignedProbesetid = SignedString
   type SignedIndex = SignedInt
 
+  // case class IndexSignature(signature: Array[Int])
+
 }

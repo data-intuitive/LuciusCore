@@ -125,19 +125,19 @@ class TransformationFunctionsTest extends FlatSpec with Matchers {
 
   val indexSignature = new IndexSignature(Array(1, -3))
   val indexSignature2 = new IndexSignature(Array(3, -1))
-  val rankVector = indexSignature.toOrderedRankVector(3) // Array(2.0, 0.0, -1.0)
-  val rankVector2 = Array(-1.0, 0.0, 2.0)
+  // val rankVector = indexSignature.toOrderedRankVector(3) // Array(2.0, 0.0, -1.0)
+  // val rankVector2 = Array(-1.0, 0.0, 2.0)
 
-  "Nonzero elements" should "return an array of non-zero elements" in {
-    assert(nonZeroElements(rankVector) === Array((1, 2.0), (3, -1.0)))
-  }
+  // "Nonzero elements" should "return an array of non-zero elements" in {
+  //   assert(nonZeroElements(rankVector) === Array((1, 2.0), (3, -1.0)))
+  // }
 
-  "A rankVector" should "convert to a sparse signature" in {
-    rankVector2IndexSignature(rankVector).toString should equal (indexSignature.toString)
-  }
+  // "A rankVector" should "convert to a sparse signature" in {
+  //   rankVector2IndexSignature(rankVector).toString should equal (indexSignature.toString)
+  // }
 
-  it should "convert to a sparse signature in different order" in {
-    rankVector2IndexSignature(rankVector2).toString should equal (indexSignature2.toString)
-  }
+  // it should "convert to a sparse signature in different order" in {
+  //   rankVector2IndexSignature(rankVector2).toString should equal (indexSignature2.toString)
+  // }
 
 }
