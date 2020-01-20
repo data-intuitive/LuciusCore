@@ -9,7 +9,11 @@ class ProbesetDB(probesets: Array[Probeset]) extends Serializable {
     .map{ case(psid, symbols) => (psid, symbols.map(_._2).toList)}
 
   val symbols = probesets.map(ps => ps.symbol).flatMap(x => x).distinct
-  def indexedSymbols = symbols.zipWithIndex.map{ case(k,v) => (v,k) }.toMap
+  def indexedSymbols = 
+    symbols
+      .zipWithIndex
+      .map{ case(k,i) => (k, i+1)}          // 1-based index
+      .map{ case(k,v) => (v,k) }.toMap
 
   def toGeneDB = GeneDB(
     indexedSymbols
