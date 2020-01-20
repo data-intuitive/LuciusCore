@@ -15,24 +15,13 @@ case class SymbolSignature(signature: Array[SignedSymbol]) extends Signature[Sig
 
     def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
 
-    def toIndexSignature(implicit genes: GeneDB, failover: Int = 0):IndexSignature =
-        toProbesetidSignature.toIndexSignature
-
-}
-
-case class ProbesetidSignature(signature: Array[SignedProbesetid]) extends Signature[SignedProbesetid] {
-
-    def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
-
-    def toIndexSignature(implicit genes: GeneDB, failover: Int = 0):IndexSignature = {
-        val dict = for ((k,v) <- genes.index2ProbesetidDict) yield (v, k)
-        val translated = signature.map { g =>
-            val translation = dict.get(g.abs)
-            translation.map(ui => SignedInt(g.sign, ui)).getOrElse(SignedInt(failover))
+    def toIndexSignature(implicit geneDB: GeneDB, failover: Int = 0):IndexSignature =
+      IndexSignature(
+        signature.map{ symbol =>
+          val indexOption = geneDB.lookup(symbol.abs)
+          indexOption.map(i => SignedInt(symbol.sign, i)).getOrElse(SignedInt(failover))
         }
-        IndexSignature(translated)
-
-    }
+      )
 
 }
 
@@ -40,8 +29,13 @@ case class IndexSignature(signature: Array[SignedInt]) extends Signature[SignedI
 
   def this(signature: Array[Int]) { this(signature.map(g => SignedInt(g))) }
 
-  def toSymbolSignature(implicit genes: GeneDB, failover: Int = 0):SymbolSignature =
-      toProbesetidSignature.toSymbolSignature
+  def toSymbolSignature(implicit geneDB: GeneDB, failover: String = "OOPS"):SymbolSignature =
+      SymbolSignature(
+        signature.map{ index =>
+          val symbolOption = geneDB.lookup(index.abs)
+          symbolOption.map(symbol => SignedString(index.sign, symbol)).getOrElse(SignedString(failover))
+        }
+      )
 
   /**
     * Convert an index-based signature to an ordered rank vector.

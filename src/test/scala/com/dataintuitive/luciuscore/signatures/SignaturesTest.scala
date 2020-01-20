@@ -7,15 +7,14 @@ import org.scalatest.{FlatSpec, Matchers}
 class SignaturesTest extends FlatSpec with Matchers {
 
   val listOfGenes = Array(
-    new Gene(1, "psid1", "AF", None, None, Some(Set("SYM1")), None, None),
-    new Gene(2, "psid2", "AF", None, None, Some(Set("SYM2")), None, None),
-    new Gene(3, "psid3", "AF", None, None, Some(Set("SYM3")), None, None),
-    new Gene(4, "psid4", "AF", None, None, Some(Set("SYM4")), None, None),
-    new Gene(5, "psid5", "AF", None, None, Some(Set("SYM5")), None, None),
-    new Gene(6, "psid6", "AF", None, None, Some(Set("SYM6")), None, None)
+    new Gene(1, "SYM1"),
+    new Gene(2, "SYM2"),
+    new Gene(3, "SYM3"),
+    new Gene(4, "SYM4"),
+    new Gene(5, "SYM5")
   )
 
-  implicit val genes = new GenesDB(listOfGenes)
+  implicit val genes = new GeneDB(listOfGenes)
 
   "Instantiation" should "create the correct symbol objects" in {
 
@@ -25,17 +24,6 @@ class SignaturesTest extends FlatSpec with Matchers {
     val ssignature2 = new SymbolSignature(Array("SYM1", "-SYM2", "SYM4"))
 
     ssignature1.toString should equal (ssignature2.toString)
-
-  }
-
-  it should "create the correct probesetid objects" in {
-
-    val psignature1 = ProbesetidSignature(Array(SignedString(Sign.PLUS, "psid1"),
-                                            SignedString(Sign.MINUS, "psid2"),
-                                            SignedString(Sign.PLUS, "psid4")))
-    val psignature2 = new ProbesetidSignature(Array("psid1", "-psid2", "psid4"))
-
-    psignature1.toString should equal (psignature2.toString)
 
   }
 
@@ -53,20 +41,19 @@ class SignaturesTest extends FlatSpec with Matchers {
   "Given a Genes database" should "enable conversion between signatures" in {
 
     val ssignature2 = new SymbolSignature(Array("SYM1", "-SYM2", "SYM4"))
-    val psignature2 = new ProbesetidSignature(Array("psid1", "-psid2", "psid4"))
     val isignature2 = new IndexSignature(Array(1, -2, 4))
 
-    ssignature2.toProbesetidSignature.toString should equal (psignature2.toString)
-    psignature2.toIndexSignature.toString should equal (isignature2.toString)
-    isignature2.toSymbolSignature.toString should equal (ssignature2.toString)
+    ssignature2.toIndexSignature.signature should equal (isignature2.signature)
+    isignature2.toSymbolSignature.signature should equal (ssignature2.signature)
 
   }
 
-  "Translation" should "return OOPS for unknown entries" in {
-    val invalidSSignature = new SymbolSignature(Array("-SYM1", "OOPS"))
-    val invalidPSignature = new ProbesetidSignature(Array("-psid1", "NA"))
+  "Translation" should "return OOPS or index 0 for unknown entries" in {
+    val wrongssignature = new SymbolSignature(Array("SYM1", "wrong"))
+    val wrongisignature = new IndexSignature(Array(1, 50000))
 
-    invalidPSignature.toSymbolSignature.toString should equal (invalidSSignature.toString)
+    wrongssignature.toIndexSignature.signature(1) should equal(SignedInt(0))
+    wrongisignature.toSymbolSignature.signature(1).toString should equal("OOPS")
 
   }
 

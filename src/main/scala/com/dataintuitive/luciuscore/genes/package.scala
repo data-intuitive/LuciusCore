@@ -3,7 +3,7 @@ package com.dataintuitive.luciuscore
 package object genes {
 
   type GeneType = String
-
+  type Index = Int
   type Probesetid = String
   type Symbol = String
 

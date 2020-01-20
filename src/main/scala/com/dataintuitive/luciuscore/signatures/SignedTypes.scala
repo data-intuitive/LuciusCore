@@ -44,5 +44,3 @@ object SignedInt {
   def apply(i:Int) = if (i < 0) new SignedInt(MINUS, -i) else new SignedInt(PLUS, i)
 }
 
-
-// }

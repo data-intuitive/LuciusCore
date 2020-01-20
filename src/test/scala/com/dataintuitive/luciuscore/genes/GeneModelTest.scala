@@ -26,9 +26,9 @@ class StageGenesTest extends FlatSpec {
     Gene(4, "symbol4")
   )
 
-  "A Genes object" should "be created" in {
-    val genes = new GeneDB(listOfGenes)
-    assert(genes.lookup("symbol1").index === 1)
+  "A GeneDB object" should "be created" in {
+    val geneDB = new GeneDB(listOfGenes)
+    assert(geneDB.lookup("symbol1").get === 1)
   }
 
 }
