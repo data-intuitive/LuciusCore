@@ -1,6 +1,6 @@
 name := "LuciusCore"
 
-version := "3.2.10"
+version := "3.2.2"
 
 scalaVersion := "2.11.12"
 
@@ -18,6 +18,11 @@ scalacOptions ++= Seq("-unchecked", "-deprecation")
 organization := "com.data-intuitive"
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+
+githubOwner := "data-intuitive"
+githubRepository := "luciuscore"
+githubTokenSource := TokenSource.GitConfig("github.token")
+publishMavenStyle := true
 
 /* bintrayPackageLabels := Seq("scala", "l1000", "spark", "lucius") */
 

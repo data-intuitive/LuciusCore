@@ -22,3 +22,7 @@ dist/*
 *.log
 
 .ws
+
+.DS_Store
+.metals
+.bloop
