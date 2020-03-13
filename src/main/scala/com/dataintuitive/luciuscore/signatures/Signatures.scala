@@ -9,6 +9,8 @@ sealed trait Signature[A] extends Serializable {
     val notation = this.getClass
 
     override def toString = signature.mkString(s"Signature of type ${notation}: [", ",", "]")
+
+    def toArray = signature.map(_.toString)
 }
 
 case class SymbolSignature(signature: Array[SignedSymbol]) extends Signature[SignedSymbol] {

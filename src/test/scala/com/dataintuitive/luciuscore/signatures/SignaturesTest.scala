@@ -28,6 +28,14 @@ class SignaturesTest extends FlatSpec with Matchers {
 
   }
 
+  it should "be possible to convert to Array[String] using toArray" in {
+    
+    val a = Array("SYM1", "-SYM2", "SYM4")
+    val ssignature = new SymbolSignature(a)
+    ssignature.toArray should equal (a)
+
+  }
+
   it should "create the correct probesetid objects" in {
 
     val psignature1 = ProbesetidSignature(Array(SignedString(Sign.PLUS, "psid1"),
