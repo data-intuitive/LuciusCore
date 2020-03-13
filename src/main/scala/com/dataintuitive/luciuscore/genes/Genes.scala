@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore.genes
 
-class GenesDB(val genes: Array[Gene]) {
+case class GenesDB(val genes: Array[Gene]) extends Serializable {
 
   /**
    * The input contains entries with multiple symbol names, separated by `///`.
