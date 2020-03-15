@@ -1,6 +1,6 @@
 name := "LuciusCore"
 
-version := "3.2.10"
+version := "3.2.13"
 
 scalaVersion := "2.11.12"
 
@@ -13,12 +13,13 @@ libraryDependencies ++= Seq(
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
-organization := "com.data-intuitive"
+organization := "com.dataintuitive"
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 githubOwner := "data-intuitive"
 githubRepository := "luciuscore"
+githubActor := "tverbeiren"
 githubTokenSource := TokenSource.GitConfig("github.token")
 publishMavenStyle := true
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
