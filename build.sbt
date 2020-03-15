@@ -1,6 +1,6 @@
 name := "LuciusCore"
 
-version := "3.2.9"
+version := "3.2.10"
 
 scalaVersion := "2.11.12"
 
@@ -22,6 +22,3 @@ githubRepository := "luciuscore"
 githubTokenSource := TokenSource.GitConfig("github.token")
 publishMavenStyle := true
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
-
-/* bintrayPackageLabels := Seq("scala", "l1000", "spark", "lucius") */
-

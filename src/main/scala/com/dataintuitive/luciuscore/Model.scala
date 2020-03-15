@@ -29,6 +29,8 @@ object Model extends Serializable {
 
   type Row = Array[Option[String]]
 
+  type ScoredDbRow = (Double, DbRow)
+
   case class DbRow(
                     val pwid: Option[String],
                     val sampleAnnotations: SampleAnnotations,
