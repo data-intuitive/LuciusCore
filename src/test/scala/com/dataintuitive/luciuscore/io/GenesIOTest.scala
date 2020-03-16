@@ -4,10 +4,12 @@ import com.dataintuitive.luciuscore.genes.GenesDB
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
+import org.scalatest._
 
 /**
  * Please note the location of the featureData.txt files!
  */
+@Ignore
 class GenesIOTest extends FlatSpec with BaseSparkContextSpec with Matchers {
 
   info("Test loading of Gene annotations from file, old format (L1000)")

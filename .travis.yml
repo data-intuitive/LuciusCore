@@ -7,11 +7,10 @@ scala:
 
 deploy:
   provider: bintray
-  file: bintray.json 
-  user: tverbeiren 
+  file: bintray.json
+  user: tverbeiren
   key:
     secure: XfoWmFB31x3JEAhNtgTt/dSixXV/8xAxfI9m4XB2SuBDt4hkp6LU0tY8+4xxVw2u4LuXGZKnVsvGDWmlg+gJCii0huKCiSSRJFb+YQoSZvcZ/AvXD/Ci1VQT9B8dggmNilA7CuKs4IhYzMtiaqNSoQ+H9LkDcG/So2mNdp6OTOxHn2qetoYPBtM3A5DXF/Vbq17Ez/cbX+VOCUnCe19M+hDSmtuwW6EWakaD5BHkXZw5Brov8UFcjyaBE+6UtddQJIfi77iQaQZ8m4zIvur1xofCxXAjeYJ9v926R4sUJkgpAuTQ4zttw2uXStHhQIOSX912KM7jfBOhFGTff01W3rDk+easUdEKnAoRCuT9AJV20X6nXnqehaO2WzQ9HA9nIIZ7v2xbMsnxZJ7YVz9W2BwA0gxtOncQkRg08opTFxfHbxc/aDKOZKEpvMFeK8wtbqlB5qWEfhBL6vpupPBBfF71iEiL5gQ45LC0Huqmw3yxIvqWpcjVsFrVBxiMj97E7WuG5fw91MUx82dgY6Xmm+kCn3h1e40BjQ/NlCy9dy+RIL8mEZ7sn3xhXhsXjWl/xtbd20GYmyiHMBdJQfqVCmN1oWFetsoPT9w2zPhOFG1lDR7JMz2RM+xC3rx9xL3C5vep1QQS+LVSLtJN+DnP1WYb5eompQ73Jwjt8II7WxA=
   dry-run:  false
   on:
       all_branches: true
-
