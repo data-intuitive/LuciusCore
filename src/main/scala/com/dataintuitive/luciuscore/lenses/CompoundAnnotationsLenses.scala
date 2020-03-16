@@ -3,6 +3,8 @@ package com.dataintuitive.luciuscore.lenses
 import scalaz.Lens
 import com.dataintuitive.luciuscore.genes._
 import com.dataintuitive.luciuscore.Model._
+import OptionLenses._
+import CompoundLenses._
 
 object CompoundAnnotationsLenses extends Serializable {
 
@@ -14,11 +16,19 @@ object CompoundAnnotationsLenses extends Serializable {
         (a, value) => a.copy(knownTargets = value),
         _.knownTargets
     )
-    val predictedTargetLens = Lens.lensu[CompoundAnnotations, Option[Seq[GeneType]]](
+    val predictedTargetsLens = Lens.lensu[CompoundAnnotations, Option[Seq[GeneType]]](
         (a, value) => a.copy(predictedTargets = value),
         _.predictedTargets
     )
 
     val cL = compoundLens
 
+    val safeJnjsLens = compoundLens >=> jnjsLens >=> safeStringLens("No JNJs")
+    val safeJnjbLens = compoundLens >=> jnjbLens >=> safeStringLens("No JNJb")
+    val safeSmilesLens = compoundLens >=> smilesLens >=> safeStringLens("No smiles")
+    val safeInchikeyLens = compoundLens >=> inchikeyLens >=> safeStringLens("No inchikey")
+    val safeNameLens = compoundLens >=> nameLens >=> safeStringLens("No name")
+    val safeCtypeLens = compoundLens >=> ctypeLens >=> safeStringLens("No ctype")
+    val safeKnownTargetsLens = knownTargetsLens >=> targetsLens
+    val safePredictedTargetsLens = predictedTargetsLens >=> targetsLens
 }

@@ -2,6 +2,7 @@ package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
 import com.dataintuitive.luciuscore.Model._
+import OptionLenses._
 
 object ScoredDbRowLenses extends Serializable {
 
@@ -15,7 +16,7 @@ object ScoredDbRowLenses extends Serializable {
         _._2
     )
 
-    import OptionLenses.safeStringLens
+    val pwidLens = DbRowLens >=> DbRowLenses.pwidLens
 
     val jnjsLens = DbRowLens >=> DbRowLenses.jnjsLens
     val jnjbLens = DbRowLens >=> DbRowLenses.jnjbLens
@@ -23,6 +24,8 @@ object ScoredDbRowLenses extends Serializable {
     val inchikeyLens = DbRowLens >=> DbRowLenses.inchikeyLens
     val nameLens = DbRowLens >=> DbRowLenses.nameLens
     val ctypeLens = DbRowLens >=> DbRowLenses.ctypeLens
+    val knownTargetsLens = DbRowLens >=> DbRowLenses.knownTargetsLens
+    val predictedTargetsLens = DbRowLens >=> DbRowLenses.predictedTargetsLens
 
     val batchLens = DbRowLens >=> DbRowLenses.batchLens
     val plateidLens = DbRowLens >=> DbRowLenses.plateidLens
@@ -31,12 +34,16 @@ object ScoredDbRowLenses extends Serializable {
     val concentrationLens = DbRowLens >=>  DbRowLenses.concentrationLens
     val yearLens = DbRowLens >=> DbRowLenses.yearLens
 
+    val safePwidLens = pwidLens >=> safeStringLens("No platewellid")
+
     val safeJnjsLens = jnjsLens >=> safeStringLens("No JNJs")
     val safeJnjbLens = jnjbLens >=> safeStringLens("No JNJb")
     val safeSmilesLens = smilesLens >=> safeStringLens("No smiles")
     val safeInchikeyLens = inchikeyLens >=> safeStringLens("No inchikey")
     val safeNameLens = nameLens >=> safeStringLens("No name")
     val safeCtypeLens = ctypeLens >=> safeStringLens("No ctype")
+    val safeKnownTargetsLens = knownTargetsLens >=> targetsLens
+    val safePredictedTargetsLens = predictedTargetsLens >=> targetsLens
 
     val safeBatchLens = batchLens >=> safeStringLens("No batch")
     val safePlateidLens = plateidLens >=> safeStringLens("No plateid")
