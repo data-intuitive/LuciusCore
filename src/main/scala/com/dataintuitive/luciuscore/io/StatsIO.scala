@@ -80,6 +80,6 @@ object StatsIO {
     update.drop(1).map(x => Try(x.toDouble).toOption.getOrElse(0.0))
   }
 
-  val pwidKey = (x:DbRow) => x.sampleAnnotations.sample.pwid
+  val pwidKey = (x:DbRow) => x.sampleAnnotations.sample.id
 
 }

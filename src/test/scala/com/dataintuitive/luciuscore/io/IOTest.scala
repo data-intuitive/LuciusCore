@@ -21,15 +21,14 @@ class IOTest extends FunSpec with BaseSparkContextSpec with Matchers {
 
     it("should loadSampleCompoundRelationsFromFileV1") {
       val firstEntry = v1Relations.first
-      assert(firstEntry.pwid.get === "BRD-A00037023")
-      assert(firstEntry.compoundAnnotations.compound.jnjs === Some("BRD-A00037023"))
-      assert(firstEntry.compoundAnnotations.compound.jnjb === Some("aJNJB"))
+      assert(firstEntry.id.get === "BRD-A00037023")
+      assert(firstEntry.compoundAnnotations.compound.id === Some("BRD-A00037023"))
       assert(firstEntry.compoundAnnotations.compound.smiles === Some("CCOC(=O)C1=C(C)N=C2SC(=CC(=O)N2C1c1ccc(OC)cc1)C(=O)OC"))
       assert(firstEntry.compoundAnnotations.compound.name === Some("BRD-A00037023"))
       assert(firstEntry.compoundAnnotations.compound.inchikey === Some("inchi-00001"))
       assert(firstEntry.compoundAnnotations.compound.ctype === Some("NA"))
       assert(firstEntry.compoundAnnotations.knownTargets === Some(Seq("PSME1")))
-      assert(firstEntry.sampleAnnotations.sample.pwid === Some("BRD-A00037023"))
+      assert(firstEntry.sampleAnnotations.sample.id === Some("BRD-A00037023"))
       assert(firstEntry.sampleAnnotations.sample.batch === Some("batch#"))
       assert(firstEntry.sampleAnnotations.sample.well === Some("well#"))
       assert(firstEntry.sampleAnnotations.sample.year === Some("2020"))
@@ -48,16 +47,15 @@ class IOTest extends FunSpec with BaseSparkContextSpec with Matchers {
 
     it("should loadSampleCompoundRelationsFromFileV2") {
       val firstEntry = dbRelations.first
-      assert(firstEntry.pwid.get === "BRD-A00037023")
-      assert(firstEntry.compoundAnnotations.compound.jnjs === Some("BRD-A00037023"))
-      assert(firstEntry.sampleAnnotations.sample.pwid === Some("BRD-A00037023"))
+      assert(firstEntry.id.get === "BRD-A00037023")
+      assert(firstEntry.compoundAnnotations.compound.id === Some("BRD-A00037023"))
+      assert(firstEntry.sampleAnnotations.sample.id === Some("BRD-A00037023"))
       assert(firstEntry.sampleAnnotations.sample.batch === Some("batch#"))
       assert(firstEntry.sampleAnnotations.sample.well === Some("well#"))
       assert(firstEntry.sampleAnnotations.sample.year === Some("2020"))
       assert(firstEntry.sampleAnnotations.sample.plateid === Some("plate#"))
       assert(firstEntry.sampleAnnotations.sample.concentration === Some("00.00"))
       assert(firstEntry.sampleAnnotations.sample.protocolname === Some("LINCS"))
-      assert(firstEntry.compoundAnnotations.compound.jnjb.isDefined === false)
     }
 
   }
@@ -71,12 +69,12 @@ class IOTest extends FunSpec with BaseSparkContextSpec with Matchers {
 
     it("Should load the annotations file properly and update the DB") {
 
-      val BRDA00037023 = dbAnnotations.filter(_.pwid.map(_.contains("BRD-A00037023")).getOrElse(false))
+      val BRDA00037023 = dbAnnotations.filter(_.id.map(_.contains("BRD-A00037023")).getOrElse(false))
 
       assert(BRDA00037023.map(_.compoundAnnotations.compound.smiles).collect.length === 1)
       assert(BRDA00037023.map(_.compoundAnnotations.compound.smiles).collect.length === 1)
       assert(BRDA00037023.map(_.compoundAnnotations.compound.smiles).collect.head === Some("CCOC(=O)C1=C(C)N=C2SC(=CC(=O)N2C1c1ccc(OC)cc1)C(=O)OC"))
-      assert(BRDA00037023.map(_.compoundAnnotations.compound.jnjs).collect.head === Some("BRD-A00037023"))
+      assert(BRDA00037023.map(_.compoundAnnotations.compound.id).collect.head === Some("BRD-A00037023"))
     }
 
   }

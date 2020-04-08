@@ -56,15 +56,15 @@ object SampleCompoundRelationsIO extends Serializable {
 
     extractFeatures(data, features = featuresToExtract, includeHeader = false)
       .map { r =>
-        val _jnjs = parseJNJ(r(1))
+        val _id = parseJNJ(r(1))
         val _jnjb = parseJNJ(r(2))
         val _name = parseName(r(9))
         // Avoid that experiment names are used as compound name: either jnjs OR name is used
-        val thisCompound = (_jnjs, _name) match {
-          case (None, _) => Compound(jnjs = None, jnjb = None, name = _name)
-          case (_, _) => Compound(jnjs = _jnjs, jnjb = _jnjb, name = None)
+        val thisCompound = (_id, _name) match {
+          case (None, _) => Compound(id = None, name = _name)
+          case (_, _) => Compound(id = _id, name = None)
         }
-        val thisSample = Sample(pwid = r(0),
+        val thisSample = Sample(id = r(0),
                                 batch = r(3),
                                 plateid = r(4),
                                 well = r(5),
@@ -96,8 +96,8 @@ object SampleCompoundRelationsIO extends Serializable {
     extractFeatures(data, features = featuresToExtract, includeHeader = false)
       .map { r =>
         // Strip -AAA from the compound jnj number for compatibility
-        val thisCompound = Compound(jnjs = r(1).map(_.stripSuffix("-AAA")))
-        val thisSample = Sample(pwid = r(0),
+        val thisCompound = Compound(id = r(1).map(_.stripSuffix("-AAA")))
+        val thisSample = Sample(id = r(0),
                                 batch = r(2),
                                 plateid = r(3),
                                 well = r(4),
@@ -137,8 +137,7 @@ object SampleCompoundRelationsIO extends Serializable {
     extractFeatures(data, features = featuresToExtract, includeHeader = false)
       .map { r =>
         // Strip -AAA from the compound jnj number for compatibility
-        val thisCompound = Compound(jnjs = r(1).map(_.stripSuffix("-AAA")),
-                                    jnjb = r(2),
+        val thisCompound = Compound(id = r(1).map(_.stripSuffix("-AAA")),
                                     smiles = r(9),
                                     name = r(11),
                                     inchikey = r(10),
@@ -146,7 +145,7 @@ object SampleCompoundRelationsIO extends Serializable {
         val thisKnownTargets = r(13).map{
            targetsString => targetsString.split(",").map(_.trim).toSet.toSeq
         }
-        val thisSample = Sample(pwid = r(0),
+        val thisSample = Sample(id = r(0),
                                 batch = r(3),
                                 plateid = r(4),
                                 well = r(5),

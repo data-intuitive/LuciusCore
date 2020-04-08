@@ -5,13 +5,18 @@ import com.dataintuitive.luciuscore.Model._
 
 object CompoundLenses extends Serializable {
 
+    val idLens = Lens.lensu[Compound, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
+    )
+    // Backward compatibility
     val jnjsLens = Lens.lensu[Compound, Option[String]](
-        (a, value) => a.copy(jnjs = value),
-        _.jnjs
+        (a, value) => a.copy(id = value),
+        _.id
     )
     val jnjbLens = Lens.lensu[Compound, Option[String]](
-        (a, value) => a.copy(jnjb = value),
-        _.jnjb
+        (a, value) => a.copy(id = value),
+        _.id
     )
     val smilesLens = Lens.lensu[Compound, Option[String]](
         (a, value) => a.copy(smiles = value),

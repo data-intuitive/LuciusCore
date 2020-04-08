@@ -5,9 +5,14 @@ import com.dataintuitive.luciuscore.Model._
 
 object SampleLenses extends Serializable {
 
+    val idLens = Lens.lensu[Sample, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
+    )
+    // Backward compability
     val pwidLens = Lens.lensu[Sample, Option[String]](
-        (a, value) => a.copy(pwid = value),
-        _.pwid
+        (a, value) => a.copy(id = value),
+        _.id
     )
     val batchLens = Lens.lensu[Sample, Option[String]](
         (a, value) => a.copy(batch = value),
@@ -32,6 +37,10 @@ object SampleLenses extends Serializable {
     val yearLens = Lens.lensu[Sample, Option[String]](
         (a, value) => a.copy(year = value),
         _.year
+    )
+    val timeLens = Lens.lensu[Sample, Option[String]](
+        (a, value) => a.copy(time = value),
+        _.time
     )
 
 }

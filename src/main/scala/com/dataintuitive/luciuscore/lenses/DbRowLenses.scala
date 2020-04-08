@@ -5,9 +5,14 @@ import com.dataintuitive.luciuscore.Model._
 
 object DbRowLenses extends Serializable {
 
+    val idLens = Lens.lensu[DbRow, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
+    )
+    // Backward compatibility
     val pwidLens = Lens.lensu[DbRow, Option[String]](
-        (a, value) => a.copy(pwid = value),
-        _.pwid
+        (a, value) => a.copy(id = value),
+        _.id
     )
     val sampleAnnotationsLens = Lens.lensu[DbRow, SampleAnnotations](
         (a, value) => a.copy(sampleAnnotations = value),

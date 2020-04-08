@@ -14,7 +14,7 @@ class DbFunctionsTest extends FlatSpec with BaseSparkContextSpec{
   val sampleCompoundRelationsV2Source = "src/test/resources/v2/sampleCompoundRelations.txt"
   val aDbRow = loadSampleCompoundRelationsFromFileV2(sc, sampleCompoundRelationsV2Source).first
   // the example data does not have the r vectors we are testing, so construct new DbRow
-  val newDbRow = DbRow(aDbRow.pwid,
+  val newDbRow = DbRow(aDbRow.id,
     SampleAnnotations(aDbRow.sampleAnnotations.sample,
       Some(Array(2.0, 2.0, 2.0, 2.0)),
       Some(Array(2.0, 2.0, 2.0, 2.0)),

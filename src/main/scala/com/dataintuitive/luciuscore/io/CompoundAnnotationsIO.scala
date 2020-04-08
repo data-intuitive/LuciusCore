@@ -31,13 +31,13 @@ object CompoundAnnotationsIO extends Serializable {
       .map(_.toSeq)
       .map { l =>
         // There is at least one entry, so take the first one
-        val jnjs = l.head(0)
+        val id = l.head(0)
         val inchikey = l.head(1)
         val smiles = l.head(2)
         // Targets are not necessarily filled in, filter the empty ones out
         val targets = l.flatMap(x => x(3)).toSeq.distinct
         // Return quadrupals
-        (jnjs, inchikey, smiles, Some(targets))
+        (id, inchikey, smiles, Some(targets))
       }
   }
 
@@ -59,6 +59,6 @@ object CompoundAnnotationsIO extends Serializable {
   // Key for compound ID in DB
   def caKeyFunction(x:(Option[String], Option[String],Option[String],Option[Seq[GeneType]])):Option[String] = x._1
   // Key for compound ID in new data to be joined
-  def dbKeyFunction(x:DbRow):Option[String] = x.compoundAnnotations.compound.jnjs
+  def dbKeyFunction(x:DbRow):Option[String] = x.compoundAnnotations.compound.id
 
 }

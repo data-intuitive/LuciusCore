@@ -4,9 +4,6 @@ import com.dataintuitive.luciuscore.Model._
 
 import org.scalatest.FlatSpec
 
-/**
-  * Created by toni on 15/06/16.
-  */
 class ModelTest extends FlatSpec {
 
   info("Test Experimental Model")

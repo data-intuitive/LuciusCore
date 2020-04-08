@@ -32,7 +32,7 @@ object Model extends Serializable {
   type ScoredDbRow = (Double, DbRow)
 
   case class DbRow(
-                    val pwid: Option[String],
+                    val id: Option[String],
                     val sampleAnnotations: SampleAnnotations,
                     val compoundAnnotations: CompoundAnnotations
                   ) extends Serializable
@@ -54,17 +54,16 @@ object Model extends Serializable {
 
   // Moving Targets out of the way into seperate object!!!!
   case class Compound(
-                       jnjs: Option[String],
-                       jnjb: Option[String] = None,
+                       id: Option[String],
                        smiles: Option[String] = None,
                        inchikey: Option[String] = None,
                        name: Option[String] = None,
                        ctype: Option[String] = None
                      ) extends Serializable {
 
-    def getJnj = jnjs.getOrElse("Compound jnjs not available")
-    def getJnjs = jnjs.getOrElse("Compound Jnjs not available")
-    def getJnjb = jnjb.getOrElse("Compound Jnjb not available")
+    def getJnj = id.getOrElse("Compound jnjs not available")
+    def getJnjs = id.getOrElse("Compound Jnjs not available")
+    def getJnjb = id.getOrElse("Compound Jnjb not available")
     def getSmiles = smiles.getOrElse("Compound smiles code not availalbe")
     def getInchikey = inchikey.getOrElse("Compound inchikey not available")
     def getName = name.getOrElse("Compound name not available")
@@ -83,7 +82,7 @@ object Model extends Serializable {
                       ) extends Serializable {
 
     // Convenience method: usually jnjs is used as identifier
-    def jnj = compound.jnjs
+    def jnj = compound.id
 
     // Map None to empty set as part of the high-level API
     def getKnownTargets = knownTargets.getOrElse(Seq())
@@ -94,22 +93,25 @@ object Model extends Serializable {
   }
 
   case class Sample(
-                     val pwid: Option[String],
+                     val id: Option[String],
                      val batch: Option[String] = None,
                      val plateid: Option[String] = None,
                      val well: Option[String] = None,
                      val protocolname: Option[String] = None,
                      val concentration: Option[String] = None,
-                     val year: Option[String] = None
+                     val year: Option[String] = None,
+                     val time: Option[String] = None
                    ) extends Serializable {
 
-    def getPwid = pwid.getOrElse("Sample pwid not available")
+    def getId = id.getOrElse("Sample pwid not available")
+    def getPwid = getId
     def getBatch = batch.getOrElse("Sample batch not available")
     def getPlateid = plateid.getOrElse("Sample plateid not available")
     def getWell = well.getOrElse("Sample well not available")
     def getProtocolname = protocolname.getOrElse("Sample protocolname not available")
     def getConcentration = concentration.getOrElse("Sample concentration not available")
     def getYear = year.getOrElse("Sample year not available")
+    def getTime = time.getOrElse("Sample year not available")
 
   }
 
