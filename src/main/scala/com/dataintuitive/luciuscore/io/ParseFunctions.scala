@@ -69,4 +69,33 @@ object ParseFunctions extends Serializable {
       selectionRdd
   }
 
+  /**
+   * Function to parse an `RDD` and extract columns by name (in header).
+   *
+   * The result is an `RDD[Map[String, Option[String]]]`, where the keys
+   * are the column names and the values are the values for this _row_.
+   *
+   * If no value is found for the given key, `None` is returned.
+   */
+  def extractFeaturesMap(rdd:RDD[Array[String]],
+                      features:Seq[String],
+                      includeHeader:Boolean = false
+                   ): RDD[Map[String, Option[String]]] = {
+    val header = rdd.first.map(_.trim)  // Be on the safe side !
+    val featureIndices = features.map(value => header.indexOf(value))
+    val selectionRdd = rdd
+      .map(row =>
+        featureIndices
+          .map(valueIndex => row.lift(valueIndex))
+          .zip(features)
+          .toMap
+          .map(_.swap)
+          .withDefault(_ => None)
+      )
+    if (!includeHeader)
+      selectionRdd.zipWithIndex.filter(_._2 > 0).keys
+    else
+      selectionRdd
+  }
+
 }
