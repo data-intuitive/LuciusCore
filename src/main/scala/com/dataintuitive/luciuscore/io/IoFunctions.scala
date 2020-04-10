@@ -8,6 +8,11 @@ import org.apache.spark.rdd.RDD
   */
 object IoFunctions {
 
+  /**
+   * Helper function to remove quotes from a String
+   */
+  def removeQuotes(str: String) = if (str.startsWith("\"")) str.replace("\"", "") else str
+
   def loadTsv(sc: SparkContext,
               sampleCompoundAnnotationsFile: String,
               delimiter: String = "\t"):RDD[Array[String]] = {
