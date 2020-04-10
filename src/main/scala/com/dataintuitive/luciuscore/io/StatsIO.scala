@@ -1,5 +1,6 @@
 package com.dataintuitive.luciuscore.io
 
+import IoFunctions._
 import com.dataintuitive.luciuscore.Model.DbRow
 import org.apache.spark.SparkContext
 import com.dataintuitive.luciuscore.utilities.RddFunctions._
@@ -25,7 +26,7 @@ object StatsIO {
                           toTranspose:Boolean = true, 
                           batchSize:Int = 50000):RDD[Array[String]] = {
 
-    val raw = sc.textFile(fileName).map(_.split("\t").map(_.trim))
+    val raw = sc.textFile(fileName).map(_.split("\t").map(_.trim).map(removeQuotes(_)))
     // Prepend an empty entry in the header
     val correctedHeader = raw.zipWithIndex.map{case (v, i) => if (i == 0) "" +: v else v}
     if (toTranspose) {
