@@ -2,15 +2,11 @@ package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
 import com.dataintuitive.luciuscore.Model._
+import com.dataintuitive.luciuscore.Filters
 
 object DbRowLenses extends Serializable {
 
     val idLens = Lens.lensu[DbRow, Option[String]](
-        (a, value) => a.copy(id = value),
-        _.id
-    )
-    // Backward compatibility
-    val pwidLens = Lens.lensu[DbRow, Option[String]](
         (a, value) => a.copy(id = value),
         _.id
     )
@@ -23,6 +19,11 @@ object DbRowLenses extends Serializable {
         _.compoundAnnotations
     )
 
+    val filtersLens = Lens.lensu[DbRow, Filters](
+        (a, value) => a.copy(filters = value),
+        _.filters
+    )
+
     // Shorthands
     val saL = sampleAnnotationsLens
     val caL = compoundAnnotationsLens
@@ -31,8 +32,7 @@ object DbRowLenses extends Serializable {
     import CompoundAnnotationsLenses._
     import OptionLenses._
 
-    val jnjsLens = caL >=> compoundLens >=> CompoundLenses.jnjsLens
-    val jnjbLens = caL >=> compoundLens >=> CompoundLenses.jnjbLens
+    val compoundIdLens = caL >=> compoundLens >=> CompoundLenses.idLens
     val smilesLens = caL >=> compoundLens >=> CompoundLenses.smilesLens
     val inchikeyLens = caL >=> compoundLens >=> CompoundLenses.inchikeyLens
     val nameLens = caL >=> compoundLens >=> CompoundLenses.nameLens
@@ -46,11 +46,11 @@ object DbRowLenses extends Serializable {
     val protocolnameLens = saL >=> sampleLens >=> SampleLenses.protocolnameLens
     val concentrationLens = saL >=> sampleLens >=> SampleLenses.concentrationLens
     val yearLens = saL >=> sampleLens >=> SampleLenses.yearLens
+    val timeLens = saL >=> sampleLens >=> SampleLenses.timeLens
 
-    val safePwidLens = pwidLens >=> safeStringLens("No platewellid")
+    val safeIdLens = idLens >=> safeStringLens("No id")
 
-    val safeJnjsLens = jnjsLens >=> safeStringLens("No JNJs")
-    val safeJnjbLens = jnjbLens >=> safeStringLens("No JNJb")
+    val safeCompoundIdLens = compoundIdLens >=> safeStringLens("No compound ID")
     val safeSmilesLens = smilesLens >=> safeStringLens("No smiles")
     val safeInchikeyLens = inchikeyLens >=> safeStringLens("No inchikey")
     val safeNameLens = nameLens >=> safeStringLens("No name")
@@ -64,6 +64,18 @@ object DbRowLenses extends Serializable {
     val safeProtocolnameLens = protocolnameLens >=> safeStringLens("No protocol")
     val safeConcentrationLens = concentrationLens >=> safeStringLens("No concentration")
     val safeYearLens = yearLens >=> safeStringLens("No year")
+    val safeTimeLens = timeLens >=> safeStringLens("No time")
+
+    // Pending deprecation
+    val pwidLens = Lens.lensu[DbRow, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
+    )
+    val jnjsLens = caL >=> compoundLens >=> CompoundLenses.jnjsLens
+    val jnjbLens = caL >=> compoundLens >=> CompoundLenses.jnjbLens
+
+    val safePwidLens = pwidLens >=> safeStringLens("No platewellid")
+    val safeJnjsLens = jnjsLens >=> safeStringLens("No JNJs")
+    val safeJnjbLens = jnjbLens >=> safeStringLens("No JNJb")
 
 }
-

@@ -34,7 +34,8 @@ object Model extends Serializable {
   case class DbRow(
                     val id: Option[String],
                     val sampleAnnotations: SampleAnnotations,
-                    val compoundAnnotations: CompoundAnnotations
+                    val compoundAnnotations: CompoundAnnotations,
+                    val filters: Filters = Filters()
                   ) extends Serializable
 
   case class SampleAnnotations(

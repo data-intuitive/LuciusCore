@@ -16,10 +16,9 @@ object ScoredDbRowLenses extends Serializable {
         _._2
     )
 
-    val pwidLens = DbRowLens >=> DbRowLenses.pwidLens
+    val idLens = DbRowLens >=> DbRowLenses.idLens
 
-    val jnjsLens = DbRowLens >=> DbRowLenses.jnjsLens
-    val jnjbLens = DbRowLens >=> DbRowLenses.jnjbLens
+    val compoundIdLens = DbRowLens >=> DbRowLenses.compoundIdLens
     val smilesLens = DbRowLens >=> DbRowLenses.smilesLens
     val inchikeyLens = DbRowLens >=> DbRowLenses.inchikeyLens
     val nameLens = DbRowLens >=> DbRowLenses.nameLens
@@ -33,11 +32,13 @@ object ScoredDbRowLenses extends Serializable {
     val protocolnameLens = DbRowLens >=> DbRowLenses.protocolnameLens
     val concentrationLens = DbRowLens >=>  DbRowLenses.concentrationLens
     val yearLens = DbRowLens >=> DbRowLenses.yearLens
+    val timeLens = DbRowLens >=> DbRowLenses.timeLens
 
-    val safePwidLens = pwidLens >=> safeStringLens("No platewellid")
+    val filtersLens = DbRowLens >=> DbRowLenses.filtersLens
 
-    val safeJnjsLens = jnjsLens >=> safeStringLens("No JNJs")
-    val safeJnjbLens = jnjbLens >=> safeStringLens("No JNJb")
+    val safeIdLens = idLens >=> safeStringLens("No id")
+
+    val safeCompoundIdLens = compoundIdLens >=> safeStringLens("No id")
     val safeSmilesLens = smilesLens >=> safeStringLens("No smiles")
     val safeInchikeyLens = inchikeyLens >=> safeStringLens("No inchikey")
     val safeNameLens = nameLens >=> safeStringLens("No name")
@@ -51,6 +52,15 @@ object ScoredDbRowLenses extends Serializable {
     val safeProtocolnameLens = protocolnameLens >=> safeStringLens("No protocol")
     val safeConcentrationLens = concentrationLens >=> safeStringLens("No concentration")
     val safeYearLens = yearLens >=> safeStringLens("No year")
+    val safeTimeLens = timeLens >=> safeStringLens("No time")
+
+    // Pending deprecation
+    val pwidLens = DbRowLens >=> DbRowLenses.pwidLens
+    val jnjsLens = DbRowLens >=> DbRowLenses.jnjsLens
+    val jnjbLens = DbRowLens >=> DbRowLenses.jnjbLens
+
+    val safePwidLens = pwidLens >=> safeStringLens("No platewellid")
+    val safeJnjsLens = jnjsLens >=> safeStringLens("No JNJs")
+    val safeJnjbLens = jnjbLens >=> safeStringLens("No JNJb")
 
 }
-
