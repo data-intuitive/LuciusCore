@@ -25,4 +25,3 @@ object SampleAnnotationsLenses extends Serializable {
     val sL = sampleLens
 
 }
-

@@ -9,15 +9,6 @@ object CompoundLenses extends Serializable {
         (a, value) => a.copy(id = value),
         _.id
     )
-    // Backward compatibility
-    val jnjsLens = Lens.lensu[Compound, Option[String]](
-        (a, value) => a.copy(id = value),
-        _.id
-    )
-    val jnjbLens = Lens.lensu[Compound, Option[String]](
-        (a, value) => a.copy(id = value),
-        _.id
-    )
     val smilesLens = Lens.lensu[Compound, Option[String]](
         (a, value) => a.copy(smiles = value),
         _.smiles
@@ -33,6 +24,16 @@ object CompoundLenses extends Serializable {
     val ctypeLens = Lens.lensu[Compound, Option[String]](
         (a, value) => a.copy(ctype = value),
         _.ctype
+    )
+
+    // Pending deprecation
+    val jnjsLens = Lens.lensu[Compound, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
+    )
+    val jnjbLens = Lens.lensu[Compound, Option[String]](
+        (a, value) => a.copy(id = value),
+        _.id
     )
 
 }

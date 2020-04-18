@@ -23,12 +23,16 @@ object CompoundAnnotationsLenses extends Serializable {
 
     val cL = compoundLens
 
-    val safeJnjsLens = compoundLens >=> jnjsLens >=> safeStringLens("No JNJs")
-    val safeJnjbLens = compoundLens >=> jnjbLens >=> safeStringLens("No JNJb")
+    val safeIdLens = compoundLens >=> idLens >=> safeStringLens("No id")
     val safeSmilesLens = compoundLens >=> smilesLens >=> safeStringLens("No smiles")
     val safeInchikeyLens = compoundLens >=> inchikeyLens >=> safeStringLens("No inchikey")
     val safeNameLens = compoundLens >=> nameLens >=> safeStringLens("No name")
     val safeCtypeLens = compoundLens >=> ctypeLens >=> safeStringLens("No ctype")
     val safeKnownTargetsLens = knownTargetsLens >=> targetsLens
     val safePredictedTargetsLens = predictedTargetsLens >=> targetsLens
+
+    // Pending deprecation
+    val safeJnjsLens = compoundLens >=> jnjsLens >=> safeStringLens("No JNJs")
+    val safeJnjbLens = compoundLens >=> jnjbLens >=> safeStringLens("No JNJb")
+
 }
