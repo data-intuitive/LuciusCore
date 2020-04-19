@@ -46,7 +46,15 @@ object OldModel extends Serializable {
             compoundAnnotations.knownTargets,
             compoundAnnotations.predictedTargets
           )
-        DbRow(pwid, newSampleAnnotations, newCompoundAnnotations)
+        val _filters =
+          Filters() +
+          Filter("raw_concentration", oldSample.concentration.getOrElse("N/A")) +
+          Filter("raw_protocol", oldSample.protocolname.getOrElse("N/A")) +
+          Filter("raw_type", oldCompound.ctype.getOrElse("N/A")) +
+          Filter("transformed_concentration", oldSample.concentration.getOrElse("N/A")) +
+          Filter("transformed_protocol", oldSample.protocolname.getOrElse("N/A")) +
+          Filter("transformed_type", oldCompound.ctype.getOrElse("N/A"))
+        DbRow(pwid, newSampleAnnotations, newCompoundAnnotations, filters = _filters)
       }
   }
 

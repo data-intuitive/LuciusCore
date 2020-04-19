@@ -2,7 +2,7 @@ package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
 import com.dataintuitive.luciuscore.Model._
-import com.dataintuitive.luciuscore.Filters
+import com.dataintuitive.luciuscore.{Filter, Filters}
 
 object DbRowLenses extends Serializable {
 
@@ -22,6 +22,11 @@ object DbRowLenses extends Serializable {
     val filtersLens = Lens.lensu[DbRow, Filters](
         (a, value) => a.copy(filters = value),
         _.filters
+    )
+
+    val filtersSeqLens = Lens.lensu[DbRow, Seq[Filter]](
+        (a, value) => a.copy(filters = Filters(value)),
+        _.filters.filters
     )
 
     // Shorthands
