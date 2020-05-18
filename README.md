@@ -1,5 +1,4 @@
-[![Build
-Status](https://travis-ci.org/data-intuitive/LuciusCore.svg?branch=master)](https://travis-ci.org/data-intuitive/LuciusCore)
+![Scala CI](https://github.com/data-intuitive/LuciusCore/workflows/Scala%20CI/badge.svg)
 
 # LuciusCore
 
