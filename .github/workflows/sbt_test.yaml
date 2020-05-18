@@ -20,4 +20,4 @@ jobs:
       uses: olafurpg/setup-scala@v5
     - name: Run tests on Ubuntu
       if: startsWith(matrix.os, 'ubuntu')
-      run: sbt test
+      run: sbt 'testOnly -- -l com.dataintuitive.tags.IOtag'
