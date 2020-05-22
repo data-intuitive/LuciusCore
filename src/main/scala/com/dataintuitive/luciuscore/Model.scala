@@ -33,7 +33,7 @@ object Model extends Serializable {
                     val id: Option[String],
                     val sampleAnnotations: SampleAnnotations,
                     val compoundAnnotations: CompoundAnnotations,
-                    val filters: Filters = Filters()
+                    val filters: Seq[Filter] = Nil
                   ) extends Serializable
 
   case class SampleAnnotations(

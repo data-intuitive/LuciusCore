@@ -19,14 +19,9 @@ object DbRowLenses extends Serializable {
         _.compoundAnnotations
     )
 
-    val filtersLens = Lens.lensu[DbRow, Filters](
+    val filtersLens = Lens.lensu[DbRow, Seq[Filter]](
         (a, value) => a.copy(filters = value),
         _.filters
-    )
-
-    val filtersSeqLens = Lens.lensu[DbRow, Seq[Filter]](
-        (a, value) => a.copy(filters = Filters(value)),
-        _.filters.filters
     )
 
     // Shorthands
@@ -52,6 +47,8 @@ object DbRowLenses extends Serializable {
     val concentrationLens = saL >=> sampleLens >=> SampleLenses.concentrationLens
     val yearLens = saL >=> sampleLens >=> SampleLenses.yearLens
     val timeLens = saL >=> sampleLens >=> SampleLenses.timeLens
+
+    val filtersMapLens = filtersLens >=> FilterLenses.seqFilterMapLens
 
     val safeIdLens = idLens >=> safeStringLens("No id")
 

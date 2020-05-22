@@ -34,8 +34,8 @@ object ScoredDbRowLenses extends Serializable {
     val yearLens = DbRowLens >=> DbRowLenses.yearLens
     val timeLens = DbRowLens >=> DbRowLenses.timeLens
 
+    val filtersMapLens = DbRowLens >=> DbRowLenses.filtersMapLens
     val filtersLens = DbRowLens >=> DbRowLenses.filtersLens
-    val filtersSeqLens = DbRowLens >=> DbRowLenses.filtersSeqLens
 
     val safeIdLens = idLens >=> safeStringLens("No id")
 

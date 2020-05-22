@@ -6,35 +6,26 @@ package com.dataintuitive.luciuscore
 case class Filter(key: String, value:String) extends Serializable
 
 /**
- * A class to contain multiple filters to match on and two helper functions.
+ * A representation for a filter query: one key, multiple (possible) values
  */
-case class Filters(filters:Seq[Filter] = Nil) extends Serializable {
+case class QFilter(val key: String, val values: Seq[String]) extends Serializable
 
-  // Check if there is a match, return true if no filters are available
-  def isMatch(query:Filter):Boolean =
-    if (!filters.isEmpty)
-      filters.map(_ equals query).reduce(_ || _)
-    else
-      true
+/**
+ * Helper functions for dealing with Seq[Filter] and QFilter
+ */
+object FilterFunctions extends Serializable {
 
-  // Check if there is a match, return true if no filters are available
-  def isMatch(queries:Seq[Filter]):Boolean =
-    if (!filters.isEmpty)
-      queries.flatMap(query => filters.map(_ equals query)).reduce(_||_)
-    else
-      true
+  // Retrieve a Set of filter values corresponding to a key
+  def getFilterValues(filters: Seq[Filter], key:String):Set[String] = filters.filter(_.key == key).map(_.value).toSet
 
-  def isEmpty = filters.isEmpty
+  // Check a match for 1 query filter key (QFilter)
+  def isMatch(qfilter: QFilter, dfilters: Seq[Filter]):Boolean =
+      qfilter.values.toSet.intersect(getFilterValues(dfilters, qfilter.key)).size > 0
 
-  def add(newFilter:Filter) =
-    if (isMatch(newFilter) && !isEmpty)
-      this
-    else
-      Filters(filters ++ Seq(newFilter))
-
-  def remove(toRemove:Filter) = Filters(filters.filter(f => !(f equals toRemove)))
-
-  def +(newFilter:Filter) = add(newFilter)
-  def -(toRemove:Filter) = remove(toRemove)
-
+  // Check a match for Seq[QFilter]
+  def isMatch(qfilters: Seq[QFilter], dfilters: Seq[Filter]):Boolean =
+      if (qfilters.size > 0)
+        qfilters.map(isMatch(_, dfilters)).reduce(_&&_)
+      else
+        true
 }
