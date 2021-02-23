@@ -2,9 +2,10 @@ package com.dataintuitive.luciuscore.signatures
 
 import com.dataintuitive.luciuscore.genes._
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SignaturesTest extends FlatSpec with Matchers {
+class SignaturesTest extends AnyFlatSpec with Matchers {
 
   val listOfGenes = Array(
     new Gene(1, "psid1", "AF", None, None, Some(Set("SYM1")), None, None),

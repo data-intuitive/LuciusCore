@@ -2,14 +2,15 @@ package com.dataintuitive.luciuscore.lowlevel
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import com.dataintuitive.luciuscore.utilities.RddFunctions._
 import com.dataintuitive.test.BaseSparkContextSpec
 
 /**
   * Created by toni on 27/04/16.
   */
-class RddFunctionsTest extends FlatSpec with BaseSparkContextSpec with Matchers {
+class RddFunctionsTest extends AnyFlatSpec with BaseSparkContextSpec with Matchers {
 
   info("Test function on Vectors")
 

@@ -1,9 +1,9 @@
 package com.dataintuitive.luciuscore.utilities
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
 
-class SignedStringTest extends FlatSpec {
+class SignedStringTest extends AnyFlatSpec {
 
   info("Test String extensions")
 

@@ -14,6 +14,7 @@
 .history/
 .idea/
 .lib/
+project/.sbtboot
 
 .idea_modules/
 
@@ -26,3 +27,6 @@ dist/*
 .DS_Store
 .metals
 .bloop
+metastore_db
+
+?Stats*

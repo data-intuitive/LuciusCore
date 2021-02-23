@@ -1,6 +1,7 @@
 package com.dataintuitive.luciuscore.io
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 import com.dataintuitive.test.BaseSparkContextSpec
 import com.dataintuitive.luciuscore.io.StatsIO._
 import com.dataintuitive.luciuscore.io.SampleCompoundRelationsIO._
@@ -11,7 +12,7 @@ import com.dataintuitive.luciuscore.io.RanksIO._
   * This test class tests the whole of the loading and combining functionality. It serves as an example
   * of how to work with the input files and use the API provided in LuciusCore.
   */
-class IOTest extends FunSpec with BaseSparkContextSpec with Matchers {
+class IOTest extends AnyFunSpec with BaseSparkContextSpec with Matchers {
 
   // Load relations data from a file, here in V1 format:
   val sampleCompoundRelationsV1Source = "src/test/resources/v1/sampleCompoundRelations.txt"

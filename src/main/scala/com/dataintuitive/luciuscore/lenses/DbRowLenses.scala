@@ -2,7 +2,7 @@ package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
 import com.dataintuitive.luciuscore.Model._
-import com.dataintuitive.luciuscore.{Filter, Filters}
+import com.dataintuitive.luciuscore.Filter
 
 object DbRowLenses extends Serializable {
 

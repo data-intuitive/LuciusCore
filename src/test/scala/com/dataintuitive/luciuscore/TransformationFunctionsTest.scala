@@ -4,12 +4,13 @@ import com.dataintuitive.luciuscore.Model._
 import signatures._
 import com.dataintuitive.luciuscore.TransformationFunctions._
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 /**
   * Created by toni on 27/04/16.
   */
-class TransformationFunctionsTest extends FlatSpec with Matchers {
+class TransformationFunctionsTest extends AnyFlatSpec with Matchers {
 
   info("Test aggregateStats")
 

@@ -1,8 +1,9 @@
 package com.dataintuitive.luciuscore.signatures
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SignedTypesTest extends FlatSpec with Matchers {
+class SignedTypesTest extends AnyFlatSpec with Matchers {
 
   "SignedString and companion object" should "construct the correct representation" in {
 

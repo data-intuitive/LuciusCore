@@ -3,12 +3,12 @@ package com.dataintuitive.luciuscore
 import com.dataintuitive.luciuscore.Model._
 import com.dataintuitive.luciuscore.ZhangScoreFunctions._
 import com.dataintuitive.test.BaseSparkContextSpec
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
 /**
   * Created by toni on 26/04/16.
   */
-class ZhangScoreFunctionsTest extends FlatSpec with BaseSparkContextSpec {
+class ZhangScoreFunctionsTest extends AnyFlatSpec with BaseSparkContextSpec {
 
   info("Testing Connection score calculation")
 

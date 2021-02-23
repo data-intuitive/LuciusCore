@@ -1,8 +1,8 @@
 package com.dataintuitive.luciuscore.genes
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class StageGenesTest extends FlatSpec {
+class StageGenesTest extends AnyFlatSpec {
 
   info("Test model for gene annotations")
 

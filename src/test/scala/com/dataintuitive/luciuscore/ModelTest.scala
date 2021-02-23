@@ -2,9 +2,9 @@ package com.dataintuitive.luciuscore
 
 import com.dataintuitive.luciuscore.Model._
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class ModelTest extends FlatSpec {
+class ModelTest extends AnyFlatSpec {
 
   info("Test Experimental Model")
 

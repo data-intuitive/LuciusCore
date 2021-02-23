@@ -3,14 +3,14 @@ package com.dataintuitive.luciuscore.io
 import com.dataintuitive.luciuscore.io.GenesIO._
 import com.dataintuitive.luciuscore.genes.GenesDB
 import com.dataintuitive.test.BaseSparkContextSpec
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest._
 
 /**
  * Please note the location of the featureData.txt files!
  */
-class GenesIOTest extends FlatSpec with BaseSparkContextSpec with Matchers {
+class GenesIOTest extends AnyFlatSpec with BaseSparkContextSpec with Matchers {
 
   "Loading gene data from a file in the old format" should "work" taggedAs(IOtag) in {
     val genes = loadGenesFromFile(sc, "/Users/toni/code/compass/data/L1000/featureData.txt", "\t")

@@ -3,10 +3,10 @@ package com.dataintuitive.luciuscore
 import com.dataintuitive.luciuscore.Model.{DbRow, RankVector, SampleAnnotations}
 import com.dataintuitive.luciuscore.io.SampleCompoundRelationsIO.loadSampleCompoundRelationsFromFileV2
 import com.dataintuitive.test.BaseSparkContextSpec
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import com.dataintuitive.luciuscore.DbFunctions._
 
-class DbFunctionsTest extends FlatSpec with BaseSparkContextSpec{
+class DbFunctionsTest extends AnyFlatSpec with BaseSparkContextSpec{
 
   info("Testing rank vector scoring")
 
