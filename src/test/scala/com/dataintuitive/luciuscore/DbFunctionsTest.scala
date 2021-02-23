@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.Model.{DbRow, RankVector, SampleAnnotations}
+import com.dataintuitive.luciuscore.model.v3.Model.{DbRow, RankVector, SampleAnnotations}
 import com.dataintuitive.luciuscore.io.SampleCompoundRelationsIO.loadSampleCompoundRelationsFromFileV2
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.flatspec.AnyFlatSpec

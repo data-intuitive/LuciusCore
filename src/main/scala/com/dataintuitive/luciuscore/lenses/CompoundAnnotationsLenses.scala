@@ -2,7 +2,7 @@ package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
 import com.dataintuitive.luciuscore.genes._
-import com.dataintuitive.luciuscore.Model._
+import com.dataintuitive.luciuscore.model.v3.Model._
 import OptionLenses._
 import CompoundLenses._
 

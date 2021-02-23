@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.Model._
+import com.dataintuitive.luciuscore.model.v3.Model._
 
 import scala.math.{abs, max}
 

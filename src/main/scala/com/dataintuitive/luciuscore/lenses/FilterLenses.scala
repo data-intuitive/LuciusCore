@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore.lenses
 
 import scalaz.Lens
-import com.dataintuitive.luciuscore.Filter
+import com.dataintuitive.luciuscore.model.v3.Filter
 
 object FilterLenses extends Serializable {
 

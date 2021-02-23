@@ -1,4 +1,4 @@
-package com.dataintuitive.luciuscore
+package com.dataintuitive.luciuscore.model.v3
 
 /**
  * A basic representation of a filter with a key and a value

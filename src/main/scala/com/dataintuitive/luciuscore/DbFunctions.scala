@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.Model.DbRow
+import com.dataintuitive.luciuscore.model.v3.Model.DbRow
 import com.dataintuitive.luciuscore.ZhangScoreFunctions.connectionScore
 
 object DbFunctions {

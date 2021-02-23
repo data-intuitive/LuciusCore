@@ -1,7 +1,8 @@
-package com.dataintuitive.luciuscore
+package com.dataintuitive.luciuscore.model.v3
 
-import genes._
-import signatures._
+import com.dataintuitive.luciuscore.genes._
+import com.dataintuitive.luciuscore.signatures._
+import Filter._
 
 /**
   * The types and classes used throughout Lucius.

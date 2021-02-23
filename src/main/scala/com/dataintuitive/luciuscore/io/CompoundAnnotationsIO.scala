@@ -3,7 +3,7 @@ package com.dataintuitive.luciuscore.io
 import com.dataintuitive.luciuscore.genes._
 import org.apache.spark.SparkContext
 import com.dataintuitive.luciuscore.io.ParseFunctions._
-import com.dataintuitive.luciuscore.Model._
+import com.dataintuitive.luciuscore.model.v3.Model._
 import com.dataintuitive.luciuscore.utilities.RddFunctions.joinUpdateRDD
 import org.apache.spark.rdd.RDD
 
