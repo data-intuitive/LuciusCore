@@ -1,7 +1,7 @@
-package com.dataintuitive.luciuscore.signatures
+package com.dataintuitive.luciuscore
+package signatures
 
-import com.dataintuitive.luciuscore.model.v3.Model._
-import com.dataintuitive.luciuscore.genes.GenesDB
+import genes.GenesDB
 
 sealed trait Signature[A] extends Serializable {
 

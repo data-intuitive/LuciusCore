@@ -1,10 +1,12 @@
-package com.dataintuitive.luciuscore.lenses
+package com.dataintuitive.luciuscore
+package model.v3
+package model.v3.lenses
 
-import scalaz.Lens
-import com.dataintuitive.luciuscore.genes._
-import com.dataintuitive.luciuscore.model.v3.Model._
+import genes._
 import OptionLenses._
 import CompoundLenses._
+
+import scalaz.Lens
 
 object CompoundAnnotationsLenses extends Serializable {
 

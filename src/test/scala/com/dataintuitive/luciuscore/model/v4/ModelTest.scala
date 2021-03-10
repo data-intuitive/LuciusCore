@@ -1,6 +1,4 @@
-package com.dataintuitive.luciuscore
-
-import com.dataintuitive.luciuscore.model.v4.Model._
+package com.dataintuitive.luciuscore.model.v4
 
 import org.scalatest.flatspec.AnyFlatSpec
 

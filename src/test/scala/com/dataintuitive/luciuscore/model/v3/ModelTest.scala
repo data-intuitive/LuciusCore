@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.model.v3.Model._
+import model.v3._
 
 import org.scalatest.flatspec.AnyFlatSpec
 

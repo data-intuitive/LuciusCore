@@ -1,12 +1,24 @@
 package com.dataintuitive
 
-/**
-  * Created by toni on 23/09/16.
-  */
 package object luciuscore {
 
-  import com.dataintuitive.luciuscore.model.v3.Model._
-  import com.dataintuitive.luciuscore.Implicits._
-  import com.dataintuitive.luciuscore.io._
+  type Value = Double
+  type ValueVector = Array[Value]
+
+  /**
+   * A RankVector is just an array of Ranks, being Double values.
+   *
+   * Please note that we wrap signatures but not RankVectors because we can't afford
+   * the overhead when running in a distributed way.
+   */
+  type Rank = Double
+  type RankVector = Array[Rank]
+
+  type Index = Int
+
+  /**
+   * A generic representation of a row in a datafile
+   */
+  type Row = Array[Option[String]]
 
 }

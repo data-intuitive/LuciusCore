@@ -1,14 +1,4 @@
-package com.dataintuitive.luciuscore.model.v3
-
-/**
- * A basic representation of a filter with a key and a value
- */
-case class Filter(key: String, value:String) extends Serializable
-
-/**
- * A representation for a filter query: one key, multiple (possible) values
- */
-case class QFilter(val key: String, val values: Seq[String]) extends Serializable
+package com.dataintuitive.luciuscore.filters
 
 /**
  * Helper functions for dealing with Seq[Filter] and QFilter
@@ -28,4 +18,5 @@ object FilterFunctions extends Serializable {
         qfilters.map(isMatch(_, dfilters)).reduce(_&&_)
       else
         true
+
 }

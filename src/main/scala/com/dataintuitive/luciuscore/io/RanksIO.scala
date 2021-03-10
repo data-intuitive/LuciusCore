@@ -1,7 +1,9 @@
-package com.dataintuitive.luciuscore.io
+package com.dataintuitive.luciuscore
+package io
 
-import com.dataintuitive.luciuscore.model.v3.Model._
-import com.dataintuitive.luciuscore.TransformationFunctions._
+import model.v3._
+import TransformationFunctions._
+
 import org.apache.spark.rdd.RDD
 
 

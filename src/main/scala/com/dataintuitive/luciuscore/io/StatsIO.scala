@@ -1,9 +1,11 @@
-package com.dataintuitive.luciuscore.io
+package com.dataintuitive.luciuscore
+package io
 
 import IoFunctions._
-import com.dataintuitive.luciuscore.model.v3.Model.DbRow
+import model.v3._
+import utilities.RddFunctions._
+
 import org.apache.spark.SparkContext
-import com.dataintuitive.luciuscore.utilities.RddFunctions._
 import org.apache.spark.rdd.RDD
 
 import scala.util.Try

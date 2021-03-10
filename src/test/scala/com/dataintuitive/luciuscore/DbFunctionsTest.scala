@@ -1,10 +1,11 @@
 package com.dataintuitive.luciuscore
+package model.v3
 
-import com.dataintuitive.luciuscore.model.v3.Model.{DbRow, RankVector, SampleAnnotations}
-import com.dataintuitive.luciuscore.io.SampleCompoundRelationsIO.loadSampleCompoundRelationsFromFileV2
+import io.SampleCompoundRelationsIO.loadSampleCompoundRelationsFromFileV2
+import DbFunctions._
+
 import com.dataintuitive.test.BaseSparkContextSpec
 import org.scalatest.flatspec.AnyFlatSpec
-import com.dataintuitive.luciuscore.DbFunctions._
 
 class DbFunctionsTest extends AnyFlatSpec with BaseSparkContextSpec{
 
@@ -42,5 +43,5 @@ class DbFunctionsTest extends AnyFlatSpec with BaseSparkContextSpec{
     val y: RankVector = Array.fill(4){scala.util.Random.nextInt(10).asInstanceOf[Double]}
     assert(queryDbRow(newDbRow, x, y).get._2.size === 2)
   }
-    
+
 }

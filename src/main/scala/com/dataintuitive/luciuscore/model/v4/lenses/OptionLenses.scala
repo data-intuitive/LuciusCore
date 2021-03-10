@@ -1,8 +1,10 @@
-package com.dataintuitive.luciuscore.model.v4.lenses
+package com.dataintuitive.luciuscore
+package model.v4
+package model.v4.lenses
+
+import genes._
 
 import scalaz.Lens
-import com.dataintuitive.luciuscore.model.v4.Model._
-import com.dataintuitive.luciuscore.genes._
 
 object OptionLenses extends Serializable {
 

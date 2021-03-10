@@ -1,32 +1,18 @@
-package com.dataintuitive.luciuscore.model.v3
+package com.dataintuitive.luciuscore
+package model.v3
 
-import com.dataintuitive.luciuscore.genes._
-import com.dataintuitive.luciuscore.signatures._
-import Filter._
+import genes._
+import signatures._
+import filters._
+
+object Model extends ModelTrait
 
 /**
   * The types and classes used throughout Lucius.
   *
   * Be aware: The gene model and signature model are in separate packages.
   */
-object Model extends Serializable {
-
-  // For Vector derivatives: A ValueVector is for t-stats and p-stats
-  type Value = Double
-  type ValueVector = Array[Value]
-
-  /**
-   * A RankVector is just an array of Ranks, being Double values.
-   *
-   * Please note that we wrap signatures but RankVectors because we can't afford
-   * the overhead when running in a distributed way.
-   */
-  type Rank = Double
-  type RankVector = Array[Rank]
-
-  type Index = Int
-
-  type Row = Array[Option[String]]
+trait ModelTrait extends Serializable {
 
   type ScoredDbRow = (Double, DbRow)
 
@@ -120,3 +106,4 @@ object Model extends Serializable {
   }
 
 }
+

@@ -1,8 +1,10 @@
-package com.dataintuitive.luciuscore.io
+package com.dataintuitive.luciuscore
+package io
 
-import com.dataintuitive.luciuscore.genes._
+import genes._
 import ParseFunctions._
 import IoFunctions._
+
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 

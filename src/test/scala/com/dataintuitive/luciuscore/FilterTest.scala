@@ -1,8 +1,6 @@
-package com.dataintuitive.luciuscore
+package com.dataintuitive.luciuscore.filters
 
-import com.dataintuitive.luciuscore.model.v3.Filter
-import com.dataintuitive.luciuscore.model.v3.QFilter
-import com.dataintuitive.luciuscore.model.v3.FilterFunctions._
+import FilterFunctions._
 
 import org.scalatest.flatspec.AnyFlatSpec
 

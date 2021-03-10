@@ -1,18 +1,16 @@
-package com.dataintuitive.luciuscore.model.v4
+package com.dataintuitive.luciuscore
+package model.v4
 
-import com.dataintuitive.luciuscore.genes._
-import com.dataintuitive.luciuscore.signatures._
-import Filter._
+import genes._
+import signatures._
+import filters._
 
 /**
  * The types and classes used throughout Lucius.
  *
  * Be aware: The gene model and signature model are in separate packages.
  */
-object Model extends Serializable {
-
-  type RankVector = Array[Integer]
-  type ValueVector = Array[Double]
+trait ModelTrait extends Serializable {
 
   /**
    * The experimental conditions for the perturbation
@@ -71,12 +69,13 @@ object Model extends Serializable {
    * types of profiles: original l1000, inferred, ...
    */
   case class Perturbation(
-    val id: String,
-    val information: Information,
-    val profiles: List[Profiles],
-    val trt_type: String,
-    val trt_cp: Option[TRT_CP],
-    val trt_lig: Option[TRT_LIG]
+    id: String,
+    information: Information,
+    profiles: List[Profiles],
+    trt_type: String,
+    trt_cp: Option[TRT_CP],
+    trt_lig: Option[TRT_LIG],
+    filters: Filters
   )
 
   object Perturbation {
@@ -84,11 +83,14 @@ object Model extends Serializable {
       id: String,
       info: Information = Information(),
       profiles: List[Profiles] = List(Profiles()),
-      trt: TRT
+      trt: TRT,
+      filters: Filters = Nil
     ):Perturbation = trt match {
-      case t:TRT_CP  => Perturbation(id, info, profiles, "trt_cp",  Some(t), None)
-      case t:TRT_LIG => Perturbation(id, info, profiles, "trt_lig", None,    Some(t))
-      case _         => Perturbation(id, info, profiles, "NA",      None,    None)
+      case t:TRT_CP  => Perturbation(id, info, profiles, "trt_cp",  Some(t), None   , filters)
+      case t:TRT_LIG => Perturbation(id, info, profiles, "trt_lig", None,    Some(t), filters)
+      case _         => Perturbation(id, info, profiles, "NA",      None,    None   , filters)
     }
   }
 }
+
+object Model extends ModelTrait

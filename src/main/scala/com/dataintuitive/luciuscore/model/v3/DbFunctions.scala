@@ -1,9 +1,10 @@
 package com.dataintuitive.luciuscore
+package model.v3
 
-import com.dataintuitive.luciuscore.model.v3.Model.DbRow
-import com.dataintuitive.luciuscore.ZhangScoreFunctions.connectionScore
+import ZhangScoreFunctions.connectionScore
 
 object DbFunctions {
+
   /**
     * Score an arbitrary number of rank vectors against a database entry.
     * @param x DbRow

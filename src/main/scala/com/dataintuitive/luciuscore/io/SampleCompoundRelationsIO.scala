@@ -1,7 +1,9 @@
-package com.dataintuitive.luciuscore.io
+package com.dataintuitive.luciuscore
+package io
 
-import com.dataintuitive.luciuscore.model.v3.Model._
+import model.v3._
 import ParseFunctions._
+
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import scala.language.postfixOps

@@ -1,9 +1,10 @@
-package com.dataintuitive.luciuscore.model.v2
+package com.dataintuitive.luciuscore
+package model.v2
 
 import com.dataintuitive.luciuscore.genes._
 import com.dataintuitive.luciuscore.signatures._
 import com.dataintuitive.luciuscore.model.v3.Model._
-import com.dataintuitive.luciuscore.model.v3.Filter
+import com.dataintuitive.luciuscore.filters._
 
 /**
  * The old DbRow model, in order to handle data processed earlier

@@ -1,7 +1,6 @@
 package com.dataintuitive.luciuscore.model.v4
 
-import Model._
-import com.dataintuitive.luciuscore.model.v4.lenses.PerturbationLenses
+import model.v4.lenses._
 
 import org.scalatest.flatspec.AnyFlatSpec
 
