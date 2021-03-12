@@ -59,8 +59,10 @@ class ModelTestv4 extends AnyFlatSpec {
   )
 
   "Full instantiation" should "automatically create the correct entries" in {
-    assert(cp.trt === trtGenericCp)
-    assert(cp.trt_cp === ModelFunctions.convertToSpecific(trtGenericCp))
+    assert(cp.trt === cp.trt_cp.get)
+    assert(cp.trt_lig === None)
+    // After instantiation, trt_generic is set to None unless something went wrong converting
+    assert(cp.trt_generic === None)
   }
 
 }

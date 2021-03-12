@@ -113,11 +113,27 @@ trait ModelTrait extends Serializable {
     information: Information,
     profiles: List[Profiles],
     trtType: String,
-    trt: TRT_GENERIC,
+    trt_generic: Option[TRT_GENERIC],
     trt_cp: Option[TRT_CP],
     trt_lig: Option[TRT_LIG],
     filters: Filters
-  )
+  ) extends Serializable {
+
+    def trt:TRT = trtType match {
+      case "trt_cp"  => trt_cp.get.asInstanceOf[TRT_CP]
+      case "trt_lig" => trt_lig.get.asInstanceOf[TRT_LIG]
+      case _         => trt_generic.get
+    }
+
+    def trtSafe:TRT = trtType match {
+      case "trt_cp"  if trt_cp.isDefined  => trt_cp.get.asInstanceOf[TRT_CP]
+      case "trt_lig" if trt_lig.isDefined => trt_lig.get.asInstanceOf[TRT_LIG]
+      case _  => trt_generic.get
+    }
+
+    def isEmpty:Boolean = trt_generic == Some(TRT_EMPTY)
+
+  }
 
   import ModelFunctions._
 
@@ -135,7 +151,7 @@ trait ModelTrait extends Serializable {
           info,
           profiles,
           "trt_cp",
-          trt,
+          None,
           Some(convertToSpecific(trt).asInstanceOf[TRT_CP]),
           None,
           filters
@@ -145,7 +161,7 @@ trait ModelTrait extends Serializable {
          info,
          profiles,
          "trt_lig",
-         trt,
+         None,
          None,
          Some(convertToSpecific(trt).asInstanceOf[TRT_LIG]),
          filters
@@ -155,7 +171,7 @@ trait ModelTrait extends Serializable {
          info,
          profiles,
          "empty",
-         trt,
+         Some(trt),
          None,
          None,
          filters
