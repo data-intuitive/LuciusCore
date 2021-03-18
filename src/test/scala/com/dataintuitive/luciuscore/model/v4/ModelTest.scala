@@ -6,7 +6,7 @@ class ModelTestv4 extends AnyFlatSpec {
 
   info("Test v4 Model")
 
-  val p = Perturbation("123")
+  val p = Perturbation("123", Information(), Nil, TRT_EMPTY, Nil)
 
   "Minimal Instantiation" should "simply work" in {
     assert(p.id === "123")
@@ -44,25 +44,37 @@ class ModelTestv4 extends AnyFlatSpec {
     )
 
   val cp = Perturbation(
-    "pid",
-    Information(),
-    Nil,
-    trtGenericCp,
-    Nil
+    id = "pid",
+    info = Information(),
+    profiles = Nil,
+    trt = trtGenericCp,
+    filters = Nil
   )
   val lig = Perturbation(
-    "pid",
-    Information(),
-    Nil,
-    trtGenericLig,
-    Nil
+    id = "pid",
+    info = Information(),
+    profiles = Nil,
+    trt = trtGenericLig,
+    filters = Nil
   )
 
   "Full instantiation" should "automatically create the correct entries" in {
-    assert(cp.trt === cp.trt_cp.get)
+    assert(cp.trt !== None)
     assert(cp.trt_lig === None)
-    // After instantiation, trt_generic is set to None unless something went wrong converting
+  }
+
+  "After init, trt_generic" should "be converted and turned to None" in {
+    assert(cp.trt_cp !== None)
     assert(cp.trt_generic === None)
+    assert(lig.trt_lig !== None)
+    assert(lig.trt_generic === None)
+  }
+
+  it should "allow for using accessor methods trt and trtSafe" in {
+    assert(cp.trt === cp.trt_cp.get)
+    assert(cp.trtSafe === cp.trt_cp.get)
+    assert(lig.trt === lig.trt_lig.get)
+    assert(lig.trtSafe === lig.trt_lig.get)
   }
 
 }

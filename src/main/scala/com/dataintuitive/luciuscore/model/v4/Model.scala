@@ -74,8 +74,6 @@ trait ModelTrait extends Serializable {
     timeUnit: String
   ) extends TRT(trtType = "trt_lig") with Serializable
 
-  // case class TRT_EMPTY() extends TRT(trtType = "empty") with Serializable
-
   case class TRT_GENERIC(
     override val trtType: String,
     id: String,
@@ -87,7 +85,34 @@ trait ModelTrait extends Serializable {
     doseUnit: Option[String],
     time: Option[String],
     timeUnit: Option[String]
-    ) extends TRT(trtType = "generic") with Serializable
+    ) extends TRT(trtType = trtType) with Serializable {
+
+      def toSpecific:TRT =
+        trtType match {
+          case "trt_cp" =>
+            TRT_CP(
+              name,
+              id,
+              dose.getOrElse("NA"),
+              doseUnit.getOrElse("NA"),
+              time.getOrElse("NA"),
+              timeUnit.getOrElse("NA"),
+              inchikey,
+              smiles,
+              pubchemId
+            )
+          case "trt_lig" =>
+            TRT_LIG(
+              name,
+              id,
+              dose.getOrElse("NA"),
+              doseUnit.getOrElse("NA"),
+              time.getOrElse("NA"),
+              timeUnit.getOrElse("NA")
+            )
+          case _ => this
+        }
+    }
 
   object TRT_EMPTY extends TRT_GENERIC(
     trtType = "empty",
@@ -110,7 +135,7 @@ trait ModelTrait extends Serializable {
    */
   case class Perturbation(
     id: String,
-    information: Information,
+    info: Information,
     profiles: List[Profiles],
     trtType: String,
     trt_generic: Option[TRT_GENERIC],
@@ -133,110 +158,63 @@ trait ModelTrait extends Serializable {
 
     def isEmpty:Boolean = trt_generic == Some(TRT_EMPTY)
 
+    def toSpecific =
+      trtType match {
+        case "trt_cp"  =>
+          Perturbation(
+            id = id,
+            info = info,
+            profiles = profiles,
+            trtType = "trt_cp",
+            trt_generic = None,
+            trt_cp = trt_generic.map(_.toSpecific.asInstanceOf[TRT_CP]),
+            trt_lig = None,
+            filters = filters
+          )
+        case "trt_lig" =>
+          Perturbation(
+            id = id,
+            info = info,
+            profiles = profiles,
+            trtType = "trt_lig",
+            trt_generic = None,
+            trt_cp = None,
+            trt_lig = trt_generic.map(_.toSpecific.asInstanceOf[TRT_LIG]),
+            filters = filters
+          )
+        case _ => // TODO: Handle exception
+          Perturbation(id,
+            info,
+            profiles,
+            "empty",
+            trt_generic,
+            None,
+            None,
+            filters
+          )
+      }
   }
-
-  import ModelFunctions._
 
   object Perturbation {
     def apply(
       id: String,
-      info: Information = Information(),
-      profiles: List[Profiles] = List(Profiles()),
-      trt: TRT_GENERIC = TRT_EMPTY,
-      filters: Filters = Nil
-    ):Perturbation = trt.trtType match {
-      case "trt_cp"  =>
-        Perturbation(
-          id,
-          info,
-          profiles,
-          "trt_cp",
-          None,
-          Some(convertToSpecific(trt).asInstanceOf[TRT_CP]),
-          None,
-          filters
-        )
-      case "trt_lig" =>
-        Perturbation(id,
-         info,
-         profiles,
-         "trt_lig",
-         None,
-         None,
-         Some(convertToSpecific(trt).asInstanceOf[TRT_LIG]),
-         filters
-       )
-      case _ =>
-        Perturbation(id,
-         info,
-         profiles,
-         "empty",
-         Some(trt),
-         None,
-         None,
-         filters
-       )
-    }
+      info: Information,
+      profiles: List[Profiles],
+      trt: TRT_GENERIC,
+      filters: Filters
+    ):Perturbation =
+      Perturbation(
+        id = id,
+        info = info,
+        profiles = profiles,
+        trtType = trt.trtType,
+        trt_generic = Some(trt),
+        trt_cp = None,
+        trt_lig = None,
+        filters = filters
+      ).toSpecific
   }
 
-  object ModelFunctions {
-
-    def convertToGeneric(trt:TRT):TRT_GENERIC =
-      trt match {
-        case t:TRT_GENERIC => t
-        case t:TRT_CP =>
-          TRT_GENERIC(
-            "trt_cp",
-            t.id,
-            t.name,
-            t.inchikey,
-            t.smiles,
-            t.pubchemId,
-            Some(t.dose),
-            Some(t.doseUnit),
-            Some(t.time),
-            Some(t.timeUnit)
-          )
-        case t:TRT_LIG =>
-          TRT_GENERIC(
-            "trt_lig",
-            t.id,
-            t.name,
-            None,
-            None,
-            None,
-            Some(t.dose),
-            Some(t.doseUnit),
-            Some(t.time),
-            Some(t.timeUnit)
-          )
-      }
-
-    def convertToSpecific(trt:TRT_GENERIC):TRT =
-      trt.trtType match {
-        case "trt_cp" =>
-          TRT_CP(
-            trt.name,
-            trt.id,
-            trt.dose.getOrElse("NA"),
-            trt.doseUnit.getOrElse("NA"),
-            trt.time.getOrElse("NA"),
-            trt.timeUnit.getOrElse("NA"),
-            trt.inchikey,
-            trt.smiles,
-            trt.pubchemId
-          )
-        case "trt_lig" =>
-          TRT_LIG(
-            trt.name,
-            trt.id,
-            trt.dose.getOrElse("NA"),
-            trt.doseUnit.getOrElse("NA"),
-            trt.time.getOrElse("NA"),
-            trt.timeUnit.getOrElse("NA")
-          )
-      }
-  }
 }
 
 object Model extends ModelTrait
