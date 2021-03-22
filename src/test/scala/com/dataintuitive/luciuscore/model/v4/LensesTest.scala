@@ -8,7 +8,7 @@ class LensesTest extends AnyFlatSpec {
 
   info("Test v4 Model")
 
-  val p = Perturbation("123", Information(), Nil, TRT_EMPTY, Nil)
+  val p = Perturbation("123", Information(), Profiles(), TRT_EMPTY, Nil)
 
   "Minimal Instantiation" should "simply work" in {
     assert(p.id === "123")
