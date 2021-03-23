@@ -1,8 +1,10 @@
 package com.dataintuitive.luciuscore
 package model.v4
-package model.v4.lenses
+package lenses
 
 import scalaz.Lens
+
+import filters._
 
 object PerturbationLenses extends Serializable {
 
@@ -24,6 +26,16 @@ object PerturbationLenses extends Serializable {
   val profilesLens = Lens.lensu[Perturbation, Profiles](
     (a, value) => a.copy(profiles = value),
     _.profiles
+  )
+
+  val trtLens = Lens.lensu[Perturbation, Treatment](
+    (a, value) => a.copy(trt = value),
+    _.trt
+  )
+
+  val filtersLens = Lens.lensu[Perturbation, Filters](
+    (a, value) => a.copy(filters = value),
+    _.filters
   )
 
 }

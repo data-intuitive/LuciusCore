@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 package model.v4
-package model.v4.lenses
+package lenses
 
 import genes._
 

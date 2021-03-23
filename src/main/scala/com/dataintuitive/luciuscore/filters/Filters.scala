@@ -14,4 +14,4 @@ trait FiltersTrait extends Serializable {
 
 }
 
-object Filters extends FiltersTrait
+// object Filters extends FiltersTrait

@@ -125,9 +125,7 @@ case class Treatment(
 
   def specifics = Seq(trt_cp, trt_lig)
   def isSpecific = specifics.map(_.isDefined).filter(x=>x).length == 1
-
   def isConsistent = trt_generic.isDefined || isSpecific
-
   def isEmpty = (trt_generic == Some(TRT_EMPTY)) || (! isConsistent)
 
   def toSpecific =
