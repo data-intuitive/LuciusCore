@@ -44,34 +44,71 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
       Some("m")
     )
 
-  val trtCp = TRT_CP(
-      "pertId",
-      "pertName",
-      "1",
-      "ml",
-      "4",
-      "m",
-      Some("inchikey"),
-      Some("smiles"),
-      Some("pubchem")
-    )
+  "Full instantiation" should "just work" in {
 
-  val trtLig = TRT_LIG(
-      "pertId",
-      "pertName",
-      "2",
-      "ml",
-      "1",
-      "m"
-    )
+    val trtCp = TRT_CP(
+        "pertId",
+        "pertName",
+        "1",
+        "ml",
+        "4",
+        "m",
+        Some("inchikey"),
+        Some("smiles"),
+        Some("pubchem")
+      )
 
-  "Full instances" should "just work" in {
     Treatment(None, Some(trtCp), None).trt_cp    shouldBe Some(trtCp)
     Treatment(None, Some(trtCp), None).trt       shouldBe a [TRT_CP]
     Treatment(None, Some(trtCp), None).trt       shouldBe a [TRT_CP]
-    Treatment(Some(trtGenericCp)).trt            shouldBe a [TRT_GENERIC]
-    Treatment(Some(trtGenericCp)).toSpecific.trt shouldBe a [TRT_CP]
-    Treatment(Some(trtGenericCp)).toSpecific.trt shouldBe trtCp
+
   }
 
+  "Treatment constructor" should "create the correct representation for trt_cp" in {
+
+    val trtCp = TRT_CP(
+        name = "pertName",
+        id = "pertId",
+        dose = "1",
+        doseUnit = "ml",
+        time = "4",
+        timeUnit = "m",
+        inchikey = Some("inchikey"),
+        smiles = Some("smiles"),
+        pubchemId = Some("pubchem")
+      )
+
+    Treatment(Some(trtGenericCp)).trt             shouldBe a [TRT_GENERIC]
+    Treatment(Some(trtGenericCp)).toSpecific.trt  shouldBe a [TRT_CP]
+    Treatment(Some(trtGenericCp)).toSpecific.trt  shouldBe trtCp
+
+  }
+
+  it should "create the correct representation for trt_lig" in {
+
+    val trtLig = TRT_LIG(
+        id = "pertId",
+        name = "pertName",
+        dose = "2",
+        doseUnit = "ml",
+        time = "1",
+        timeUnit = "m"
+      )
+
+    Treatment(Some(trtGenericLig)).trt            shouldBe a [TRT_GENERIC]
+    Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe a [TRT_LIG]
+    Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe trtLig
+
+  }
+
+  "TRT_EMPTY" should "represent an NA value" in {
+
+    t.trt shouldBe TRT_EMPTY
+    t.trt.id shouldBe "NA"
+    t.trt.name shouldBe "NA"
+    t.isEmpty shouldBe true
+    t.trt.id shouldBe "NA"
+    t.trt.name shouldBe "NA"
+
+  }
 }
