@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore
 
-package object filters extends FiltersTrait {
+package object filters {
 
-  type Filters = List[Filter]
+  type Filters = Seq[Filter]
 
 }
