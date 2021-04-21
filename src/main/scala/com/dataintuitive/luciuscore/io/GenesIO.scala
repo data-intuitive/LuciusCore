@@ -14,7 +14,7 @@ import org.apache.spark.rdd.RDD
 object GenesIO {
 
   val defaultDict = Map(
-    "probesetID" -> "probesetid",
+    "probesetID" -> "id",
     "dataType" -> "dataType",
     "ENTREZID" -> "entrezid",
     "ENSEMBL" -> "ensemblid",
@@ -46,11 +46,11 @@ object GenesIO {
 
       val splitGenesRdd = extractFeaturesMap(rawGenesRdd, dict.keys.toSeq, includeHeader=false)
 
-     val genesRaw:RDD[GeneRaw] = 
+     val genesRaw:RDD[GeneRaw] =
         splitGenesRdd.zipWithIndex.map{ case (x,i) => new GeneRaw(
           i.toInt + 1,              // index offset 1
-          if (inverseMap.get("probesetid").isDefined) x.get(inverseMap("probesetid")).getOrElse("N/A").toString else "N/A",
-          if (inverseMap.get("dataType").isDefined) x.get(inverseMap("dataType")).getOrElse("N/A").toString else "N/A",
+          if (inverseMap.get("id").isDefined) x(inverseMap("id")).getOrElse("N/A").toString else "N/A",
+          if (inverseMap.get("dataType").isDefined) x(inverseMap("dataType")).getOrElse("N/A").toString else "N/A",
           if (inverseMap.get("entrezid").isDefined) x(inverseMap("entrezid")) else None,
           if (inverseMap.get("ensemblid").isDefined) x(inverseMap("ensemblid")) else None,
           if (inverseMap.get("symbol").isDefined) x(inverseMap("symbol")) else None,

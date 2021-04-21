@@ -9,7 +9,8 @@ libraryDependencies ++= Seq(
   "org.scalactic"      %% "scalactic"       % "3.2.2"      % "test",
   "org.scalatest"      %% "scalatest"       % "3.2.2"      % "test",
   "org.scalatest"      %% "scalatest-shouldmatchers"       % "3.2.2"      % "test",
-  "org.apache.spark"   %% "spark-core"      % "2.4.7"      % "provided"
+  "org.apache.spark"   %% "spark-core"      % "2.4.7"      % "provided",
+  "org.apache.spark"   %% "spark-sql"       % "2.4.7"      % "provided"
 )
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
