@@ -3,6 +3,7 @@ package model.v4
 package lenses
 
 import OptionLenses._
+// import Model._
 
 import scalaz.Lens
 

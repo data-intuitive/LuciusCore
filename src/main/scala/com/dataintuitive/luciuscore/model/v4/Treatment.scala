@@ -2,7 +2,12 @@ package com.dataintuitive.luciuscore
 package model.v4
 
 /**
- * Base trait for a treatment aka perturbagen
+ * Base class for a treatment
+ *
+ * This only contains an id and a name and some helper types and methods
+ *
+ * Concrete case classes extend this TRT class and add additional properties
+ * For each case class we define a companion object that converts a TRT_GENERIC
  */
 sealed abstract class TRT(val trtType: String) extends Product with Serializable {
   type T <: TRT
@@ -20,6 +25,9 @@ object PClass {
   def isGeneLike(trt:String) = geneLike.contains(trt)
 }
 
+/**
+ * TRT_CP class and companion object
+ */
 case class TRT_CP(
   name: String,
   id: String,
@@ -117,6 +125,16 @@ object TRT_EMPTY extends TRT_GENERIC(
   timeUnit = None
 ) with Serializable
 
+/**
+  * Treatment contains the perturbation information
+  *
+  * There is a slot for every perturbagen/treatment type in order to
+  * enable automatic encoding/decoding for Parquet and Spark DataSets.
+  *
+  * @param trt_generic
+  * @param trt_cp
+  * @param trt_lig
+  */
 case class Treatment(
   trt_generic:Option[TRT_GENERIC],
   trt_cp:Option[TRT_CP] = None,

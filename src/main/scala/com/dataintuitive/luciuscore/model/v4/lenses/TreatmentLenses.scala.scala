@@ -6,5 +6,4 @@ import scalaz.Lens
 
 object TreatmentLenses extends Serializable {
 
-
 }

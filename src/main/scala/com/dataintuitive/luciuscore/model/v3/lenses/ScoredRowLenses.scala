@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 package model.v3
-package model.v3.lenses
+package lenses
 
 import scalaz.Lens
 import OptionLenses._
