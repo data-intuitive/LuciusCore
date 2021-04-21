@@ -17,7 +17,7 @@ class StageGenesTest extends AnyFlatSpec {
     assert(gene.symbol === "symbolString")
     assert(gene.ensemblid === "ensemblidString")
     assert(gene.entrezid === "entrezidString")
-    assert(gene.probesetid === "probesetidString")
+    assert(gene.id === "probesetidString")
   }
 
   val listOfGenes = Array(

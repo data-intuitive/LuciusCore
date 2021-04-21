@@ -37,12 +37,12 @@ class SignaturesTest extends AnyFlatSpec with Matchers {
 
   }
 
-  it should "create the correct probesetid objects" in {
+  it should "create the correct id objects" in {
 
-    val psignature1 = ProbesetidSignature(Array(SignedString(Sign.PLUS, "psid1"),
+    val psignature1 = IdSignature(Array(SignedString(Sign.PLUS, "psid1"),
                                             SignedString(Sign.MINUS, "psid2"),
                                             SignedString(Sign.PLUS, "psid4")))
-    val psignature2 = new ProbesetidSignature(Array("psid1", "-psid2", "psid4"))
+    val psignature2 = new IdSignature(Array("psid1", "-psid2", "psid4"))
 
     psignature1.toString should equal (psignature2.toString)
 
@@ -62,10 +62,10 @@ class SignaturesTest extends AnyFlatSpec with Matchers {
   "Given a Genes database" should "enable conversion between signatures" in {
 
     val ssignature2 = new SymbolSignature(Array("SYM1", "-SYM2", "SYM4"))
-    val psignature2 = new ProbesetidSignature(Array("psid1", "-psid2", "psid4"))
+    val psignature2 = new IdSignature(Array("psid1", "-psid2", "psid4"))
     val isignature2 = new IndexSignature(Array(1, -2, 4))
 
-    ssignature2.toProbesetidSignature.toString should equal (psignature2.toString)
+    ssignature2.toIdSignature.toString should equal (psignature2.toString)
     psignature2.toIndexSignature.toString should equal (isignature2.toString)
     isignature2.toSymbolSignature.toString should equal (ssignature2.toString)
 
@@ -73,7 +73,7 @@ class SignaturesTest extends AnyFlatSpec with Matchers {
 
   "Translation" should "return OOPS for unknown entries" in {
     val invalidSSignature = new SymbolSignature(Array("-SYM1", "OOPS"))
-    val invalidPSignature = new ProbesetidSignature(Array("-psid1", "NA"))
+    val invalidPSignature = new IdSignature(Array("-psid1", "NA"))
 
     invalidPSignature.toSymbolSignature.toString should equal (invalidSSignature.toString)
 
