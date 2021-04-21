@@ -21,27 +21,27 @@ trait SignaturesTrait extends Serializable {
 
       def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
 
-      def toProbesetidSignature(implicit genes: GenesDB, failover: String = "OOPS"):ProbesetidSignature = {
-          val dict = genes.symbol2ProbesetidDict
+      def toIdSignature(implicit genes: GenesDB, failover: String = "OOPS"):IdSignature = {
+          val dict = genes.symbol2idDict
           val translated = signature.map { g =>
               val translation = dict.get(g.abs)
               translation.map(ug => SignedString(g.sign, ug)).getOrElse(SignedString(failover))
           }
-          ProbesetidSignature(translated)
+          IdSignature(translated)
       }
 
       def toIndexSignature(implicit genes: GenesDB, failover: Int = 0):IndexSignature =
-          toProbesetidSignature.toIndexSignature
+          toIdSignature.toIndexSignature
 
   }
 
-  case class ProbesetidSignature(signature: Array[SignedProbesetid]) extends Signature[SignedProbesetid] {
+  case class IdSignature(signature: Array[SignedId]) extends Signature[SignedId] {
 
       def this(signature: Array[String]) { this(signature.map(g => SignedString(g))) }
 
       def toSymbolSignature(implicit genes: GenesDB, failover: String = "OOPS"):SymbolSignature = {
           // TODO : inverse dict should be handled by Genes, not here!
-          val dict = for ((k,v) <- genes.symbol2ProbesetidDict) yield (v, k)
+          val dict = for ((k,v) <- genes.symbol2idDict) yield (v, k)
           val translated = signature.map { g =>
               val translation = dict.get(g.abs)
               translation.map(ug => SignedString(g.sign, ug)).getOrElse(SignedString(failover))
@@ -51,7 +51,7 @@ trait SignaturesTrait extends Serializable {
       }
 
       def toIndexSignature(implicit genes: GenesDB, failover: Int = 0):IndexSignature = {
-          val dict = for ((k,v) <- genes.index2ProbesetidDict) yield (v, k)
+          val dict = for ((k,v) <- genes.index2idDict) yield (v, k)
           val translated = signature.map { g =>
               val translation = dict.get(g.abs)
               translation.map(ui => SignedInt(g.sign, ui)).getOrElse(SignedInt(failover))
@@ -66,17 +66,17 @@ trait SignaturesTrait extends Serializable {
 
     def this(signature: Array[Int]) { this(signature.map(g => SignedInt(g))) }
 
-    def toProbesetidSignature(implicit genes: GenesDB, failover: String = "OOPS"):ProbesetidSignature = {
-        val dict = genes.index2ProbesetidDict
+    def toIdSignature(implicit genes: GenesDB, failover: String = "OOPS"):IdSignature = {
+        val dict = genes.index2idDict
         val translated = signature.map { g =>
             val translation = dict.get(g.abs)
             translation.map(go => SignedString(g.sign, go)).getOrElse(SignedString(failover))
         }
-        ProbesetidSignature(translated)
+        IdSignature(translated)
     }
 
     def toSymbolSignature(implicit genes: GenesDB, failover: Int = 0):SymbolSignature = 
-        toProbesetidSignature.toSymbolSignature
+        toIdSignature.toSymbolSignature
 
     /**
       * Convert an index-based signature to an ordered rank vector.

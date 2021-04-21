@@ -15,7 +15,7 @@ package object signatures extends SignaturesTrait {
 
   // Concrete types
   type SignedSymbol = SignedString
-  type SignedProbesetid = SignedString
+  type SignedId = SignedString
   type SignedIndex = SignedInt
 
 }
