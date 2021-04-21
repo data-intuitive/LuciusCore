@@ -7,7 +7,7 @@ package com.dataintuitive.luciuscore.genes
   */
 class GeneRaw(
                 val index: Int,
-                val probesetid: Probesetid,
+                val id: String,
                 val dataType: String,
                 val entrezid: Option[String],
                 val ensemblid: Option[String],
@@ -15,11 +15,11 @@ class GeneRaw(
                 val name: Option[String],
                 val geneFamily: Option[String]) extends Serializable {
 
-  override def toString = s"${probesetid} (index = ${index}, entrezid = ${entrezid}, dataType = ${dataType}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name}, family = ${geneFamily})"
+  override def toString = s"${id} (index = ${index}, entrezid = ${entrezid}, dataType = ${dataType}, ensemblid = ${ensemblid}, symbol = ${symbol}, name = ${name}, family = ${geneFamily})"
 
   def toGene = new Gene(
         index,
-        probesetid,
+        id,
         dataType,
         entrezid.flatMap(convertOption(_)).flatMap(secondarySplit(_)),
         ensemblid.flatMap(convertOption(_)).flatMap(secondarySplit(_)),
