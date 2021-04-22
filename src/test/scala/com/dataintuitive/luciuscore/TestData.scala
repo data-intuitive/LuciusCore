@@ -52,4 +52,15 @@ trait TestData extends BaseSparkContextSpec {
 
   val testData = sc.parallelize(Array.fill(100)(generatePerturbation)).toDF.as[Perturbation]
 
+  val flatData = testData.map( row =>
+      api.FlatDbRow(
+        row.id,
+        row.info.cell.getOrElse("N/A"),
+        row.trt.trt_cp.map(_.dose).getOrElse("N/A"),
+        row.trtType,
+        row.trt.trt.name,
+        row.profiles.profile.map(_.p.map(_.count(_ <= 0.05)).getOrElse(0) > 0).getOrElse(false)
+      )
+    )
+
 }
