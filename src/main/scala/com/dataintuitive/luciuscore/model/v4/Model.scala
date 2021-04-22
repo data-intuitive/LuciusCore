@@ -75,3 +75,5 @@ object Perturbation {
       filters = filters
     )
 }
+
+case class ScoredPerturbation(score: Double, perturbation: Perturbation) extends Serializable
