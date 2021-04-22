@@ -81,6 +81,9 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
     Treatment(Some(trtGenericCp)).trt             shouldBe a [TRT_GENERIC]
     Treatment(Some(trtGenericCp)).toSpecific.trt  shouldBe a [TRT_CP]
     Treatment(Some(trtGenericCp)).toSpecific.trt  shouldBe trtCp
+    Treatment(Some(trtGenericCp)).dose            shouldBe Some("1")
+    Treatment(Some(trtGenericCp)).time            shouldBe Some("4")
+    Treatment(Some(trtGenericCp)).smiles          shouldBe Some("smiles")
 
   }
 
@@ -98,6 +101,9 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
     Treatment(Some(trtGenericLig)).trt            shouldBe a [TRT_GENERIC]
     Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe a [TRT_LIG]
     Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe trtLig
+    Treatment(Some(trtGenericLig)).dose            shouldBe Some("2")
+    Treatment(Some(trtGenericLig)).time            shouldBe Some("1")
+    Treatment(Some(trtGenericLig)).smiles          shouldBe None
 
   }
 

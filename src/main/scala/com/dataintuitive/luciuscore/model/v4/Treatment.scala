@@ -165,9 +165,58 @@ case class Treatment(
   def get = trt
 
   def trtSafe = this match {
-    case Treatment(x, None, None) => x.map(_.trt)
-    case Treatment(None, x, None) => x.map(_.trt)
-    case Treatment(None, None, x) => x.map(_.trt)
+    case Treatment(x, None, None) => x.map(_.trt.asInstanceOf[TRT_GENERIC])
+    case Treatment(None, x, None) => x.map(_.trt.asInstanceOf[TRT_CP])
+    case Treatment(None, None, x) => x.map(_.trt.asInstanceOf[TRT_LIG])
+    case _ => None
+  }
+
+  def dose:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.dose)
+    case "trt_cp"      => trt_cp.map(_.dose)
+    case "trt_lig"     => trt_lig.map(_.dose)
+    case _ => None
+  }
+
+  def doseUnit:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.doseUnit)
+    case "trt_cp"      => trt_cp.map(_.doseUnit)
+    case "trt_lig"     => trt_lig.map(_.doseUnit)
+    case _ => None
+  }
+
+  def time:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.time)
+    case "trt_cp"      => trt_cp.map(_.time)
+    case "trt_lig"     => trt_lig.map(_.time)
+    case _ => None
+  }
+
+  def timeUnit:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.timeUnit)
+    case "trt_cp"      => trt_cp.map(_.timeUnit)
+    case "trt_lig"     => trt_lig.map(_.timeUnit)
+    case _ => None
+  }
+
+  def inchikey:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.inchikey)
+    case "trt_cp"      => trt_cp.flatMap(_.inchikey)
+    case "trt_lig"     => None
+    case _ => None
+  }
+
+  def smiles:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.smiles)
+    case "trt_cp"      => trt_cp.flatMap(_.smiles)
+    case "trt_lig"     => None
+    case _ => None
+  }
+
+  def pubchemId:Option[String] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.pubchemId)
+    case "trt_cp"      => trt_cp.flatMap(_.pubchemId)
+    case "trt_lig"     => None
     case _ => None
   }
 
