@@ -12,6 +12,12 @@ object OptionLenses extends Serializable {
         (a, value) => Some(value),
         _.getOrElse("N/A")
     )
+
+    val listLens = Lens.lensu[Option[List[String]], List[String]](
+        (a, value) => Some(value),
+        _.getOrElse(Nil)
+    )
+
     def safeStringLens(fallback: String = "OOPS") = Lens.lensu[Option[String], String](
             (a, value) => Some(value),
             _.getOrElse(fallback)

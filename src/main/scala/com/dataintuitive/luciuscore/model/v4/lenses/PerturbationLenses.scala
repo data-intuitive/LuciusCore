@@ -5,8 +5,6 @@ package lenses
 import scalaz.Lens
 
 import filters._
-// import Model._
-import filters._
 
 object PerturbationLenses extends Serializable {
 
@@ -39,5 +37,7 @@ object PerturbationLenses extends Serializable {
     (a, value) => a.copy(filters = value),
     _.filters
   )
+
+  val filtersMapLens = filtersLens >=> FilterLenses.seqFilterMapLens
 
 }
