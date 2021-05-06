@@ -15,6 +15,7 @@ sealed abstract class TRT(val trtType: String) extends Product with Serializable
   val id: String
   val trt: T = this.asInstanceOf[T]
   def get():T = trt
+
 }
 
 object PClass {
@@ -37,10 +38,26 @@ case class TRT_CP(
   timeUnit: String,
   inchikey: Option[String],
   smiles: Option[String],
-  pubchemId: Option[String]
+  pubchemId: Option[String],
+  targets: List[String]
 ) extends TRT(trtType = "trt_cp") with Serializable {
 
   type T = TRT_CP
+
+  def toGeneric:TRT_GENERIC =
+    TRT_GENERIC(
+      trtType = "trt_cp",
+      id = id,
+      name = name,
+      inchikey = inchikey,
+      smiles = smiles,
+      pubchemId = pubchemId,
+      dose = Some(dose),
+      doseUnit = Some(doseUnit),
+      time = Some(time),
+      timeUnit = Some(timeUnit),
+      targets = Some(targets)
+    )
 
 }
 
@@ -56,7 +73,8 @@ object TRT_CP {
       timeUnit = generic.timeUnit.getOrElse("NA"),
       inchikey = generic.inchikey,
       smiles = generic.smiles,
-      pubchemId = generic.pubchemId
+      pubchemId = generic.pubchemId,
+      targets = generic.targets.getOrElse(Nil)
     )
 
 }
@@ -71,6 +89,21 @@ case class TRT_LIG(
 ) extends TRT(trtType = "trt_lig") with Serializable {
 
   type T = TRT_LIG
+
+  def toGeneric:TRT_GENERIC =
+    TRT_GENERIC(
+      trtType = "trt_cp",
+      id = id,
+      name = name,
+      inchikey = None,
+      smiles = None,
+      pubchemId = None,
+      dose = Some(dose),
+      doseUnit = Some(doseUnit),
+      time = Some(time),
+      timeUnit = Some(timeUnit),
+      targets = None
+    )
 
 }
 
@@ -99,7 +132,8 @@ case class TRT_GENERIC(
   dose: Option[String],
   doseUnit: Option[String],
   time: Option[String],
-  timeUnit: Option[String]
+  timeUnit: Option[String],
+  targets: Option[List[String]]
 ) extends TRT(trtType = trtType) with Serializable {
 
   type T = TRT_GENERIC
@@ -110,6 +144,9 @@ case class TRT_GENERIC(
       case "trt_lig" => TRT_LIG(this).asInstanceOf[S]
       case _ => this.asInstanceOf[S]
     }
+
+  def toGeneric:TRT_GENERIC = this
+
 }
 
 object TRT_EMPTY extends TRT_GENERIC(
@@ -122,7 +159,8 @@ object TRT_EMPTY extends TRT_GENERIC(
   dose = None,
   doseUnit = None,
   time = None,
-  timeUnit = None
+  timeUnit = None,
+  targets = None
 ) with Serializable
 
 /**
@@ -141,18 +179,28 @@ case class Treatment(
   trt_lig:Option[TRT_LIG] = None
 ) extends Serializable {
 
+  // Which specific treatment types are supported?
   def specifics = Seq(trt_cp, trt_lig)
   def isSpecific = specifics.map(_.isDefined).filter(x=>x).length == 1
   def isConsistent = trt_generic.isDefined || isSpecific
   def isEmpty = (trt_generic == Some(TRT_EMPTY)) || (! isConsistent)
 
-  def toSpecific =
+  // Convert to a specific treatment type (access slot in Treatment)
+  def toSpecific:Treatment =
     trt_generic.get.trtType match {
       case "trt_cp"    => Treatment(None, trt_cp  = trt_generic.map(_.toSpecific[TRT_CP]))
       case "trt_lig"   => Treatment(None, trt_lig = trt_generic.map(_.toSpecific[TRT_LIG]))
       case "trt_empty" => Treatment(None)
       case _ => Treatment(None)
     }
+
+  // Convert to a generic treatment type (inverse of toSpecific)
+  def toGeneric:Treatment = trtType match {
+    case "trt_generic" => this
+    case "trt_cp"      => Treatment(trt_cp.map(_.toGeneric))
+    case "trt_lig"     => Treatment(trt_lig.map(_.toGeneric))
+    case _ =>  Treatment(Some(TRT_EMPTY))
+  }
 
   def trtType:String = this match {
     case Treatment(x, None, None) => "trt_generic"

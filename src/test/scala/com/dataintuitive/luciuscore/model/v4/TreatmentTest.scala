@@ -101,9 +101,17 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
     Treatment(Some(trtGenericLig)).trt            shouldBe a [TRT_GENERIC]
     Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe a [TRT_LIG]
     Treatment(Some(trtGenericLig)).toSpecific.trt shouldBe trtLig
-    Treatment(Some(trtGenericLig)).dose            shouldBe Some("2")
-    Treatment(Some(trtGenericLig)).time            shouldBe Some("1")
-    Treatment(Some(trtGenericLig)).smiles          shouldBe None
+    Treatment(Some(trtGenericLig)).dose           shouldBe Some("2")
+    Treatment(Some(trtGenericLig)).time           shouldBe Some("1")
+    Treatment(Some(trtGenericLig)).smiles         shouldBe None
+
+  }
+
+  it should "allow transformation between specific and generic representations" in {
+
+    val trt = Treatment(Some(trtGenericCp))
+
+    trt.toSpecific.toGeneric shouldBe trt
 
   }
 
