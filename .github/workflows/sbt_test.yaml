@@ -1,4 +1,4 @@
-name: Scala CI
+name: Scala CI and Publish
 
 on:
   push:
@@ -21,21 +21,6 @@ jobs:
     - name: Run tests on Ubuntu
       if: startsWith(matrix.os, 'ubuntu')
       run: sbt 'testOnly -- -l com.dataintuitive.tags.IOtag'
-  # package:
-  #   name: Build package
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Set up Scala
-  #     uses: olafurpg/setup-scala@v10
-  #   - name: Create package
-  #     run: sbt package
-  #   - name: Upload package
-  #     uses: actions/upload-artifact@2
-  #     with:
-  #       name: package
-  #       path: "target/scala-2.11/*.jar"
   publish:
     name: Publish package
     needs: [build]
@@ -47,4 +32,4 @@ jobs:
     - name: Upload
       run: sbt aetherDeploy
       env:
-        GITHUB_TOKEN: ${{ secrets.LuciusCore }}
+        GITHUB_TOKEN: ${{ secrets.PACKAGE_SECRET }}
