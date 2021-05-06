@@ -27,7 +27,8 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
       Some("1"),
       Some("ml"),
       Some("4"),
-      Some("m")
+      Some("m"),
+      Some(List("T1", "T2"))
     )
 
   val trtGenericLig =
@@ -41,7 +42,8 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
       Some("2"),
       Some("ml"),
       Some("1"),
-      Some("m")
+      Some("m"),
+      Some(List("T1", "T2"))
     )
 
   "Full instantiation" should "just work" in {
@@ -55,7 +57,8 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
         "m",
         Some("inchikey"),
         Some("smiles"),
-        Some("pubchem")
+        Some("pubchem"),
+        List("T1", "T2")
       )
 
     Treatment(None, Some(trtCp), None).trt_cp    shouldBe Some(trtCp)
@@ -75,7 +78,8 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
         timeUnit = "m",
         inchikey = Some("inchikey"),
         smiles = Some("smiles"),
-        pubchemId = Some("pubchem")
+        pubchemId = Some("pubchem"),
+        targets = List("T1", "T2")
       )
 
     Treatment(Some(trtGenericCp)).trt             shouldBe a [TRT_GENERIC]

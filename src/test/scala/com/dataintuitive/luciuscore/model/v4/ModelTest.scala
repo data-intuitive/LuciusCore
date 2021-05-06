@@ -32,7 +32,8 @@ class ModelTestv4 extends AnyFlatSpec with Matchers {
       Some("1"),
       Some("ml"),
       Some("4"),
-      Some("m")
+      Some("m"),
+      Some(List("T1", "T2"))
     )
 
   val perturbation = Perturbation("456", Information(), Profiles(), trtGenericCp, Nil)
@@ -48,7 +49,8 @@ class ModelTestv4 extends AnyFlatSpec with Matchers {
         timeUnit = "m",
         inchikey = Some("inchikey"),
         smiles = Some("smiles"),
-        pubchemId = Some("pubchem")
+        pubchemId = Some("pubchem"),
+        targets = List("T1", "T2")
       )
 
     assert(perturbation.trt.trt === trtCp)
@@ -63,7 +65,6 @@ class ModelTestv4 extends AnyFlatSpec with Matchers {
   }
 
   it should "allow automatic conversion to trt_<specific>" in {
-    println(perturbation.trt)
     assert(perturbation.trt.isConsistent)
     perturbation.trt.get shouldBe a [TRT_CP]
     perturbation.trt.isSpecific shouldBe true

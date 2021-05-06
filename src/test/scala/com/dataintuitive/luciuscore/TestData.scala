@@ -42,7 +42,8 @@ trait TestData extends BaseSparkContextSpec {
           dose = None,
           doseUnit = None,
           time = None,
-          timeUnit = None)
+          timeUnit = None,
+          targets = None)
 
       Perturbation(uniqueID, info, profiles, trt, Nil)
   }
