@@ -1,4 +1,5 @@
 package com.dataintuitive.luciuscore
+package correlations
 
 import scala.math.{abs, max}
 

@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore
 package model.v3
 
-import ZhangScoreFunctions.connectionScore
+import correlations.ZhangScoreFunctions._
 
 object DbFunctions {
 
