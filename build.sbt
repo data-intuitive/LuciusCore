@@ -19,12 +19,14 @@ organization := "com.data-intuitive"
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
-/* githubOwner := "data-intuitive" */
-/* githubRepository := "luciuscore" */
-/* githubActor := "tverbeiren" */
-/* githubTokenSource := TokenSource.GitConfig("github.token") */
-/* publishMavenStyle := true */
-/* publishConfiguration := publishConfiguration.value.withOverwrite(true) */
+// publish to github packages
+publishTo := Some("GitHub Data Intuitive Scala Packages" at "https://maven.pkg.github.com/data-intuitive/LuciusCore")
+publishMavenStyle := true
+credentials += Credentials(
+  "GitHub Package Registry",
+  "maven.pkg.github.com",
+  "data-intuitive",
+  System.getenv("GITHUB_TOKEN")
+)
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
-bintrayPackageLabels := Seq("scala", "l1000", "spark", "lucius", "compass")

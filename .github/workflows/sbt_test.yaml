@@ -21,3 +21,30 @@ jobs:
     - name: Run tests on Ubuntu
       if: startsWith(matrix.os, 'ubuntu')
       run: sbt 'testOnly -- -l com.dataintuitive.tags.IOtag'
+  # package:
+  #   name: Build package
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Scala
+  #     uses: olafurpg/setup-scala@v10
+  #   - name: Create package
+  #     run: sbt package
+  #   - name: Upload package
+  #     uses: actions/upload-artifact@2
+  #     with:
+  #       name: package
+  #       path: "target/scala-2.11/*.jar"
+  publish:
+    name: Publish package
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Scala
+      uses: olafurpg/setup-scala@v10
+    - name: Upload
+      run: sbt publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
