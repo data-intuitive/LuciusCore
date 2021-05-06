@@ -45,6 +45,6 @@ jobs:
     - name: Set up Scala
       uses: olafurpg/setup-scala@v10
     - name: Upload
-      run: sbt publish
+      run: sbt aetherDeploy
       env:
         GITHUB_TOKEN: ${{ secrets.LuciusCore }}
