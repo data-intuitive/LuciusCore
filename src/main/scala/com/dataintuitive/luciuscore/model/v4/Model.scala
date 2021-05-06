@@ -76,4 +76,14 @@ object Perturbation {
     )
 }
 
-case class ScoredPerturbation(score: Double, perturbation: Perturbation) extends Serializable
+case class ScoredPerturbation(scores: List[Double], perturbation: Perturbation) extends Serializable {
+
+    def score = scores.head
+
+}
+
+object ScoredPerturbation {
+
+  def apply(score: Double, perturbation: Perturbation):ScoredPerturbation = ScoredPerturbation(List(score), perturbation)
+
+}
