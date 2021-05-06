@@ -12,7 +12,10 @@ import model.v4._
 
 object CheckSignature extends ApiFunctionTrait {
 
-  case class JobData(db: Dataset[Perturbation], genesDB: GenesDB, version: String, signature: List[String])
+  case class SpecificData(
+    signature: List[String]
+  )
+
   type JobOutput = List[Map[String, Any]]
 
   val infoMsg = "Returns annotations about genes (exists in l1000, symbol)."
@@ -25,14 +28,17 @@ object CheckSignature extends ApiFunctionTrait {
     |- __`query`__: a gene signature where genes can be in any format symbol, ensembl, probeset, entrez (mandatory)
     """.stripMargin
 
+  def header(data: JobData): String = s"Retrieve annotations about gene signature ${data.specificData.signature}"
+
   def result(data: JobData)(implicit sparkSession: SparkSession): JobOutput = {
 
     implicit def signString(string: String) = new SignedString(string)
 
-    val JobData(db, genesDB, version, rawSignature) = data
-    implicit val genes = genesDB
+    val CachedData(db, _, genesDb) = data.cachedData
+    val SpecificData(rawSignature) = data.specificData
+    implicit val genes = genesDb
 
-    val tt = genesDB
+    val tt = genes
       .createSymbolDictionary
       .map(_.swap)
       .flatMap{ case (gene, symbol) =>

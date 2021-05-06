@@ -1,9 +1,10 @@
 package com.dataintuitive.luciuscore
 package api
 
-trait ApiFunctionTrait {
+trait ApiFunctionTrait extends Serializable {
 
-    type JobData
+    type SpecificData
+    case class JobData(version: String, cachedData: CachedData, specificData: SpecificData)
     type JobOutput
 
     val helpMsg:String

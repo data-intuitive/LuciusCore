@@ -12,7 +12,8 @@ import model.v4._
 
 object Statistics extends ApiFunctionTrait {
 
-  case class JobData(db: Dataset[Perturbation], flatDb: Dataset[FlatDbRow], genes: GenesDB)
+  case class SpecificData()
+
   type JobOutput = Map[String, Any]
 
   val infoMsg =
@@ -25,7 +26,6 @@ object Statistics extends ApiFunctionTrait {
     |No input is required for this endpoint
     """.stripMargin
 
-
   def info(data: JobData) = "General statistics about the dataset"
 
   def header(data: JobData) = Map("key" -> "value").toString
@@ -34,7 +34,7 @@ object Statistics extends ApiFunctionTrait {
 
     import sparkSession.implicits._
 
-    val flatDb = data.flatDb
+    val CachedData(_, flatDb, _) = data.cachedData
 
     val compounds = Map(
       "total" -> flatDb
