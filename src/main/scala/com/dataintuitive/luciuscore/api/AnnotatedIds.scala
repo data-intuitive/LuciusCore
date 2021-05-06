@@ -4,6 +4,7 @@ package api
 import model.v4._
 import genes._
 import signatures._
+import lenses.CombinedPerturbationLenses.lengthLens
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Dataset
@@ -52,15 +53,7 @@ object AnnotatedIds extends ApiFunctionTrait {
 
     // Just taking the first element t vector is incorrect, what do we use options for after all?!
     // So... a version of takeWhile to the rescue
-    val vLength =
-      db
-        .filter( x =>
-          x.profiles.profile.flatMap(_.t).isDefined)
-        .first
-        .profiles
-        .profile
-        .flatMap(_.t.map(_.length))
-        .getOrElse(0)
+    val vLength = lengthLens.get(db.first)
     val query = signature.toIndexSignature.toOrderedRankVector(vLength)
 
     // Filter the pids in the query, at least if one is specified

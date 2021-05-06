@@ -7,6 +7,7 @@ import filters._
 import signatures._
 import correlations._
 import utilities.BinningFunctions._
+import lenses.CombinedPerturbationLenses.lengthLens
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Dataset
@@ -45,15 +46,7 @@ object BinnedCorrelation extends ApiFunctionTrait {
     val signature = new SymbolSignature(signatureQuery.toArray)
     val iSignature = signature.toIndexSignature
 
-    val vLength =
-      db
-        .filter( x =>
-          x.profiles.profile.flatMap(_.t).isDefined)
-        .first
-        .profiles
-        .profile
-        .flatMap(_.t.map(_.length))
-        .getOrElse(0)
+    val vLength = lengthLens.get(db.first)
     val query = iSignature.toOrderedRankVector(vLength)
 
     // Add Zhang score if signature is present
