@@ -1,6 +1,6 @@
 name := "LuciusCore"
 
-version := "4.0.0-SNAPSHOT"
+version in ThisBuild := "4.0.0-SNAPSHOT"
 
 scalaVersion := "2.11.12"
 
@@ -20,13 +20,15 @@ organization := "com.data-intuitive"
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 // publish to github packages
-publishTo := Some("GitHub Data Intuitive Scala Packages" at "https://maven.pkg.github.com/data-intuitive/LuciusCore")
+publishTo := Some("GitHub data-intuitive Apache Maven Packages" at "https://maven.pkg.github.com/data-intuitive/luciuscore")
 publishMavenStyle := true
 credentials += Credentials(
   "GitHub Package Registry",
   "maven.pkg.github.com",
-  "data-intuitive",
+  "tverbeiren",
   System.getenv("GITHUB_TOKEN")
 )
+
+publishArtifact in (Compile, packageDoc) := false
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
