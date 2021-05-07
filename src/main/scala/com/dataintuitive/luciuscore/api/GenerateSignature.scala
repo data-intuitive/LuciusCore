@@ -39,7 +39,7 @@ object GenerateSignature extends ApiFunctionTrait {
 
     // Start with query compound and retrieve indices
     val selection =
-      db.filter(x => x.id.exists(elem => pQuery.toSet.contains(elem)))
+      db.filter(x => pQuery.toSet.contains(x.id))
         .collect
         .map(x => (x.profiles.profile.flatMap(_.t).get, x.profiles.profile.flatMap(_.p).get))
     val valueVector = TransformationFunctions.aggregateStats(selection, pValue)
