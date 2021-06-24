@@ -6,6 +6,8 @@ import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.SparkSession
 import com.dataintuitive.test.BaseSparkContextSpec
 
+import lenses._
+
 trait TestData extends BaseSparkContextSpec {
 
   val featuresToExtract = Map(

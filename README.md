@@ -34,10 +34,12 @@ Perturbation
     r
     logFc
   trtType                 trt_cp / trt_lig / ...
-  trt
+  trt                     treatment information
     trt_generic           a generic representation
     trt_cp                slot for trt_cp type perturbagens
     trt_lig               slot for trt_lig type perturbagens
+    trt_sh                ...
+    ctl_vector            ...
   filters
 ```
 
