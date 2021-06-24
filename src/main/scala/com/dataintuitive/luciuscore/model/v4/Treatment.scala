@@ -20,7 +20,7 @@ sealed abstract class TRT(val trtType: String) extends Product with Serializable
 
 object PClass {
   val compoundLike = Set("trt_cp")
-  val geneLike = Set("trt_lig")
+  val geneLike = Set("trt_lig", "trt_sh")
 
   def isCompoundLike(trt:String) = compoundLike.contains(trt)
   def isGeneLike(trt:String) = geneLike.contains(trt)
@@ -107,6 +107,76 @@ case class TRT_LIG(
 
 }
 
+case class TRT_SH(
+  name: String,
+  id: String
+) extends TRT(trtType = "trt_sh") with Serializable {
+
+  type T = TRT_SH
+
+  def toGeneric:TRT_GENERIC =
+    TRT_GENERIC(
+      trtType = "trt_sh",
+      id = id,
+      name = name,
+      inchikey = None,
+      smiles = None,
+      pubchemId = None,
+      dose = None,
+      doseUnit = None,
+      time = None,
+      timeUnit = None,
+      targets = None
+    )
+
+}
+
+object TRT_SH {
+
+  def apply(generic: TRT_GENERIC):TRT_SH =
+
+    TRT_SH(
+      id = generic.id,
+      name = generic.name
+    )
+
+}
+
+case class CTL_VECTOR(
+  name: String,
+  id: String
+) extends TRT(trtType = "ctl_vector") with Serializable {
+
+  type T = CTL_VECTOR
+
+  def toGeneric:TRT_GENERIC =
+    TRT_GENERIC(
+      trtType = "ctl_vector",
+      id = id,
+      name = name,
+      inchikey = None,
+      smiles = None,
+      pubchemId = None,
+      dose = None,
+      doseUnit = None,
+      time = None,
+      timeUnit = None,
+      targets = None
+    )
+
+}
+
+object CTL_VECTOR {
+
+  def apply(generic: TRT_GENERIC):CTL_VECTOR =
+
+    CTL_VECTOR(
+      id = generic.id,
+      name = generic.name
+    )
+
+}
+
 object TRT_LIG {
 
   def apply(generic: TRT_GENERIC):TRT_LIG =
@@ -140,8 +210,10 @@ case class TRT_GENERIC(
 
   def toSpecific[S <: TRT]():S =
     trtType match {
-      case "trt_cp" => TRT_CP(this).asInstanceOf[S]
-      case "trt_lig" => TRT_LIG(this).asInstanceOf[S]
+      case "trt_cp"     => TRT_CP(this).asInstanceOf[S]
+      case "trt_lig"    => TRT_LIG(this).asInstanceOf[S]
+      case "trt_sh"     => TRT_SH(this).asInstanceOf[S]
+      case "ctl_vector" => CTL_VECTOR(this).asInstanceOf[S]
       case _ => this.asInstanceOf[S]
     }
 
@@ -176,11 +248,13 @@ object TRT_EMPTY extends TRT_GENERIC(
 case class Treatment(
   trt_generic:Option[TRT_GENERIC],
   trt_cp:Option[TRT_CP] = None,
-  trt_lig:Option[TRT_LIG] = None
+  trt_lig:Option[TRT_LIG] = None,
+  trt_sh:Option[TRT_SH] = None,
+  ctl_vector:Option[CTL_VECTOR] = None
 ) extends Serializable {
 
   // Which specific treatment types are supported?
-  def specifics = Seq(trt_cp, trt_lig)
+  def specifics = Seq(trt_cp, trt_lig, trt_sh, ctl_vector)
   def isSpecific = specifics.map(_.isDefined).filter(x=>x).length == 1
   def isConsistent = trt_generic.isDefined || isSpecific
   def isEmpty = (trt_generic == Some(TRT_EMPTY)) || (! isConsistent)
@@ -188,9 +262,11 @@ case class Treatment(
   // Convert to a specific treatment type (access slot in Treatment)
   def toSpecific:Treatment =
     trt_generic.get.trtType match {
-      case "trt_cp"    => Treatment(None, trt_cp  = trt_generic.map(_.toSpecific[TRT_CP]))
-      case "trt_lig"   => Treatment(None, trt_lig = trt_generic.map(_.toSpecific[TRT_LIG]))
-      case "trt_empty" => Treatment(None)
+      case "trt_cp"     => Treatment(None, trt_cp  = trt_generic.map(_.toSpecific[TRT_CP]))
+      case "trt_lig"    => Treatment(None, trt_lig = trt_generic.map(_.toSpecific[TRT_LIG]))
+      case "trt_sh"     => Treatment(None, trt_sh  = trt_generic.map(_.toSpecific[TRT_SH]))
+      case "ctl_vector" => Treatment(None, ctl_vector = trt_generic.map(_.toSpecific[CTL_VECTOR]))
+      case "trt_empty"  => Treatment(None)
       case _ => Treatment(None)
     }
 
@@ -199,13 +275,17 @@ case class Treatment(
     case "trt_generic" => this
     case "trt_cp"      => Treatment(trt_cp.map(_.toGeneric))
     case "trt_lig"     => Treatment(trt_lig.map(_.toGeneric))
+    case "trt_sh"      => Treatment(trt_sh.map(_.toGeneric))
+    case "ctl_vector"  => Treatment(ctl_vector.map(_.toGeneric))
     case _ =>  Treatment(Some(TRT_EMPTY))
   }
 
   def trtType:String = this match {
-    case Treatment(x, None, None) => "trt_generic"
-    case Treatment(None, x, None) => "trt_cp"
-    case Treatment(None, None, x) => "trt_lig"
+    case Treatment(x, None, None, None, None) => "trt_generic"
+    case Treatment(None, x, None, None, None) => "trt_cp"
+    case Treatment(None, None, x, None, None) => "trt_lig"
+    case Treatment(None, None, None, x, None) => "trt_sh"
+    case Treatment(None, None, None, None, x) => "ctl_vector"
     case _ => "error"
   }
 
@@ -213,9 +293,11 @@ case class Treatment(
   def get = trt
 
   def trtSafe = this match {
-    case Treatment(x, None, None) => x.map(_.trt.asInstanceOf[TRT_GENERIC])
-    case Treatment(None, x, None) => x.map(_.trt.asInstanceOf[TRT_CP])
-    case Treatment(None, None, x) => x.map(_.trt.asInstanceOf[TRT_LIG])
+    case Treatment(x, None, None, None, None) => x.map(_.trt.asInstanceOf[TRT_GENERIC])
+    case Treatment(None, x, None, None, None) => x.map(_.trt.asInstanceOf[TRT_CP])
+    case Treatment(None, None, x, None, None) => x.map(_.trt.asInstanceOf[TRT_LIG])
+    case Treatment(None, None, None, x, None) => x.map(_.trt.asInstanceOf[TRT_SH])
+    case Treatment(None, None, None, None, x) => x.map(_.trt.asInstanceOf[CTL_VECTOR])
     case _ => None
   }
 
@@ -250,21 +332,18 @@ case class Treatment(
   def inchikey:Option[String] = trtType match {
     case "trt_generic" => trt_generic.flatMap(_.inchikey)
     case "trt_cp"      => trt_cp.flatMap(_.inchikey)
-    case "trt_lig"     => None
     case _ => None
   }
 
   def smiles:Option[String] = trtType match {
     case "trt_generic" => trt_generic.flatMap(_.smiles)
     case "trt_cp"      => trt_cp.flatMap(_.smiles)
-    case "trt_lig"     => None
     case _ => None
   }
 
   def pubchemId:Option[String] = trtType match {
     case "trt_generic" => trt_generic.flatMap(_.pubchemId)
     case "trt_cp"      => trt_cp.flatMap(_.pubchemId)
-    case "trt_lig"     => None
     case _ => None
   }
 
