@@ -2,12 +2,13 @@ package com.dataintuitive.luciuscore.io
 
 import com.dataintuitive.luciuscore.io.ParseFunctions._
 import com.dataintuitive.test.BaseSparkContextSpec
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
 /**
   * Created by toni on 07/09/16.
   */
-class ParseFunctionsTest extends FunSpec with BaseSparkContextSpec with Matchers {
+class ParseFunctionsTest extends AnyFunSpec with BaseSparkContextSpec with Matchers {
 
   val arr = Array(
     Array("col1", "col2", "col3"),

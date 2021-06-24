@@ -36,32 +36,32 @@ case class GenesDB(val genes: Array[Gene]) extends Serializable {
   /**
    * Dictionary to translate symbols to probsetids
    *
-   * Please note the relation probesetid <-> symbol is n-m
+   * Please note the relation id <-> symbol is n-m
    */
-  val symbol2ProbesetidDict = 
+  val symbol2idDict =
     createSymbolDictionary
-      .map{ case (s, ga) => (s, ga.probesetid) }
+      .map{ case (s, ga) => (s, ga.id) }
 
   /**
-   * Dictionary to translate indices to probesetids.
+   * Dictionary to translate indices to ids.
    *
    * This mapping is 1-1
    */
-  val index2ProbesetidDict: Map[Int, Probesetid] =
+  val index2idDict: Map[Int, String] =
     createIndexDictionary
-      .map{ case (i, ga) => (i, ga.probesetid) }
+      .map{ case (i, ga) => (i, ga.id) }
 
   /**
-   * Dictionary to translate indices to probesetids.
+   * Dictionary to translate indices to ids.
    *
    * This mapping is 1-1
    */
-  val probesetid2Index: Map[Probesetid, Int] =
-    for ((k,v) <- index2ProbesetidDict) yield (v, k)
+  val id2index: Map[String, Int] =
+    for ((k,v) <- index2idDict) yield (v, k)
 
   /**
-   * A vector containing the probesetids representing the genes.
+   * A vector containing the ids representing the genes.
    */
-  val probesetidVector = genes.map(_.probesetid)
+  val idVector = genes.map(_.id)
 
 }

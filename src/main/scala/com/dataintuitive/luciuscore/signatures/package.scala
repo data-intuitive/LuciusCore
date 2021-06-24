@@ -2,7 +2,7 @@ package com.dataintuitive.luciuscore
 
 import com.dataintuitive.luciuscore.genes._
 
-package object signatures {
+package object signatures extends SignaturesTrait {
 
   type GeneVector = Array[GeneType]
 
@@ -15,7 +15,7 @@ package object signatures {
 
   // Concrete types
   type SignedSymbol = SignedString
-  type SignedProbesetid = SignedString
+  type SignedId = SignedString
   type SignedIndex = SignedInt
 
 }

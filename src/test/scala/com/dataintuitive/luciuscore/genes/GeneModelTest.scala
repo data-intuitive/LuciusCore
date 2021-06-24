@@ -1,8 +1,8 @@
 package com.dataintuitive.luciuscore.genes
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class StageGenesTest extends FlatSpec {
+class StageGenesTest extends AnyFlatSpec {
 
   info("Test model for gene annotations")
 
@@ -17,7 +17,7 @@ class StageGenesTest extends FlatSpec {
     assert(gene.symbol === "symbolString")
     assert(gene.ensemblid === "ensemblidString")
     assert(gene.entrezid === "entrezidString")
-    assert(gene.probesetid === "probesetidString")
+    assert(gene.id === "probesetidString")
   }
 
   val listOfGenes = Array(

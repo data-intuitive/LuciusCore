@@ -30,6 +30,7 @@ sealed trait SignedType[A<:Any] extends Serializable {
  * Implementation for Strings
  */
 case class SignedString(val sign: Sign, val abs: String) extends SignedType[String]
+
 object SignedString {
   def apply(s:String) = if (s.head == '-') new SignedString(MINUS, s.drop(1)) else new SignedString(PLUS, s)
 }
@@ -40,9 +41,8 @@ object SignedString {
 case class SignedInt(val sign: Sign, val abs: Int) extends SignedType[Int] {
   def toInt = signInt * abs
 }
+
 object SignedInt {
   def apply(i:Int) = if (i < 0) new SignedInt(MINUS, -i) else new SignedInt(PLUS, i)
 }
 
-
-// }
