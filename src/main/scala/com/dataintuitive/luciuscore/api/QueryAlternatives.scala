@@ -17,18 +17,19 @@ object QueryAlternatives {
   val BATCH = Set("batch", "Batch")
   val PLATE = Set("plateid", "PlateId")
   val WELL  = Set("well", "Well")
-  val CELL  = Set("protocolname", "cellline", "CellLine", "ProtocolName", "protocol", "Protocol", "cell")
+  val CELL  = Set("cell", "protocolname", "cellline", "CellLine", "ProtocolName", "protocol", "Protocol")
   val YEAR  = Set("year", "Year")
 
-  // Perturbation
-  val P_ID = Set("jnjs", "Jnjs", "cid", "pid", "compound_id", "brdid")
-  val P_SMILES = Set("Smiles", "smiles", "SMILES", "compound_smiles")
-  val P_INCHIKEY = Set("inchikey", "Inchikey", "compound_inchikey")
-  val P_NAME = Set("compoundname", "CompoundName", "Compoundname", "name", "Name", "compound_name")
-  val P_TYPE = Set("Type", "type", "compound_type")
-  val P_TARGETS = Set("targets", "knownTargets", "Targets", "compound_targets")
-  val DOSE  = Set("concentration", "Concentration", "dose")
-  val TIME  = Set("duration", "time", "Time", "Duration")
+  // Treatment
+  val TRT      = Set("trt", "perturbagen_type", "treatment")
+  val TRT_ID   = Set("trt_id", "jnjs", "Jnjs", "cid", "pid", "compound_id", "brdid")
+  val TRT_NAME = Set("trt_name", "compoundname", "CompoundName", "Compoundname", "compound_name")
+  val TRT_TYPE = Set("Type", "type", "compound_type") // DEPRECATE ME !!!
+  val SMILES   = Set("smiles", "Smiles", "SMILES", "compound_smiles")
+  val INCHIKEY = Set("inchikey", "Inchikey", "compound_inchikey")
+  val DOSE     = Set("dose", "concentration", "Concentration")
+  val TIME     = Set("time", "duration", "Time", "Duration")
+  val TARGETS  = Set("targets", "knownTargets", "Targets", "compound_targets")
 
   // Filters
   val FILTERS = Set("filters", "Filters", "filter", "filters")
@@ -37,4 +38,3 @@ object QueryAlternatives {
   val SIGNIFICANTGENES = Set("significantGenes")
 
 }
-
