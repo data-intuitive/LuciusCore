@@ -48,16 +48,17 @@ object Extractors {
       "zhang",
       "id",
       "batch",
-      "plateid",        // Should be plate
+      "plateid",
       "well",
-      "protocolname",   // Should be cell
-      "concentration",  // Should be dose
+      "cell",
+      "dose",
       "year",
-      "time",
-      "compound_id",    // Should become something else!
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "name",
+      "time",
       "filters"
     )
   }
@@ -90,12 +91,13 @@ object Extractors {
 
     val allFeatures = List(
       "id",
-      "compound_id",    // Should become something else!
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "concentration",  // Should be dose
+      "dose",
       "time",
-      "compound_name",  // Should be replaced by name?
       "targets"
     )
 
@@ -123,16 +125,17 @@ object Extractors {
     val allFeatures = List(
       "id",
       "batch",
-      "plateid",        // Should be plate
+      "plate",
       "well",
-      "protocolname",   // Should be cell
-      "concentration",  // Should be dose
+      "cell",
       "year",
-      "time",
-      "compound_id",    // Should be pid
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "name"
+      "dose",
+      "time"
     )
 
   }
