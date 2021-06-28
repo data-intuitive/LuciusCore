@@ -93,22 +93,21 @@ object TopTable extends ApiFunctionTrait {
       if (featuresSpecified) featuresQuery
       else
         List(
-           "zhang",
            "id",
+           "zhang",
            "batch",
-           "plateid",       // Should be updated -> plate
+           "plate",
            "well",
-           "protocolname",  // Should be updated -> cell
-           "concentration", // Should be updated -> dose
+           "cell",
+           "dose",
            "year",
            "time",
-           "pid",
-           "compound_smiles",
-           "compound_inchikey",
-           "compound_name",
-           "compound_type",
-           "compound_targets",
-           "compound_id",   // Should this be kept?
+           "trt",
+           "trt_id",
+           "trt_name",
+           "smiles",
+           "inchikey",
+           "targets",
            "filters"
        )
     }

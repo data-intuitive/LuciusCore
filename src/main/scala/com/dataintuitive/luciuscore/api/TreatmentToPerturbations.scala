@@ -48,7 +48,7 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
 
     val result =
       db.filter { p =>
-          isMatch(pidLens.get(p), compoundQuery)
+          isMatch(trtIdLens.get(p), compoundQuery)
         }
         .collect
         .map(entry => PerturbationExtractor(entry, PerturbationExtractor.allFeatures))
