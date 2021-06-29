@@ -8,6 +8,10 @@ package model.v4
  *
  * Concrete case classes extend this TRT class and add additional properties
  * For each case class we define a companion object that converts a TRT_GENERIC
+ *
+ * Not all types have been implemented yet.
+ * An overview of all the possible perturbagen types can be found here:
+ * https://clue.io/connectopedia/perturbagen_types_and_controls
  */
 sealed abstract class TRT(val trtType: String) extends Product with Serializable {
   type T <: TRT
