@@ -5,7 +5,7 @@ package com.dataintuitive.luciuscore.genes
   *
   * Variables modelled with a `Set` may contain multiple entries.
   */
-class Gene(
+case class Gene(
                 val index: Int,
                 val id: String,
                 val dataType: String,
