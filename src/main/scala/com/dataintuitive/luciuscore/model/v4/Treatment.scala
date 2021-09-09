@@ -96,7 +96,7 @@ case class TRT_LIG(
 
   def toGeneric:TRT_GENERIC =
     TRT_GENERIC(
-      trtType = "trt_cp",
+      trtType = "trt_lig",
       id = id,
       name = name,
       inchikey = None,
