@@ -66,13 +66,17 @@ object CombinedScoredPerturbationLenses extends Serializable {
       CombinedPerturbationLenses.profileLens
 
   // Treatment lenses
-  val pidLens =
+  val trtTypeLens =
     ScoredPerturbationLenses.perturbationLens >=>
-      CombinedPerturbationLenses.pidLens
+      CombinedPerturbationLenses.trtTypeLens
 
-  val nameLens =
+  val trtIdLens =
     ScoredPerturbationLenses.perturbationLens >=>
-      CombinedPerturbationLenses.nameLens
+      CombinedPerturbationLenses.trtIdLens
+
+  val trtNameLens =
+    ScoredPerturbationLenses.perturbationLens >=>
+      CombinedPerturbationLenses.trtNameLens
 
   val smilesLens =
     ScoredPerturbationLenses.perturbationLens >=>

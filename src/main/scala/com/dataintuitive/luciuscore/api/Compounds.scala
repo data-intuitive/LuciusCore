@@ -54,11 +54,11 @@ object Compounds extends ApiFunctionTrait {
 
     val resultRDD =
       db.rdd.filter { p =>
-          (isMatch(pidLens.get(p), compoundQuery)
-          || isMatch( nameLens.get(p), compoundQuery))
+          (isMatch(trtIdLens.get(p), compoundQuery)
+          || isMatch( trtNameLens.get(p), compoundQuery))
         }
         .map { p =>
-          (pidLens.get(p), nameLens.get(p))
+          (trtIdLens.get(p), trtNameLens.get(p))
         }
         .countByValue()
         .keys

@@ -6,7 +6,12 @@ import scalaz.Lens
 
 object TrtGenericLenses extends Serializable {
 
-  val pidLens = Lens.lensu[TRT_GENERIC, String](
+  val typeLens = Lens.lensu[TRT_GENERIC, String](
+    (a, value) => a, // We should not allow modification of types in this way
+    _.trtType
+  )
+
+  val idLens = Lens.lensu[TRT_GENERIC, String](
     (a, value) => a.copy(id = value),
     _.id
   )

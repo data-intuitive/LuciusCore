@@ -66,13 +66,17 @@ object CombinedPerturbationLenses extends Serializable {
       InformationLenses.yearLens
 
   // Treatment lenses
-  val pidLens =
+  val trtTypeLens =
     PerturbationLenses.trtLens >=>
-      TreatmentLenses.pidLens
+      TreatmentLenses.trtTypeLens
 
-  val nameLens =
+  val trtIdLens =
     PerturbationLenses.trtLens >=>
-      TreatmentLenses.nameLens
+      TreatmentLenses.trtIdLens
+
+  val trtNameLens =
+    PerturbationLenses.trtLens >=>
+      TreatmentLenses.trtNameLens
 
   val smilesLens =
     PerturbationLenses.trtLens >=>

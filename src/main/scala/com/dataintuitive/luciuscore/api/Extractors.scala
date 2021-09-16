@@ -32,12 +32,12 @@ object Extractors {
         case x if DOSE contains x          => safeDoseLens.get(r)
         case x if YEAR contains x          => safeYearLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
-        case x if P_ID contains x          => pidLens.get(r)
-        case x if P_SMILES contains x      => safeSmilesLens.get(r)
-        case x if P_INCHIKEY contains x    => safeInchikeyLens.get(r)
-        case x if P_NAME contains x        => nameLens.get(r)
-        // case x if COMPOUND_TYPE contains x      => safeCtypeLens.get(r)
-        case x if P_TARGETS contains x     => targetsLens.get(r)
+        case x if TRT contains x           => trtTypeLens.get(r)
+        case x if TRT_ID contains x        => trtIdLens.get(r)
+        case x if TRT_NAME contains x      => trtNameLens.get(r)
+        case x if SMILES contains x        => safeSmilesLens.get(r)
+        case x if INCHIKEY contains x      => safeInchikeyLens.get(r)
+        case x if TARGETS contains x       => targetsLens.get(r)
         case x if FILTERS contains x       => filtersMapLens.get(r).map(x => Map("key" -> x._1, "value" -> x._2)).toSeq
         // fallback
         case _                             => "Feature not found"
@@ -48,16 +48,17 @@ object Extractors {
       "zhang",
       "id",
       "batch",
-      "plateid",        // Should be plate
+      "plateid",
       "well",
-      "protocolname",   // Should be cell
-      "concentration",  // Should be dose
+      "cell",
+      "dose",
       "year",
-      "time",
-      "compound_id",    // Should become something else!
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "name",
+      "time",
       "filters"
     )
   }
@@ -76,12 +77,12 @@ object Extractors {
         case x if DOSE contains x          => safeDoseLens.get(r)
         case x if YEAR contains x          => safeYearLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
-        case x if P_ID contains x          => pidLens.get(r)
-        case x if P_SMILES contains x      => safeSmilesLens.get(r)
-        case x if P_INCHIKEY contains x    => safeInchikeyLens.get(r)
-        case x if P_NAME contains x        => nameLens.get(r)
-        // case x if COMPOUND_TYPE contains x      => safeCtypeLens.get(r)
-        case x if P_TARGETS contains x     => targetsLens.get(r)
+        case x if TRT contains x           => trtTypeLens.get(r)
+        case x if TRT_ID contains x        => trtIdLens.get(r)
+        case x if TRT_NAME contains x      => trtNameLens.get(r)
+        case x if SMILES contains x        => safeSmilesLens.get(r)
+        case x if INCHIKEY contains x      => safeInchikeyLens.get(r)
+        case x if TARGETS contains x       => targetsLens.get(r)
         case x if FILTERS contains x       => filtersMapLens.get(r).map(x => Map("key" -> x._1, "value" -> x._2)).toSeq
         // fallback
         case _                             => "Feature not found"
@@ -90,12 +91,13 @@ object Extractors {
 
     val allFeatures = List(
       "id",
-      "compound_id",    // Should become something else!
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "concentration",  // Should be dose
+      "dose",
       "time",
-      "compound_name",  // Should be replaced by name?
       "targets"
     )
 
@@ -107,14 +109,14 @@ object Extractors {
 
     def apply(r:Treatment, features: List[String]) = features.map {
       _ match {
+        case x if TRT contains x           => trtTypeLens.get(r)
+        case x if TRT_ID contains x        => trtIdLens.get(r)
+        case x if TRT_NAME contains x      => trtNameLens.get(r)
+        case x if SMILES contains x        => safeSmilesLens.get(r)
+        case x if INCHIKEY contains x      => safeInchikeyLens.get(r)
+        case x if TARGETS contains x       => targetsLens.get(r)
         case x if DOSE contains x          => safeDoseLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
-        case x if P_ID contains x          => pidLens.get(r)
-        case x if P_SMILES contains x      => safeSmilesLens.get(r)
-        case x if P_INCHIKEY contains x    => safeInchikeyLens.get(r)
-        case x if P_NAME contains x        => nameLens.get(r)
-        // case x if COMPOUND_TYPE contains x      => safeCtypeLens.get(r)
-        case x if P_TARGETS contains x     => targetsLens.get(r)
         // fallback
         case _                             => "Feature not found"
       }
@@ -123,16 +125,17 @@ object Extractors {
     val allFeatures = List(
       "id",
       "batch",
-      "plateid",        // Should be plate
+      "plate",
       "well",
-      "protocolname",   // Should be cell
-      "concentration",  // Should be dose
+      "cell",
       "year",
-      "time",
-      "compound_id",    // Should be pid
+      "trt",
+      "trt_id",
+      "trt_name",
       "smiles",
       "inchikey",
-      "name"
+      "dose",
+      "time"
     )
 
   }

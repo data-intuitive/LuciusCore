@@ -6,12 +6,17 @@ import scalaz.Lens
 
 object TreatmentLenses extends Serializable {
 
-  val pidLens =
+  val trtTypeLens =
     TrtGenericLenses.trtGenericLens >=>
       TrtGenericLenses.safeTrtGenericLens >=>
-        TrtGenericLenses.pidLens
+        TrtGenericLenses.typeLens
 
-  val nameLens =
+  val trtIdLens =
+    TrtGenericLenses.trtGenericLens >=>
+      TrtGenericLenses.safeTrtGenericLens >=>
+        TrtGenericLenses.idLens
+
+  val trtNameLens =
     TrtGenericLenses.trtGenericLens >=>
       TrtGenericLenses.safeTrtGenericLens >=>
         TrtGenericLenses.nameLens
