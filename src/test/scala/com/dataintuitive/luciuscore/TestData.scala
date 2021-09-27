@@ -22,7 +22,10 @@ trait TestData extends BaseSparkContextSpec {
 
   val profileLength = genesDB.genes.length
 
-  def generatePerturbation() = {
+  // Initialize the random number generator here for real unique ids
+  val rnd = scala.util.Random
+
+  def generatePerturbation(trtType: String = "trt_cp"):Perturbation = {
 
       val t = Some(Array.fill(profileLength)(scala.util.Random.nextGaussian))
       val p = Some(Array.fill(profileLength)(math.random))
@@ -31,21 +34,41 @@ trait TestData extends BaseSparkContextSpec {
 
       val info = Information(cell = Some("MCF7"))
 
-      val uniqueID = "ID" + scala.util.Random.nextInt(10000).toString
-      val uniqueCP = "CP" + scala.util.Random.nextInt(10000).toString
+      val uniqueID = "ID" + rnd.nextInt(10000).toString
 
-      val trt = TRT_GENERIC(
-          trtType = "trt_cp",
-          id = uniqueCP,
-          name = uniqueCP + "-name",
-          inchikey = None,
-          smiles = None,
-          pubchemId = None,
-          dose = None,
-          doseUnit = None,
-          time = None,
-          timeUnit = None,
-          targets = None)
+      val trt = trtType match {
+
+        case "trt_cp" => {
+          val trt_cp = "CP" + scala.util.Random.nextInt(10000).toString
+          TRT_GENERIC(
+            trtType = "trt_cp",
+            id = trt_cp,
+            name = trt_cp + "-name",
+            inchikey = None,
+            smiles = None,
+            pubchemId = None,
+            dose = None,
+            doseUnit = None,
+            time = None,
+            timeUnit = None,
+            targets = None)
+        }
+        case "trt_lig" => {
+          val trt_lig = "LIG" + scala.util.Random.nextInt(10000).toString
+          TRT_GENERIC(
+            trtType = "trt_lig",
+            id = trt_lig,
+            name = trt_lig + "-name",
+            inchikey = None,
+            smiles = None,
+            pubchemId = None,
+            dose = None,
+            doseUnit = None,
+            time = None,
+            timeUnit = None,
+            targets = None)
+        }
+      }
 
       Perturbation(uniqueID, info, profiles, trt, Nil)
   }
@@ -53,7 +76,10 @@ trait TestData extends BaseSparkContextSpec {
   val sqlContext= new org.apache.spark.sql.SQLContext(sc)
   import sqlContext.implicits._
 
-  val testData = sc.parallelize(Array.fill(100)(generatePerturbation)).toDF.as[Perturbation]
+  val testData = sc.parallelize(
+    Array.fill(100)(generatePerturbation()) ++
+    Array.fill(100)(generatePerturbation("trt_lig"))
+  ).toDF.as[Perturbation]
 
   val flatData = testData.map( row =>
       api.FlatDbRow(
