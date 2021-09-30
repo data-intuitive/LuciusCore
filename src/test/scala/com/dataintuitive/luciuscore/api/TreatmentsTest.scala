@@ -119,4 +119,15 @@ class TreatmentsTest extends AnyFlatSpec with Matchers with TestData {
 
   }
 
+  it should "treat omit treatment id and just use name instead for genetic treatments" in {
+
+    val inputMatch = inputGenerator(
+      SpecificData(".*", 1, Nil, List("trt_lig"))
+    )
+
+    val id = Treatments.result(inputMatch).head.get("trtId")
+    val name = Treatments.result(inputMatch).head.get("trtName")
+    assert( id === name)
+
+  }
 }

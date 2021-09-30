@@ -33,13 +33,6 @@ object Treatments extends ApiFunctionTrait {
       val isCompoundLike = false
   }
 
-  // def isLike(trt:TRT):Like = trtTypeLens(trt) match {
-  //     case "trt_cp" => CompoundLike
-  //     case "trt_lig" => GeneticLike
-  //     case "trt_sh" => GeneticLike
-  //     case _ => NoneLike
-  // }
-
   def isLike(trtType: String):String = trtType match {
       case "trt_cp" => "compound"
       case "trt_lig" => "genetic"
@@ -58,7 +51,7 @@ object Treatments extends ApiFunctionTrait {
 
   val infoMsg =
     """
-    |Returns a list of perturbations (and the amount of
+    |Returns a list of treatments (and the amount of
     |samples/perturbations corresponding to it),
     |optionally with a limit on the number of results.
     |""".stripMargin
@@ -72,6 +65,13 @@ object Treatments extends ApiFunctionTrait {
      |- limit: The result size is limited to this number (optional, default is 10)
      |- like: `compound` for compound-like, `genetic` (optional, default is both)
      |- trtType: a specific treatment type (optional, default is "*")
+     |
+     |Be careful: for genetic treatments, the name corresponds to a gene/target,
+     |but the id does not. There may be 10 entries in the database corresponding to gene MELK
+     |and the combination id + MELK will still be unique. We have to adapt the logic of searching
+     |and querying accordingly.
+     |
+     |This endpoint performs an aggregation for those treatment types that are genetic-like.
      |""".stripMargin
 
   def header(data: JobData) = s"Result for treatment query ${data.specificData.treatmentQuery}"
@@ -115,16 +115,28 @@ object Treatments extends ApiFunctionTrait {
           else
             true
         }
-        .map { p =>
-          (trtIdLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+        .map { p => {
+          trtTypeLens.get(p) match {
+            // TODO: Check if we can simply match on compound-like / genetic-like
+            case "trt_lig" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+            case "trt_sh" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+            case _ => (trtIdLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+            }
+          }
         }
         .countByValue()
         .toArray
 
     val resultRDDasMap = resultRDD
       .map {
-        case ((id, name, trtType), count) =>
-          Map("trtId" -> id, "trtName" -> name, "count" -> count, "trtType" -> trtType)
+        case ((id, name, trtType, ui), count) =>
+          Map(
+            "trtId" -> id,
+            "trtName" -> name,
+            "count" -> count,
+            "trtType" -> trtType
+          )
+
       }
 
     val limitOutput = (resultRDD.length > limit)

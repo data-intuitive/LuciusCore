@@ -46,9 +46,13 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
       query.toSet.contains(s)
     }
 
+    // TODO: Check if we can simply match on compound-like / genetic-like
     val result =
-      db.filter { p =>
-          isMatch(trtIdLens.get(p), compoundQuery)
+      db.filter { p => trtTypeLens.get(p) match {
+          case "trt_lig" => isMatch(trtNameLens.get(p), compoundQuery)
+          case "trt_sh" => isMatch(trtNameLens.get(p), compoundQuery)
+          case _ => isMatch(trtIdLens.get(p), compoundQuery)
+          }
         }
         .collect
         .map(entry => PerturbationExtractor(entry, PerturbationExtractor.allFeatures))
