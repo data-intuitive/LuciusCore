@@ -129,7 +129,7 @@ object Treatments extends ApiFunctionTrait {
 
     val resultRDDasMap = resultRDD
       .map {
-        case ((id, name, trtType, ui), count) =>
+        case ((id, name, trtType), count) =>
           Map(
             "trtId" -> id,
             "trtName" -> name,
