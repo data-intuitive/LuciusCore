@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Scala
+      uses: olafurpg/setup-scala@v10
+    - name: Run tests on Ubuntu
+      if: startsWith(matrix.os, 'ubuntu')
+      run: sbt 'testOnly -- -l com.dataintuitive.tags.IOtag'
