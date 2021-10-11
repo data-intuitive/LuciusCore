@@ -1,4 +1,4 @@
-name: Scala CI and Publish
+name: Build, Test and Publish
 
 on:
   push:
