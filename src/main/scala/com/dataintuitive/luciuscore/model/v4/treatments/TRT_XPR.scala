@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_xpr: 'CRISPR for LLoF'
   */
 case class TRT_XPR(
-                   name: String,
-                   id: String
+                   id: String,
+                   name: String
                  ) extends TRT(trtType = "trt_xpr") with Serializable {
 
   type T = TRT_XPR

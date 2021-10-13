@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type ctl_vector.cns: 'Controls - consensus signature of vectors'
   */
 case class CTL_VECTOR_CNS(
-                       name: String,
-                       id: String
+                       id: String,
+                       name: String
                      ) extends TRT(trtType = "ctl_vector.cns") with Serializable {
 
   type T = CTL_VECTOR_CNS

@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type ctl_untrt: 'Controls - Untreated cells'
   */
 case class CTL_UNTRT(
-                   name: String,
-                   id: String
+                   id: String,
+                   name: String
                  ) extends TRT(trtType = "ctl_untrt") with Serializable {
 
   type T = CTL_UNTRT

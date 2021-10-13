@@ -6,9 +6,9 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type ctl_vehicle: 'Controls - vehicle for compound treatment (e.g DMSO)'
   */
 case class CTL_VEHICLE(
-                           name: String,
-                           id: String
-                         ) extends TRT(trtType = "ctl_vehicle") with Serializable {
+                        id: String,
+                        name: String
+                      ) extends TRT(trtType = "ctl_vehicle") with Serializable {
 
   type T = CTL_VEHICLE
 

@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_sh.css: 'Controls - consensus signature from shRNAs that share a common seed sequence'
   */
 case class TRT_SH_CSS(
-                   name: String,
-                   id: String
+                   id: String,
+                   name: String
                  ) extends TRT(trtType = "trt_sh.css") with Serializable {
 
   type T = TRT_SH_CSS

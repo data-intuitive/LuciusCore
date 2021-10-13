@@ -16,8 +16,8 @@ import com.dataintuitive.luciuscore.model.v4.treatments._
  */
 protected abstract class TRT(val trtType: String) extends Product with Serializable {
   type T <: TRT
-  val name: String
   val id: String
+  val name: String
   val trt: T = this.asInstanceOf[T]
   def get():T = trt
 

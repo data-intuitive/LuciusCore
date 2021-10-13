@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type ctl_vector: 'Controls - vector for genetic perturbation (e.g empty vector, GFP)'
   */
 case class CTL_VECTOR(
-                       name: String,
-                       id: String
+                       id: String,
+                       name: String
                      ) extends TRT(trtType = "ctl_vector") with Serializable {
 
   type T = CTL_VECTOR

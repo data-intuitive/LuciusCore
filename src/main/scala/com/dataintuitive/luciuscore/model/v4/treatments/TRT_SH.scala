@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_sh: 'shRNA for loss of function (LoF) of gene'
   */
 case class TRT_SH(
-                   name: String,
-                   id: String
+                   id: String,
+                   name: String
                  ) extends TRT(trtType = "trt_sh") with Serializable {
 
   type T = TRT_SH

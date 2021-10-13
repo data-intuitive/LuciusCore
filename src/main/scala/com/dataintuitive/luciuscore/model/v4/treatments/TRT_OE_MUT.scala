@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_oe.mut: 'cDNA for overexpression of mutated gene'
   */
 case class TRT_OE_MUT(
-                   name: String,
-                   id: String
+                   id: String,
+                   name: String
                  ) extends TRT(trtType = "trt_oe.mut") with Serializable {
 
   type T = TRT_OE_MUT

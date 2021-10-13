@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_cp: 'Compound'
   */
 case class TRT_CP(
-                   name: String,
                    id: String,
+                   name: String,
                    dose: String,
                    doseUnit: String,
                    time: String,

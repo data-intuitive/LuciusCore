@@ -6,8 +6,8 @@ import com.dataintuitive.luciuscore.model.v4.{TRT, TRT_GENERIC}
   * Treatment case class for perturbagen type trt_lig: 'Peptides and other biological agents (e.g. cytokine)'
   */
 case class TRT_LIG(
-                    name: String,
                     id: String,
+                    name: String,
                     dose: String,
                     doseUnit: String,
                     time: String,
