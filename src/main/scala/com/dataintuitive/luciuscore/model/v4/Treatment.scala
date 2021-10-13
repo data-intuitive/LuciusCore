@@ -1,6 +1,8 @@
 package com.dataintuitive.luciuscore
 package model.v4
 
+import com.dataintuitive.luciuscore.model.v4.treatments._
+
 /**
  * Base class for a treatment
  *
@@ -13,7 +15,7 @@ package model.v4
  * An overview of all the possible perturbagen types can be found here:
  * https://clue.io/connectopedia/perturbagen_types_and_controls
  */
-sealed abstract class TRT(val trtType: String) extends Product with Serializable {
+protected abstract class TRT(val trtType: String) extends Product with Serializable {
   type T <: TRT
   val name: String
   val id: String
@@ -28,172 +30,6 @@ object PClass {
 
   def isCompoundLike(trt:String) = compoundLike.contains(trt)
   def isGeneLike(trt:String) = geneLike.contains(trt)
-}
-
-/**
- * TRT_CP class and companion object
- */
-case class TRT_CP(
-  name: String,
-  id: String,
-  dose: String,
-  doseUnit: String,
-  time: String,
-  timeUnit: String,
-  inchikey: Option[String],
-  smiles: Option[String],
-  pubchemId: Option[String],
-  targets: List[String]
-) extends TRT(trtType = "trt_cp") with Serializable {
-
-  type T = TRT_CP
-
-  def toGeneric:TRT_GENERIC =
-    TRT_GENERIC(
-      trtType = "trt_cp",
-      id = id,
-      name = name,
-      inchikey = inchikey,
-      smiles = smiles,
-      pubchemId = pubchemId,
-      dose = Some(dose),
-      doseUnit = Some(doseUnit),
-      time = Some(time),
-      timeUnit = Some(timeUnit),
-      targets = Some(targets)
-    )
-
-}
-
-object TRT_CP {
-
-  def apply(generic:TRT_GENERIC):TRT_CP =
-    TRT_CP(
-      id = generic.id,
-      name = generic.name,
-      dose = generic.dose.getOrElse("NA"),
-      doseUnit = generic.doseUnit.getOrElse("NA"),
-      time = generic.time.getOrElse("NA"),
-      timeUnit = generic.timeUnit.getOrElse("NA"),
-      inchikey = generic.inchikey,
-      smiles = generic.smiles,
-      pubchemId = generic.pubchemId,
-      targets = generic.targets.getOrElse(Nil)
-    )
-
-}
-
-case class TRT_LIG(
-  name: String,
-  id: String,
-  dose: String,
-  doseUnit: String,
-  time: String,
-  timeUnit: String
-) extends TRT(trtType = "trt_lig") with Serializable {
-
-  type T = TRT_LIG
-
-  def toGeneric:TRT_GENERIC =
-    TRT_GENERIC(
-      trtType = "trt_lig",
-      id = id,
-      name = name,
-      inchikey = None,
-      smiles = None,
-      pubchemId = None,
-      dose = Some(dose),
-      doseUnit = Some(doseUnit),
-      time = Some(time),
-      timeUnit = Some(timeUnit),
-      targets = None
-    )
-
-}
-
-case class TRT_SH(
-  name: String,
-  id: String
-) extends TRT(trtType = "trt_sh") with Serializable {
-
-  type T = TRT_SH
-
-  def toGeneric:TRT_GENERIC =
-    TRT_GENERIC(
-      trtType = "trt_sh",
-      id = id,
-      name = name,
-      inchikey = None,
-      smiles = None,
-      pubchemId = None,
-      dose = None,
-      doseUnit = None,
-      time = None,
-      timeUnit = None,
-      targets = None
-    )
-
-}
-
-object TRT_SH {
-
-  def apply(generic: TRT_GENERIC):TRT_SH =
-
-    TRT_SH(
-      id = generic.id,
-      name = generic.name
-    )
-
-}
-
-case class CTL_VECTOR(
-  name: String,
-  id: String
-) extends TRT(trtType = "ctl_vector") with Serializable {
-
-  type T = CTL_VECTOR
-
-  def toGeneric:TRT_GENERIC =
-    TRT_GENERIC(
-      trtType = "ctl_vector",
-      id = id,
-      name = name,
-      inchikey = None,
-      smiles = None,
-      pubchemId = None,
-      dose = None,
-      doseUnit = None,
-      time = None,
-      timeUnit = None,
-      targets = None
-    )
-
-}
-
-object CTL_VECTOR {
-
-  def apply(generic: TRT_GENERIC):CTL_VECTOR =
-
-    CTL_VECTOR(
-      id = generic.id,
-      name = generic.name
-    )
-
-}
-
-object TRT_LIG {
-
-  def apply(generic: TRT_GENERIC):TRT_LIG =
-
-    TRT_LIG(
-      id = generic.id,
-      name = generic.name,
-      dose = generic.dose.getOrElse("NA"),
-      doseUnit = generic.doseUnit.getOrElse("NA"),
-      time = generic.time.getOrElse("NA"),
-      timeUnit = generic.timeUnit.getOrElse("NA")
-    )
-
 }
 
 case class TRT_GENERIC(
