@@ -336,9 +336,9 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
 
   "Treatment constructor" should "create the correct representation for trt_cp" in {
 
-    val trtCp = TRT_CP(
-        name = "pertName",
+    val trtCp_ = TRT_CP(
         id = "pertId",
+        name = "pertName",
         dose = "1",
         doseUnit = "ml",
         time = "4",
@@ -349,18 +349,25 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
         targets = List("T1", "T2")
       )
 
-    Treatment(Some(genericTrtCp)).trt             shouldBe a [TRT_GENERIC]
-    Treatment(Some(genericTrtCp)).toSpecific.trt  shouldBe a [TRT_CP]
-    Treatment(Some(genericTrtCp)).toSpecific.trt  shouldBe trtCp
-    Treatment(Some(genericTrtCp)).dose            shouldBe Some("1")
-    Treatment(Some(genericTrtCp)).time            shouldBe Some("4")
-    Treatment(Some(genericTrtCp)).smiles          shouldBe Some("smiles")
+    val testTreatment = Treatment(Some(genericTrtCp))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_CP]
+    testTreatment.toSpecific.trt  shouldBe trtCp_
+    testTreatment.inchikey        shouldBe Some("inchikey")
+    testTreatment.smiles          shouldBe Some("smiles")
+    testTreatment.pubchemId       shouldBe Some("pubchem")
+    testTreatment.dose            shouldBe Some("1")
+    testTreatment.doseUnit        shouldBe Some("ml")
+    testTreatment.time            shouldBe Some("4")
+    testTreatment.timeUnit        shouldBe Some("m")
+    testTreatment.targets         shouldBe Some(List("T1", "T2"))
 
   }
 
   it should "create the correct representation for trt_lig" in {
 
-    val trtLig = TRT_LIG(
+    val trtLig_ = TRT_LIG(
         id = "pertId",
         name = "pertName",
         dose = "2",
@@ -369,12 +376,288 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
         timeUnit = "m"
       )
 
-    Treatment(Some(genericTrtLig)).trt            shouldBe a [TRT_GENERIC]
-    Treatment(Some(genericTrtLig)).toSpecific.trt shouldBe a [TRT_LIG]
-    Treatment(Some(genericTrtLig)).toSpecific.trt shouldBe trtLig
-    Treatment(Some(genericTrtLig)).dose           shouldBe Some("2")
-    Treatment(Some(genericTrtLig)).time           shouldBe Some("1")
-    Treatment(Some(genericTrtLig)).smiles         shouldBe None
+    val testTreatment = Treatment(Some(genericTrtLig))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_LIG]
+    testTreatment.toSpecific.trt  shouldBe trtLig_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe Some("2")
+    testTreatment.doseUnit        shouldBe Some("ml")
+    testTreatment.time            shouldBe Some("1")
+    testTreatment.timeUnit        shouldBe Some("m")
+    testTreatment.targets         shouldBe None
+
+  }
+
+  it should "create the correct representation for trt_sh" in {
+
+    val trtSh_ = TRT_SH(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtSh))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_SH]
+    testTreatment.toSpecific.trt  shouldBe trtSh_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+
+  }
+
+  it should "create the correct representation for trt_sh.cgs" in {
+
+    val trtShCgs_ = TRT_SH_CGS(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtShCgs))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_SH_CGS]
+    testTreatment.toSpecific.trt  shouldBe trtShCgs_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+
+  }
+
+  it should "create the correct representation for trt_oe" in {
+
+    val trtOe_ = TRT_OE(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtOe))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_OE]
+    testTreatment.toSpecific.trt  shouldBe trtOe_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+
+  }
+
+  it should "create the correct representation for trt_oe.mut" in {
+
+    val trtOeMut_ = TRT_OE_MUT(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtOeMut))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_OE_MUT]
+    testTreatment.toSpecific.trt  shouldBe trtOeMut_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+
+  }
+
+  it should "create the correct representation for trt_xpr" in {
+
+    val trtXpr_ = TRT_XPR(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtXpr))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_XPR]
+    testTreatment.toSpecific.trt  shouldBe trtXpr_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_vehicle" in {
+
+    val ctlVehicle_ = CTL_VEHICLE(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlVehicle))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_VEHICLE]
+    testTreatment.toSpecific.trt  shouldBe ctlVehicle_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_vector" in {
+
+    val ctlVector_ = CTL_VECTOR(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlVector))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_VECTOR]
+    testTreatment.toSpecific.trt  shouldBe ctlVector_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for trt_sh.css" in {
+
+    val trtShCss_ = TRT_SH_CSS(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericTrtShCss))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [TRT_SH_CSS]
+    testTreatment.toSpecific.trt  shouldBe trtShCss_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_vehicle.cns" in {
+
+    val ctlVehicleCns_ = CTL_VEHICLE_CNS(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlVehicleCns))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_VEHICLE_CNS]
+    testTreatment.toSpecific.trt  shouldBe ctlVehicleCns_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_vector.cns" in {
+
+    val ctlVectorCns_ = CTL_VECTOR_CNS(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlVectorCns))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_VECTOR_CNS]
+    testTreatment.toSpecific.trt  shouldBe ctlVectorCns_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_untrt.cns" in {
+
+    val ctlUntrtCns_ = CTL_UNTRT_CNS(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlUntrtCns))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_UNTRT_CNS]
+    testTreatment.toSpecific.trt  shouldBe ctlUntrtCns_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
+  }
+
+  it should "create the correct representation for ctl_untrt" in {
+
+    val ctlUntrt_ = CTL_UNTRT(
+      id = "pertId",
+      name = "pertName"
+    )
+
+    val testTreatment = Treatment(Some(genericCtlUntrt))
+
+    testTreatment.trt             shouldBe a [TRT_GENERIC]
+    testTreatment.toSpecific.trt  shouldBe a [CTL_UNTRT]
+    testTreatment.toSpecific.trt  shouldBe ctlUntrt_
+    testTreatment.inchikey        shouldBe None
+    testTreatment.smiles          shouldBe None
+    testTreatment.pubchemId       shouldBe None
+    testTreatment.dose            shouldBe None
+    testTreatment.doseUnit        shouldBe None
+    testTreatment.time            shouldBe None
+    testTreatment.timeUnit        shouldBe None
+    testTreatment.targets         shouldBe None
 
   }
 
