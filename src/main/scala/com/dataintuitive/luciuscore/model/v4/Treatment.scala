@@ -263,4 +263,10 @@ case class Treatment(
     case _ => None
   }
 
+  def targets:Option[List[String]] = trtType match {
+    case "trt_generic" => trt_generic.flatMap(_.targets)
+    case "trt_cp"      => trt_cp.map(_.targets)
+    case _ => None
+  }
+
 }
