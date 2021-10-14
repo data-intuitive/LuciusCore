@@ -9,14 +9,6 @@ import org.scalatest.matchers.should._
 
 class TreatmentTest extends AnyFlatSpec with Matchers {
 
-  val t = Treatment(Some(TRT_EMPTY))
-
-  "Minimal instantiation" should "just work" in {
-    assert(t.trt === TRT_EMPTY)
-    assert(t.toSpecific.trt === TRT_EMPTY)
-
-  }
-
   val genericTrtCp =
     TRT_GENERIC(
       "trt_cp",
@@ -326,6 +318,14 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
     ("ctl_untrt",       genericCtlUntrt,      ctlUntrt,      Treatment(None, ctl_untrt = Some(ctlUntrt)))
   )
 
+  val t = Treatment(Some(TRT_EMPTY))
+
+  "Minimal instantiation" should "just work" in {
+    t.trt            shouldBe TRT_EMPTY
+    t.toGeneric.trt  shouldBe TRT_EMPTY
+    t.toSpecific.trt shouldBe TRT_EMPTY
+    t.trt.name       shouldBe "NA"
+  }
 
   "Full instantiation" should "just work" in {
 
@@ -388,16 +388,16 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
 
   "TRT_EMPTY" should "represent an NA value" in {
 
-    t.trt shouldBe TRT_EMPTY
-    t.trt.id shouldBe "NA"
+    t.trt      shouldBe TRT_EMPTY
+    t.trt.id   shouldBe "NA"
     t.trt.name shouldBe "NA"
-    t.isEmpty shouldBe true
-    t.trt.id shouldBe "NA"
+    t.isEmpty  shouldBe true
+    t.trt.id   shouldBe "NA"
     t.trt.name shouldBe "NA"
 
   }
 
-  "All generic treatments" should "have the correct name" in {
+  "All generic treatments" should "have the correct type name in the base class" in {
 
     for ((name, generic, _, _) <- testTreatmentData) {
       generic.trtType shouldBe name
@@ -405,18 +405,61 @@ class TreatmentTest extends AnyFlatSpec with Matchers {
 
   }
 
-  it should "transform to specific treatments" in {
+  it should "have trt_generic as the type name in the super class " in {
+
+    for ((_, generic, _, _) <- testTreatmentData) {
+      Treatment(Some(generic)).trtType shouldBe "trt_generic"
+    }
+
+  }
+
+  it should "have specific name as the type name in the super class trt" in {
+
+    for ((name, generic, _, _) <- testTreatmentData) {
+      Treatment(Some(generic)).trt.trtType shouldBe name
+    }
+
+  }
+
+  it should "match already present treatments base class" in {
+
+    for ((_, generic, _, _) <- testTreatmentData) {
+      Treatment(Some(generic)).trt shouldBe generic
+    }
+
+  }
+
+  it should "transform to generic and specific treatments" in {
 
     for ((_, generic, specific, _) <- testTreatmentData) {
+      Treatment(Some(generic)).toGeneric.trt  shouldBe generic
       Treatment(Some(generic)).toSpecific.trt shouldBe specific
     }
 
   }
 
-  "All specific treatments" should "transform to generic treatments" in {
+  "All specific treatments" should "have the correct type name once transformed to generic treatments" in {
 
-    for ((_, generic, _, specific) <- testTreatmentData) {
-      specific.toGeneric.trt shouldBe generic
+    for ((name, generic, _, specificTrt) <- testTreatmentData) {
+      specificTrt.toGeneric.trt.trtType                         shouldBe name
+      Treatment(Some(generic)).toSpecific.toGeneric.trt.trtType shouldBe name
+    }
+
+  }
+
+  it should "match already present treatments base class" in {
+
+    for ((_, _, specific, specificTrt) <- testTreatmentData) {
+      specificTrt.trt shouldBe specific
+    }
+
+  }
+
+  it should "transform to generic and generic treatments" in {
+
+    for ((_, generic, specific, specificTrt) <- testTreatmentData) {
+      specificTrt.toGeneric.trt                         shouldBe generic
+      specificTrt.toSpecific.trt                        shouldBe specific
       Treatment(Some(generic)).toSpecific.toGeneric.trt shouldBe generic
     }
 
