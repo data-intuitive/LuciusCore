@@ -134,24 +134,27 @@ case class Treatment(
   def isEmpty = (trt_generic == Some(TRT_EMPTY)) || (! isConsistent)
 
   // Convert to a specific treatment type (access slot in Treatment)
-  def toSpecific: Treatment = trt_generic.get.trtType match {
-    case "trt_cp"          => Treatment(None, trt_cp          = trt_generic.map(_.toSpecific[TRT_CP]))
-    case "trt_lig"         => Treatment(None, trt_lig         = trt_generic.map(_.toSpecific[TRT_LIG]))
-    case "trt_sh"          => Treatment(None, trt_sh          = trt_generic.map(_.toSpecific[TRT_SH]))
-    case "trt_sh.cgs"      => Treatment(None, trt_sh_cgs      = trt_generic.map(_.toSpecific[TRT_SH_CGS]))
-    case "trt_oe"          => Treatment(None, trt_oe          = trt_generic.map(_.toSpecific[TRT_OE]))
-    case "trt_oe.mut"      => Treatment(None, trt_oe_mut      = trt_generic.map(_.toSpecific[TRT_OE_MUT]))
-    case "trt_xpr"         => Treatment(None, trt_xpr         = trt_generic.map(_.toSpecific[TRT_XPR]))
-    case "ctl_vehicle"     => Treatment(None, ctl_vehicle     = trt_generic.map(_.toSpecific[CTL_VEHICLE]))
-    case "ctl_vector"      => Treatment(None, ctl_vector      = trt_generic.map(_.toSpecific[CTL_VECTOR]))
-    case "trt_sh.css"      => Treatment(None, trt_sh_css      = trt_generic.map(_.toSpecific[TRT_SH_CSS]))
-    case "ctl_vehicle.cns" => Treatment(None, ctl_vehicle_cns = trt_generic.map(_.toSpecific[CTL_VEHICLE_CNS]))
-    case "ctl_vector.cns"  => Treatment(None, ctl_vector_cns  = trt_generic.map(_.toSpecific[CTL_VECTOR_CNS]))
-    case "ctl_untrt.cns"   => Treatment(None, ctl_untrt_cns   = trt_generic.map(_.toSpecific[CTL_UNTRT_CNS]))
-    case "ctl_untrt"       => Treatment(None, ctl_untrt       = trt_generic.map(_.toSpecific[CTL_UNTRT]))
-    case "trt_empty"       => Treatment(None)
-    case _ => Treatment(None)
-  }
+  def toSpecific: Treatment =
+    if (trt_generic.isDefined)
+      trt_generic.get.trtType match {
+        case "trt_cp" => Treatment(None, trt_cp = trt_generic.map(_.toSpecific[TRT_CP]))
+        case "trt_lig" => Treatment(None, trt_lig = trt_generic.map(_.toSpecific[TRT_LIG]))
+        case "trt_sh" => Treatment(None, trt_sh = trt_generic.map(_.toSpecific[TRT_SH]))
+        case "trt_sh.cgs" => Treatment(None, trt_sh_cgs = trt_generic.map(_.toSpecific[TRT_SH_CGS]))
+        case "trt_oe" => Treatment(None, trt_oe = trt_generic.map(_.toSpecific[TRT_OE]))
+        case "trt_oe.mut" => Treatment(None, trt_oe_mut = trt_generic.map(_.toSpecific[TRT_OE_MUT]))
+        case "trt_xpr" => Treatment(None, trt_xpr = trt_generic.map(_.toSpecific[TRT_XPR]))
+        case "ctl_vehicle" => Treatment(None, ctl_vehicle = trt_generic.map(_.toSpecific[CTL_VEHICLE]))
+        case "ctl_vector" => Treatment(None, ctl_vector = trt_generic.map(_.toSpecific[CTL_VECTOR]))
+        case "trt_sh.css" => Treatment(None, trt_sh_css = trt_generic.map(_.toSpecific[TRT_SH_CSS]))
+        case "ctl_vehicle.cns" => Treatment(None, ctl_vehicle_cns = trt_generic.map(_.toSpecific[CTL_VEHICLE_CNS]))
+        case "ctl_vector.cns" => Treatment(None, ctl_vector_cns = trt_generic.map(_.toSpecific[CTL_VECTOR_CNS]))
+        case "ctl_untrt.cns" => Treatment(None, ctl_untrt_cns = trt_generic.map(_.toSpecific[CTL_UNTRT_CNS]))
+        case "ctl_untrt" => Treatment(None, ctl_untrt = trt_generic.map(_.toSpecific[CTL_UNTRT]))
+        case "trt_empty" => Treatment(None)
+        case _ => Treatment(None)
+      }
+    else this
 
   // Convert to a generic treatment type (inverse of toSpecific)
   def toGeneric:Treatment = trtType match {
