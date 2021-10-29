@@ -10,6 +10,7 @@ import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.SparkSession
 import scala.collection.immutable.Map
 
+@scala.deprecated("Please use Treatments instead of Compounds", "4.0.6")
 object Compounds extends ApiFunctionTrait {
 
   case class SpecificData(
