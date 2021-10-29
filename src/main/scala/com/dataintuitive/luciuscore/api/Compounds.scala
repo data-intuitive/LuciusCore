@@ -20,7 +20,7 @@ object Compounds extends ApiFunctionTrait {
 
   type JobOutput = Array[Map[String, String]]
 
-  val infoMsg = s"Returns a list of compounds and corresponding samples matching a query, optionally with a limit on the number of results."
+  val infoMsg = "Deprecated, please use Treatments instead of Compounds. Returns a list of compounds and corresponding samples matching a query, optionally with a limit on the number of results."
 
   val helpMsg =
     s"""
