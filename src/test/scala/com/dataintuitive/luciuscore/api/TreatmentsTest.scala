@@ -30,7 +30,7 @@ class TreatmentsTest extends AnyFlatSpec with Matchers with TestData {
   def inputGenerator(specificData:Treatments.SpecificData): Treatments.JobData =
       Treatments.JobData(
         "version",
-        CachedData(duplicateTreatmentData, flatData, genesDB),
+        CachedData(duplicateTreatmentData, flatData, genesDB, filters),
         specificData
       )
 

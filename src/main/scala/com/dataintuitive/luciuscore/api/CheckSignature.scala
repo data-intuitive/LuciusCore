@@ -34,7 +34,7 @@ object CheckSignature extends ApiFunctionTrait {
 
     implicit def signString(string: String) = new SignedString(string)
 
-    val CachedData(db, _, genesDb) = data.cachedData
+    val CachedData(db, _, genesDb, _) = data.cachedData
     val SpecificData(rawSignature) = data.specificData
     implicit val genes = genesDb
 

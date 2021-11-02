@@ -18,7 +18,7 @@ class StatisticsTest extends AnyFlatSpec with Matchers with TestData {
   val emptyQuery = Nil
 
   "The result function" should "simply work" in {
-    val input = Statistics.JobData("version", CachedData(testData, flatData, genesDB), SpecificData())
+    val input = Statistics.JobData("version", CachedData(testData, flatData, genesDB, filters), SpecificData())
     Statistics.result(input).size shouldBe 6
   }
 
