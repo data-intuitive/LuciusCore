@@ -1,5 +1,6 @@
 package com.dataintuitive.luciuscore
 
+import com.dataintuitive.luciuscore.api.Filters
 import model.v4._
 
 import org.apache.spark.sql.Dataset
@@ -19,7 +20,7 @@ trait TestData extends BaseSparkContextSpec {
 
   val geneFile = "src/test/resources/GSE92742_Broad_LINCS_gene_info.txt"
   implicit val genesDB = new genes.GenesDB(io.GenesIO.loadGenesFromFile(sc, geneFile, "\t", featuresToExtract))
-  val filters = Map[String, Array[String]]() // TODO add actual filter data, placeholder for when tests might require it
+  val filters: Filters.FiltersDB = Map.empty // TODO add actual filter data, placeholder for when tests might require it
 
   val profileLength = genesDB.genes.length
 
