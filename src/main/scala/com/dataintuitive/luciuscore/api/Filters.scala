@@ -16,7 +16,7 @@ object Filters extends ApiFunctionTrait {
   case class SpecificData()
 
   type JobOutput = Map[String, Any]
-  type Filters = Map[String, Array[String]]
+  type FiltersDB = Map[String, Array[String]]
 
   val infoMsg = "Filters available in the data (excluding orig_ filters)"
 
@@ -27,7 +27,7 @@ object Filters extends ApiFunctionTrait {
 
   def result(data: JobData) = data.cachedData.filters
 
-  def calculate(db: Dataset[Perturbation])(implicit sparkSession: SparkSession) = {
+  def calculate(db: Dataset[Perturbation])(implicit sparkSession: SparkSession): FiltersDB = {
 
     import sparkSession.implicits._
 
