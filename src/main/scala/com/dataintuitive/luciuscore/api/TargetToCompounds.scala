@@ -35,7 +35,7 @@ object TargetToCompounds extends ApiFunctionTrait {
 
   def result(data:JobData)(implicit sparkSession: SparkSession):JobOutput = {
 
-    val CachedData(db, _, genesDb) = data.cachedData
+    val CachedData(db, _, genesDb, _) = data.cachedData
     val SpecificData(targetQuery, limit) = data.specificData
     implicit val genes = genesDb
 

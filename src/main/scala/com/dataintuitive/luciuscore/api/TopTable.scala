@@ -41,7 +41,7 @@ object TopTable extends ApiFunctionTrait {
 
   def result(data: JobData)(implicit sparkSession: SparkSession) = {
 
-    val CachedData(db, _, genesDb) = data.cachedData
+    val CachedData(db, _, genesDb, _) = data.cachedData
     val SpecificData(head, tail, signatureQuery, featuresQuery, filters) = data.specificData
 
     implicit val genes = genesDb
