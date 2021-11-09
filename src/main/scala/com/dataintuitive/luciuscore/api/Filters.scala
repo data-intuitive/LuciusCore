@@ -16,20 +16,20 @@ object Filters extends ApiFunctionTrait {
   case class SpecificData()
 
   type JobOutput = Map[String, Any]
+  type FiltersDB = Map[String, Array[String]]
 
   val infoMsg = "Filters available in the data (excluding orig_ filters)"
 
   val helpMsg =
-    "Return the filters and values used in the dataset.\nNo input is required. Pass null for parameters in Scala"
+    "Return the filters and values used in the dataset.\nNo input is required. Pass null for parameters in Scala. Only available after initialization."
 
   def header(data: JobData) = Map("key" -> "value").toString
 
-  def result(data: JobData)(implicit sparkSession: SparkSession) = {
+  def result(data: JobData) = data.cachedData.filters
+
+  def calculate(db: Dataset[Perturbation])(implicit sparkSession: SparkSession): FiltersDB = {
 
     import sparkSession.implicits._
-
-    val CachedData(db, _, genesDb) = data.cachedData
-    implicit val genes = genesDb
 
     val filterKeys = db.flatMap(_.filters.map(_.key)).distinct.collect
     val filterKeysWithoutOrig = filterKeys.filter( x => ! (x contains "orig_") )

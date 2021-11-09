@@ -1,6 +1,7 @@
 package com.dataintuitive.luciuscore.model.v4
 
 import Treatment._
+import treatments._
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._

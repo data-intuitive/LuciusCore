@@ -32,7 +32,7 @@ object GenerateSignature extends ApiFunctionTrait {
 
     import sparkSession.implicits._
 
-    val CachedData(db, _, genesDb) = data.cachedData
+    val CachedData(db, _, genesDb, _) = data.cachedData
     val SpecificData(pValue, pQuery) = data.specificData
 
     implicit val genes = genesDb

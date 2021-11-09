@@ -34,7 +34,7 @@ object Statistics extends ApiFunctionTrait {
 
     import sparkSession.implicits._
 
-    val CachedData(_, flatDb, _) = data.cachedData
+    val CachedData(_, flatDb, _, _) = data.cachedData
 
     val compounds = Map(
       "total" -> flatDb

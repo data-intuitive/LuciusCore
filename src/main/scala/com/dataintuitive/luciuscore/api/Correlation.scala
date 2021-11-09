@@ -40,7 +40,7 @@ object Correlation extends ApiFunctionTrait {
 
     import sparkSession.implicits._
 
-    val CachedData(db, flatDb, genesDb) = data.cachedData
+    val CachedData(db, flatDb, genesDb, _) = data.cachedData
     val SpecificData(rawSignature1, rawSignature2, bins, filters) = data.specificData
     implicit val genes = genesDb
 
