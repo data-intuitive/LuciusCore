@@ -55,7 +55,7 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
           }
         }
         .collect
-        .map(entry => PerturbationExtractor(entry, PerturbationExtractor.allFeatures))
+        .map(entry => PerturbationExtractor(entry, PerturbationExtractor.allFeatures, pValue))
 
     result.map(_.zip(PerturbationExtractor.allFeatures).map(_.swap).toMap)
 
