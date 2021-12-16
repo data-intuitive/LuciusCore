@@ -21,15 +21,17 @@ object QueryAlternatives {
   val YEAR  = Set("year", "Year")
 
   // Treatment
-  val TRT      = Set("trt", "perturbagen_type", "treatment")
-  val TRT_ID   = Set("trt_id", "jnjs", "Jnjs", "cid", "pid", "compound_id", "brdid")
-  val TRT_NAME = Set("trt_name", "compoundname", "CompoundName", "Compoundname", "compound_name")
-  val TRT_TYPE = Set("Type", "type", "compound_type") // DEPRECATE ME !!!
-  val SMILES   = Set("smiles", "Smiles", "SMILES", "compound_smiles")
-  val INCHIKEY = Set("inchikey", "Inchikey", "compound_inchikey")
-  val DOSE     = Set("dose", "concentration", "Concentration")
-  val TIME     = Set("time", "duration", "Time", "Duration")
-  val TARGETS  = Set("targets", "knownTargets", "Targets", "compound_targets")
+  val TRT       = Set("trt", "perturbagen_type", "treatment")
+  val TRT_ID    = Set("trt_id", "jnjs", "Jnjs", "cid", "pid", "compound_id", "brdid")
+  val TRT_NAME  = Set("trt_name", "compoundname", "CompoundName", "Compoundname", "compound_name")
+  val TRT_TYPE  = Set("Type", "type", "compound_type") // DEPRECATE ME !!!
+  val SMILES    = Set("smiles", "Smiles", "SMILES", "compound_smiles")
+  val INCHIKEY  = Set("inchikey", "Inchikey", "compound_inchikey")
+  val DOSE      = Set("dose", "concentration", "Concentration")
+  val DOSE_UNIT = Set("dose_unit", "concentration_unit", "Concentration_unit")
+  val TIME      = Set("time", "duration", "Time", "Duration")
+  val TIME_UNIT = Set("time_unit", "duration_unit", "Time_unit", "Duration_unit")
+  val TARGETS   = Set("targets", "knownTargets", "Targets", "compound_targets")
 
   // Filters
   val FILTERS = Set("filters", "Filters", "filter", "filters")
