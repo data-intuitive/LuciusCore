@@ -36,27 +36,27 @@ object Statistics extends ApiFunctionTrait {
 
     val CachedData(_, flatDb, _, _) = data.cachedData
 
-    val compounds = Map(
+    val treatments = Map(
       "total" -> flatDb
-        .filter($"protocol" =!= "")
-        .select($"compoundId")
+        .filter($"cell" =!= "")
+        .select($"treatmentId")
         .distinct
         .count,
       "sample" -> flatDb
-        .filter($"protocol" =!= "")
-        .select($"compoundId")
+        .filter($"cell" =!= "")
+        .select($"treatmentId")
         .distinct
         .take(10)
      )
 
     val samples = Map(
       "total" -> flatDb
-        .filter($"protocol" =!= "")
+        .filter($"cell" =!= "")
         .select($"id")
         .distinct
         .count,
       "sample" -> flatDb
-        .filter($"protocol" =!= "")
+        .filter($"cell" =!= "")
         .select($"id")
         .distinct
         .take(10)
@@ -64,57 +64,57 @@ object Statistics extends ApiFunctionTrait {
 
     val informative = Map(
       "total" -> flatDb
-        .filter($"protocol" =!= "")
+        .filter($"cell" =!= "")
         .filter($"informative")
         .count
     )
 
-    val concentrations = Map(
+    val doses = Map(
       "total" -> flatDb
-        .filter($"concentration" =!= "")
-        .select($"concentration")
+        .filter($"dose" =!= "")
+        .select($"dose")
         .distinct
         .count,
       "sample" -> flatDb
-        .filter($"concentration" =!= "")
-        .select($"concentration")
+        .filter($"dose" =!= "")
+        .select($"dose")
         .distinct
         .take(10)
     )
 
-    val protocols = Map(
+    val cells = Map(
       "total" -> flatDb
-        .filter($"protocol" =!= "")
-        .select($"protocol")
+        .filter($"cell" =!= "")
+        .select($"cell")
         .distinct
         .count,
       "sample" -> flatDb
-        .filter($"protocol" =!= "")
-        .select($"protocol")
+        .filter($"cell" =!= "")
+        .select($"cell")
         .distinct
         .take(10)
     )
 
     val types = Map(
       "total" -> flatDb
-        .filter($"compoundType" =!= "")
-        .select($"compoundType")
+        .filter($"treatmentType" =!= "")
+        .select($"treatmentType")
         .distinct
         .count,
       "sample" -> flatDb
-        .filter($"compoundType" =!= "")
-        .select($"compoundType")
+        .filter($"treatmentType" =!= "")
+        .select($"treatmentType")
         .distinct
         .take(10)
     )
 
     Map(
       "samples" -> samples,
-      "compounds" -> compounds,
+      "treatments" -> treatments,
       "informative" -> informative,
-      "protocols" -> protocols,
+      "cells" -> cells,
       "types" -> types,
-      "concentrations" -> concentrations
+      "doses" -> doses
     )
   }
 }
