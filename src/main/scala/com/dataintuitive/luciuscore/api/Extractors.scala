@@ -30,8 +30,10 @@ object Extractors {
         case x if WELL contains x          => safeWellLens.get(r)
         case x if CELL contains x          => safeCellLens.get(r)
         case x if DOSE contains x          => safeDoseLens.get(r)
+        case x if DOSE_UNIT contains x     => safeDoseUnitLens.get(r)
         case x if YEAR contains x          => safeYearLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
+        case x if TIME_UNIT contains x     => safeTimeUnitLens.get(r)
         case x if TRT contains x           => trtTypeLens.get(r)
         case x if TRT_ID contains x        => trtIdLens.get(r)
         case x if TRT_NAME contains x      => trtNameLens.get(r)
@@ -52,6 +54,7 @@ object Extractors {
       "well",
       "cell",
       "dose",
+      "dose_unit",
       "year",
       "trt",
       "trt_id",
@@ -59,6 +62,7 @@ object Extractors {
       "smiles",
       "inchikey",
       "time",
+      "time_unit",
       "filters"
     )
   }
@@ -75,8 +79,10 @@ object Extractors {
         case x if WELL contains x          => safeWellLens.get(r)
         case x if CELL contains x          => safeCellLens.get(r)
         case x if DOSE contains x          => safeDoseLens.get(r)
+        case x if DOSE_UNIT contains x     => safeDoseUnitLens.get(r)
         case x if YEAR contains x          => safeYearLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
+        case x if TIME_UNIT contains x     => safeTimeUnitLens.get(r)
         case x if TRT contains x           => trtTypeLens.get(r)
         case x if TRT_ID contains x        => trtIdLens.get(r)
         case x if TRT_NAME contains x      => trtNameLens.get(r)
@@ -98,7 +104,9 @@ object Extractors {
       "smiles",
       "inchikey",
       "dose",
+      "dose_unit",
       "time",
+      "time_unit",
       "targets",
       "cell",
       "plate",
@@ -121,7 +129,9 @@ object Extractors {
         case x if INCHIKEY contains x      => safeInchikeyLens.get(r)
         case x if TARGETS contains x       => targetsLens.get(r)
         case x if DOSE contains x          => safeDoseLens.get(r)
+        case x if DOSE_UNIT contains x     => safeDoseUnitLens.get(r)
         case x if TIME contains x          => safeTimeLens.get(r)
+        case x if TIME_UNIT contains x     => safeTimeUnitLens.get(r)
         // fallback
         case _                             => "Feature not found"
       }
@@ -140,7 +150,9 @@ object Extractors {
       "smiles",
       "inchikey",
       "dose",
-      "time"
+      "dose_unit",
+      "time",
+      "time_unit"
     )
 
   }

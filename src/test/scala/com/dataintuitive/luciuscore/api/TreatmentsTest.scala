@@ -82,11 +82,33 @@ class TreatmentsTest extends AnyFlatSpec with Matchers with TestData {
     val inputNoMatch = inputGenerator(
       SpecificData("LIG.*", 10, List("compound"))
     )
+    val inputNoMatch2 = inputGenerator(
+      SpecificData("SH.*", 10, List("compound"))
+    )
     val inputMatch = inputGenerator(
       SpecificData("CP.*", 10, List("compound"))
     )
 
     assert(Treatments.result(inputNoMatch).length === 0)
+    assert(Treatments.result(inputNoMatch2).length === 0)
+    assert(Treatments.result(inputMatch).length === 10)
+
+  }
+
+  it should "return only ligand-like when like = ligand" in {
+
+    val inputNoMatch = inputGenerator(
+      SpecificData("CP.*", 10, List("ligand"))
+    )
+    val inputNoMatch2 = inputGenerator(
+      SpecificData("SH.*", 10, List("ligand"))
+    )
+    val inputMatch = inputGenerator(
+      SpecificData("LIG.*", 10, List("ligand"))
+    )
+
+    assert(Treatments.result(inputNoMatch).length === 0)
+    assert(Treatments.result(inputNoMatch2).length === 0)
     assert(Treatments.result(inputMatch).length === 10)
 
   }
@@ -96,11 +118,15 @@ class TreatmentsTest extends AnyFlatSpec with Matchers with TestData {
     val inputNoMatch = inputGenerator(
       SpecificData("CP.*", 10, List("genetic"))
     )
-    val inputMatch = inputGenerator(
+    val inputNoMatch2 = inputGenerator(
       SpecificData("LIG.*", 10, List("genetic"))
+    )
+    val inputMatch = inputGenerator(
+      SpecificData("SH.*", 10, List("genetic"))
     )
 
     assert(Treatments.result(inputNoMatch).length === 0)
+    assert(Treatments.result(inputNoMatch2).length === 0)
     assert(Treatments.result(inputMatch).length === 10)
 
   }
@@ -113,8 +139,12 @@ class TreatmentsTest extends AnyFlatSpec with Matchers with TestData {
     val inputNoMatch = inputGenerator(
       SpecificData("LIG.*", 10, Nil, List("trt_cp"))
     )
+    val inputNoMatch2 = inputGenerator(
+      SpecificData("SH.*", 10, Nil, List("trt_cp"))
+    )
 
     assert(Treatments.result(inputNoMatch).length === 0)
+    assert(Treatments.result(inputNoMatch2).length === 0)
     assert(Treatments.result(inputMatch).length === 10)
 
   }
