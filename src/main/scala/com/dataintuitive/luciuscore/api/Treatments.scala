@@ -13,31 +13,46 @@ import scala.collection.immutable.Map
 object Treatments extends ApiFunctionTrait {
 
   trait Like extends Serializable {
-
-      val isCompoundLike:Boolean
-      def isGeneticLike = !isCompoundLike
-      def isLike:Like = if (isCompoundLike) CompoundLike else GeneticLike
-
+    val isCompoundLike:Boolean
+    val isGeneticLike:Boolean
+    val isLigandLike:Boolean
+    def isLike: Like = (isCompoundLike, isGeneticLike, isLigandLike) match {
+      case (true , false, false) => CompoundLike
+      case (false, true , false) => GeneticLike
+      case (false, false, true ) => LigandLike
+      case _ => NoneLike
+    }
   }
 
   case object CompoundLike extends Like {
     val isCompoundLike = true
-
+    val isGeneticLike = false
+    val isLigandLike = false
   }
 
   case object GeneticLike extends Like {
-      val isCompoundLike = false
+    val isCompoundLike = false
+    val isGeneticLike = true
+    val isLigandLike = false
+  }
+
+  case object LigandLike extends Like {
+    val isCompoundLike = false
+    val isGeneticLike = false
+    val isLigandLike = true
   }
 
   case object NoneLike extends Like {
-      val isCompoundLike = false
+    val isCompoundLike = false
+    val isGeneticLike = false
+    val isLigandLike = false
   }
 
   def isLike(trtType: String):String = trtType match {
-      case "trt_cp" => "compound"
-      case "trt_lig" => "genetic"
-      case "trt_sh" => "genetic"
-      case _ => "none"
+    case "trt_cp" => "compound"
+    case "trt_lig" => "ligand"
+    case "trt_sh" => "genetic"
+    case _ => "none"
   }
 
   case class SpecificData(
