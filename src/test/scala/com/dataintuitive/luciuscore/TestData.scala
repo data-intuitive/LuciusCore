@@ -70,6 +70,21 @@ trait TestData extends BaseSparkContextSpec {
             timeUnit = None,
             targets = None)
         }
+        case "trt_sh" => {
+          val trt_sh = "SH" + scala.util.Random.nextInt(10000).toString
+          TRT_GENERIC(
+            trtType = "trt_sh",
+            id = trt_sh,
+            name = trt_sh + "-name",
+            inchikey = None,
+            smiles = None,
+            pubchemId = None,
+            dose = None,
+            doseUnit = None,
+            time = None,
+            timeUnit = None,
+            targets = None)
+        }
       }
 
       Perturbation(uniqueID, info, profiles, trt, Nil)
@@ -80,7 +95,8 @@ trait TestData extends BaseSparkContextSpec {
 
   val testData = sc.parallelize(
     Array.fill(100)(generatePerturbation()) ++
-    Array.fill(100)(generatePerturbation("trt_lig"))
+    Array.fill(100)(generatePerturbation("trt_lig")) ++
+    Array.fill(100)(generatePerturbation("trt_sh"))
   ).toDF.as[Perturbation]
 
   val flatData = testData.map( row =>
