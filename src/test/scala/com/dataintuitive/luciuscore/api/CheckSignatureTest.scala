@@ -28,7 +28,7 @@ class CheckSignatureTest extends AnyFlatSpec with Matchers with TestData {
     val cData = CachedData(testData, flatData, genesDB, filters)
     val sData = SpecificData(faultyQuery)
     val input = CheckSignature.JobData("version", cData, sData)
-    CheckSignature.result(input).head should contain ("inL1000" -> false)
+    CheckSignature.result(input).head should contain ("found" -> false)
   }
 
   it should "deal with empty queries" in {
