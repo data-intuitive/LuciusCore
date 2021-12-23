@@ -37,7 +37,8 @@ object GenesIO {
              sc: SparkContext,
              geneAnnotationsFile: String,
              delimiter: String = "\t",
-             dict: Map[String, String] = defaultDict
+             dict: Map[String, String] = defaultDict,
+             dataTypeDict: Map[String, String] = Map.empty
             ): Array[Gene] = {
 
       val inverseMap = dict.map(_.swap).withDefault(_ => "N/A")
@@ -54,10 +55,14 @@ object GenesIO {
             if (inverseMap.get("dataType2").isDefined) {
               val dataType1 = x(inverseMap("dataType")).getOrElse("N/A").toString
               val dataType2 = x(inverseMap("dataType2")).getOrElse("N/A").toString
-              dataType1 + "-" + dataType2
+              val dataType = dataType1 + "-" + dataType2
+              dataTypeDict.get(dataType).getOrElse(dataType)
             }
             else
-              x(inverseMap("dataType")).getOrElse("N/A").toString
+            {
+              val dataType = x(inverseMap("dataType")).getOrElse("N/A").toString
+              dataTypeDict.get(dataType).getOrElse(dataType)
+            }
           } else "N/A",
           if (inverseMap.get("entrezid").isDefined) x(inverseMap("entrezid")) else None,
           if (inverseMap.get("ensemblid").isDefined) x(inverseMap("ensemblid")) else None,
