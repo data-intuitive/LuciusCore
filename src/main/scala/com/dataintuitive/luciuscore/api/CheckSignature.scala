@@ -43,21 +43,21 @@ object CheckSignature extends ApiFunctionTrait {
       .map(_.swap)
       .flatMap{ case (gene, symbol) =>
         List(
-          (gene.id, symbol),
-          (gene.ensemblid.map(_.toList.head).getOrElse("NA"), symbol),
-          (gene.symbol.map(_.toList.head).getOrElse("NA"), symbol))
+          (gene.id, (symbol, gene.dataType)),
+          (gene.ensemblid.map(_.toList.head).getOrElse("NA"), (symbol, gene.dataType)),
+          (gene.symbol.map(_.toList.head).getOrElse("NA"), (symbol, gene.dataType)))
       }
 
     val l1000OrNot = rawSignature
       .map(gene => (gene, tt.get(gene.abs)))
       .map {
         case (gene, optionTranslation) =>
-          (gene, optionTranslation.isDefined, tt.getOrElse(gene.abs, ""))
+          (gene, optionTranslation.isDefined, tt.getOrElse(gene.abs, ("", "")))
       }
 
     l1000OrNot.map {
-      case (query, inL1000, symbol) =>
-        Map("query" -> query, "inL1000" -> inL1000, "symbol" -> (query.sign + symbol))
+      case (query, found, data) =>
+        Map("query" -> query, "found" -> found, "symbol" -> (query.sign + data._1), "dataType" -> data._2)
     }
 
   }

@@ -83,13 +83,15 @@ object ParseFunctions extends Serializable {
                    ): RDD[Map[String, Option[String]]] = {
     val header = rdd.first.map(_.trim)  // Be on the safe side !
     val featureIndices = features.map(value => header.indexOf(value))
+    val filteredFeatures = featureIndices
+      .zip(features)
+      .filter(p => p._1 >= 0)
+
     val selectionRdd = rdd
       .map(row =>
-        featureIndices
-          .map(valueIndex => row.lift(valueIndex))
-          .zip(features)
+        filteredFeatures
+          .map(valueIndex => (valueIndex._2, row.lift(valueIndex._1)))
           .toMap
-          .map(_.swap)
           .withDefault(_ => None)
       )
     if (!includeHeader)
