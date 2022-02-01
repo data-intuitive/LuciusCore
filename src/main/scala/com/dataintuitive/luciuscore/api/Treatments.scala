@@ -105,7 +105,7 @@ object Treatments extends ApiFunctionTrait {
     // This way, the same function can be reused for v1 and v2
     def isMatch(s: String, query: String): Boolean = {
       // Backward compatbility: Does query contains regexp or just first characters?
-      val hasNonAlpha = treatmentQuery.matches("^.*[^a-zA-Z0-9 ].*$")
+      val hasNonAlpha = treatmentQuery.matches("^.*[^a-zA-Z0-9 -].*$")
 
       if (hasNonAlpha) s.matches(query)
       else s.startsWith(query)
