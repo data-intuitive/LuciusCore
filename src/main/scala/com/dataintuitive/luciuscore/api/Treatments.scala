@@ -52,6 +52,7 @@ object Treatments extends ApiFunctionTrait {
     case "trt_cp" => "compound"
     case "trt_lig" => "ligand"
     case "trt_sh" => "genetic"
+    case "trt_oe" => "genetic"
     case _ => "none"
   }
 
@@ -104,7 +105,7 @@ object Treatments extends ApiFunctionTrait {
     // This way, the same function can be reused for v1 and v2
     def isMatch(s: String, query: String): Boolean = {
       // Backward compatbility: Does query contains regexp or just first characters?
-      val hasNonAlpha = treatmentQuery.matches("^.*[^a-zA-Z0-9 ].*$")
+      val hasNonAlpha = treatmentQuery.matches("^.*[^a-zA-Z0-9 -].*$")
 
       if (hasNonAlpha) s.matches(query)
       else s.startsWith(query)
@@ -135,6 +136,7 @@ object Treatments extends ApiFunctionTrait {
             // TODO: Check if we can simply match on compound-like / genetic-like
             case "trt_lig" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             case "trt_sh" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+            case "trt_oe" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             case _ => (trtIdLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             }
           }
