@@ -36,7 +36,7 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
   def result(data: JobData)(implicit sparkSession: SparkSession) = {
 
     val CachedData(db, _, genesDb, _) = data.cachedData
-    val SpecificData(pValue, compoundQuery, limit) = data.specificData
+    val SpecificData(pValue, treatmentQuery, limit) = data.specificData
     implicit val genes = genesDb
 
     // I could distinguish on version as well, but this makes more sense
@@ -49,9 +49,9 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
     // TODO: Check if we can simply match on compound-like / genetic-like
     val result =
       db.filter { p => trtTypeLens.get(p) match {
-          case "trt_lig" => isMatch(trtNameLens.get(p), compoundQuery)
-          case "trt_sh" => isMatch(trtNameLens.get(p), compoundQuery)
-          case _ => isMatch(trtIdLens.get(p), compoundQuery)
+          case "trt_lig" => isMatch(trtNameLens.get(p), treatmentQuery)
+          case "trt_sh" => isMatch(trtNameLens.get(p), treatmentQuery)
+          case _ => isMatch(trtIdLens.get(p), treatmentQuery)
           }
         }
         .collect
