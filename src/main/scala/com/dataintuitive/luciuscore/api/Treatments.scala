@@ -52,6 +52,7 @@ object Treatments extends ApiFunctionTrait {
     case "trt_cp" => "compound"
     case "trt_lig" => "ligand"
     case "trt_sh" => "genetic"
+    case "trt_oe" => "genetic"
     case _ => "none"
   }
 
@@ -135,6 +136,7 @@ object Treatments extends ApiFunctionTrait {
             // TODO: Check if we can simply match on compound-like / genetic-like
             case "trt_lig" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             case "trt_sh" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
+            case "trt_oe" => (trtNameLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             case _ => (trtIdLens.get(p), trtNameLens.get(p), trtTypeLens.get(p))
             }
           }

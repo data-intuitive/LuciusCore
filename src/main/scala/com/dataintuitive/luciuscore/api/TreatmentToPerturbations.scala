@@ -51,6 +51,7 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
       db.filter { p => trtTypeLens.get(p) match {
           case "trt_lig" => isMatch(trtNameLens.get(p), treatmentQuery)
           case "trt_sh" => isMatch(trtNameLens.get(p), treatmentQuery)
+          case "trt_oe" => isMatch(trtNameLens.get(p), treatmentQuery)
           case _ => isMatch(trtIdLens.get(p), treatmentQuery)
           }
         }

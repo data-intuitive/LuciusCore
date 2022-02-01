@@ -25,7 +25,7 @@ protected abstract class TRT(val trtType: String) extends Product with Serializa
 
 object PClass {
   val compoundLike = Set("trt_cp")
-  val geneLike = Set("trt_sh")
+  val geneLike = Set("trt_sh", "trt_oe")
   val ligandLike = Set("trt_lig")
 
   /*
