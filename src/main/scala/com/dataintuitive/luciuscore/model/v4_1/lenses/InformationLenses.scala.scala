@@ -9,14 +9,14 @@ import scalaz.Lens
 
 object InformationLenses extends Serializable {
 
-  val processingLevelLens = Lens.lensu[Information, Int](
-    (a, value) => a.copy(processing_level = value),
-    _.processing_level
+  val processingLevelLens = Lens.lensu[Information, Option[Int]](
+    (a, value) => a.copy(processing_level = value.getOrElse(-1)),
+    a => Some(a.processing_level)
   )
 
-  val replicatesLens = Lens.lensu[Information, Int](
+  val replicatesLens = Lens.lensu[Information, Option[Int]](
     null,
-    _.details.length
+    a => Some(a.details.length)
   )
 
   val detailsLens = Lens.lensu[Information, List[InformationDetail]](
@@ -59,6 +59,9 @@ object InformationLenses extends Serializable {
     null,
     a => Some(a.details.map(_.extra).mkString(","))
   )
+
+  val safeProcessingLevel = processingLevelLens >=> safeIntLens(-1)
+  val safeReplicates = replicatesLens >=> safeIntLens(0)
 
   val safeCellLens = cellLens >=> safeStringLens("No cell info")
   val safeBatchLens = batchLens >=> safeStringLens("No batch info")
