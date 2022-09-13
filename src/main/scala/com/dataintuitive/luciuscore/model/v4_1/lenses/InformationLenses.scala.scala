@@ -17,11 +17,8 @@ object InformationLenses extends Serializable {
     (a, value) => {
       val arr = value match {
         case None => a.details
-        case Some(i) if i > a.details.length =>
-          val newArr: Seq[InformationDetail] = Seq.fill(i - a.details.length)(new InformationDetail)
-          a.details ++ newArr
-        case Some(i) if i == a.details.length => a.details
-        case Some(i) => a.details.take(i)
+        case Some(i) =>
+          a.details.zipAll(Seq.range(0, i), new InformationDetail, -1).filter(_._2 != -1).map(_._1)
       }
       a.copy(details = arr)
     },
