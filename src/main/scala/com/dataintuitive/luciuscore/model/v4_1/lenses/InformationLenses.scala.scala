@@ -3,7 +3,6 @@ package model.v4_1
 package lenses
 
 import OptionLenses._
-// import Model._
 
 import scalaz.Lens
 
@@ -15,7 +14,17 @@ object InformationLenses extends Serializable {
   )
 
   val replicatesLens = Lens.lensu[Information, Option[Int]](
-    null,
+    (a, value) => {
+      val arr = value match {
+        case None => a.details
+        case Some(i) if i > a.details.length =>
+          val newArr: Seq[InformationDetail] = Seq.fill(i - a.details.length)(new InformationDetail)
+          a.details ++ newArr
+        case Some(i) if i == a.details.length => a.details
+        case Some(i) => a.details.take(i)
+      }
+      a.copy(details = arr)
+    },
     a => Some(a.details.length)
   )
 
@@ -25,38 +34,32 @@ object InformationLenses extends Serializable {
   )
 
   val cellLens = Lens.lensu[Information, Option[String]](
-    //(a, value) => a.copy(cell = value),
-    null,
+    (a, value) => null, //a.copy(cell = value),
     a => Some(a.details.map(_.cell).mkString(","))
   )
 
   val batchLens = Lens.lensu[Information, Option[String]](
-//    (a, value) => a.copy(batch = value),
-    null,
+    (a, value) => null, //a.copy(batch = value),
     a => Some(a.details.map(_.batch).mkString(","))
   )
 
   val plateLens = Lens.lensu[Information, Option[String]](
-//    (a, value) => a.copy(plate = value),
-    null,
+    (a, value) => null, //a.copy(plate = value),
     a => Some(a.details.map(_.plate).mkString(","))
   )
 
   val wellLens = Lens.lensu[Information, Option[String]](
-//    (a, value) => a.copy(well = value),
-    null,
+    (a, value) => null, //a.copy(well = value),
     a => Some(a.details.map(_.well).mkString(","))
   )
 
   val yearLens = Lens.lensu[Information, Option[String]](
-//    (a, value) => a.copy(year = value),
-    null,
+    (a, value) => null, //a.copy(year = value),
     a => Some(a.details.map(_.year).mkString(","))
   )
 
   val extraLens = Lens.lensu[Information, Option[String]](
-//    (a, value) => a.copy(extra = value),
-    null,
+    (a, value) => null, //a.copy(extra = value),
     a => Some(a.details.map(_.extra).mkString(","))
   )
 
