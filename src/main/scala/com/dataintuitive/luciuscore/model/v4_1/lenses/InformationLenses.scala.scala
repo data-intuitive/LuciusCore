@@ -18,6 +18,7 @@ object InformationLenses extends Serializable {
       val arr = value match {
         case None => a.details
         case Some(i) =>
+          // Resize array, both making longer and shorter
           a.details.zipAll(Seq.range(0, i), new InformationDetail, -1).filter(_._2 != -1).map(_._1)
       }
       a.copy(details = arr)
@@ -30,44 +31,42 @@ object InformationLenses extends Serializable {
     _.details.toList
   )
 
-  val serializedCellLens = Lens.lensu[Information, Option[String]](
-    (a, value) =>
-      if (value.isEmpty) {
-        a.copy(details = a.details.map(d => d.copy(cell = None)))
-      }
-      else {
-        val newData = value.get.split(',')
-        val newDetails = a.details.zipWithIndex.collect({ case (a, b) => a.copy(cell = newData.lift(b)) })
-        a.copy(details = newDetails)
-      }
-    ,
-    a => Some(a.details.map(_.cell).mkString(","))
+  val cellLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(cell = value.lift(b).flatten) })),
+    a => a.details.map(_.cell)
   )
 
-  val serializedBatchLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(batch = value),
-    a => Some(a.details.map(_.batch).mkString(","))
+  val batchLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(batch = value.lift(b).flatten) })),
+    a => a.details.map(_.batch)
   )
 
-  val serializedPlateLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(plate = value),
-    a => Some(a.details.map(_.plate).mkString(","))
+  val plateLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(plate = value.lift(b).flatten) })),
+    a => a.details.map(_.plate)
   )
 
-  val serializedWellLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(well = value),
-    a => Some(a.details.map(_.well).mkString(","))
+  val wellLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(well = value.lift(b).flatten) })),
+    a => a.details.map(_.well)
   )
 
-  val serializedYearLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(year = value),
-    a => Some(a.details.map(_.year).mkString(","))
+  val yearLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(year = value.lift(b).flatten) })),
+    a => a.details.map(_.year)
   )
 
-  val serializedExtraLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(extra = value),
-    a => Some(a.details.map(_.extra).mkString(","))
+  val extraLens = Lens.lensu[Information, Seq[Option[String]]](
+    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(extra = value.lift(b).flatten) })),
+    a => a.details.map(_.extra)
   )
+
+  val serializedCellLens =  cellLens >=> serializeStringSeqLens
+  val serializedBatchLens = batchLens >=> serializeStringSeqLens
+  val serializedPlateLens = plateLens >=> serializeStringSeqLens
+  val serializedWellLens = wellLens >=> serializeStringSeqLens
+  val serializedYearLens = yearLens >=> serializeStringSeqLens
+  val serializedExtraLens = extraLens >=> serializeStringSeqLens
 
   val safeProcessingLevel = processingLevelLens >=> safeIntLens(-1)
   val safeReplicates = replicatesLens >=> safeIntLens(0)

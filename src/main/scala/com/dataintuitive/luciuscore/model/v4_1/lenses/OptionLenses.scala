@@ -28,4 +28,9 @@ object OptionLenses extends Serializable {
     _.getOrElse(fallback)
   )
 
+  def serializeStringSeqLens = Lens.lensu[Seq[Option[String]], Option[String]](
+    (a, value) => value.map(_.split(',').map(Some(_)).toSeq).getOrElse(Seq.empty),
+    a => Some(a.mkString(","))
+  )
+
 }

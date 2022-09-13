@@ -47,23 +47,23 @@ object CombinedPerturbationLenses extends Serializable {
   // Information Lenses
   val batchLens =
     PerturbationLenses.infoLens >=>
-      InformationLenses.batchLens
+      InformationLenses.serializedBatchLens
 
   val plateLens =
     PerturbationLenses.infoLens >=>
-      InformationLenses.plateLens
+      InformationLenses.serializedPlateLens
 
   val wellLens =
     PerturbationLenses.infoLens >=>
-      InformationLenses.wellLens
+      InformationLenses.serializedWellLens
 
   val cellLens =
     PerturbationLenses.infoLens >=>
-      InformationLenses.cellLens
+      InformationLenses.serializedCellLens
 
   val yearLens =
     PerturbationLenses.infoLens >=>
-      InformationLenses.yearLens
+      InformationLenses.serializedYearLens
 
   // Treatment lenses
   val trtTypeLens =
