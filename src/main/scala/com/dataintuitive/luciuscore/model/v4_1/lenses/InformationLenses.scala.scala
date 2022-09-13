@@ -30,32 +30,41 @@ object InformationLenses extends Serializable {
     _.details.toList
   )
 
-  val cellLens = Lens.lensu[Information, Option[String]](
-    (a, value) => null, //a.copy(cell = value),
+  val serializedCellLens = Lens.lensu[Information, Option[String]](
+    (a, value) =>
+      if (value.isEmpty) {
+        a.copy(details = a.details.map(d => d.copy(cell = None)))
+      }
+      else {
+        val newData = value.get.split(',')
+        val newDetails = a.details.zipWithIndex.collect({ case (a, b) => a.copy(cell = newData.lift(b)) })
+        a.copy(details = newDetails)
+      }
+    ,
     a => Some(a.details.map(_.cell).mkString(","))
   )
 
-  val batchLens = Lens.lensu[Information, Option[String]](
+  val serializedBatchLens = Lens.lensu[Information, Option[String]](
     (a, value) => null, //a.copy(batch = value),
     a => Some(a.details.map(_.batch).mkString(","))
   )
 
-  val plateLens = Lens.lensu[Information, Option[String]](
+  val serializedPlateLens = Lens.lensu[Information, Option[String]](
     (a, value) => null, //a.copy(plate = value),
     a => Some(a.details.map(_.plate).mkString(","))
   )
 
-  val wellLens = Lens.lensu[Information, Option[String]](
+  val serializedWellLens = Lens.lensu[Information, Option[String]](
     (a, value) => null, //a.copy(well = value),
     a => Some(a.details.map(_.well).mkString(","))
   )
 
-  val yearLens = Lens.lensu[Information, Option[String]](
+  val serializedYearLens = Lens.lensu[Information, Option[String]](
     (a, value) => null, //a.copy(year = value),
     a => Some(a.details.map(_.year).mkString(","))
   )
 
-  val extraLens = Lens.lensu[Information, Option[String]](
+  val serializedExtraLens = Lens.lensu[Information, Option[String]](
     (a, value) => null, //a.copy(extra = value),
     a => Some(a.details.map(_.extra).mkString(","))
   )
@@ -63,11 +72,11 @@ object InformationLenses extends Serializable {
   val safeProcessingLevel = processingLevelLens >=> safeIntLens(-1)
   val safeReplicates = replicatesLens >=> safeIntLens(0)
 
-  val safeCellLens = cellLens >=> safeStringLens("No cell info")
-  val safeBatchLens = batchLens >=> safeStringLens("No batch info")
-  val safePlateLens = plateLens >=> safeStringLens("No plate info")
-  val safeWellLens = wellLens >=> safeStringLens("No well info")
-  val safeYearLens = yearLens >=> safeStringLens("No year info")
-  val safeExtraLens = extraLens >=> safeStringLens("No extra info")
+  val safeCellLens = serializedCellLens >=> safeStringLens("No cell info")
+  val safeBatchLens = serializedBatchLens >=> safeStringLens("No batch info")
+  val safePlateLens = serializedPlateLens >=> safeStringLens("No plate info")
+  val safeWellLens = serializedWellLens >=> safeStringLens("No well info")
+  val safeYearLens = serializedYearLens >=> safeStringLens("No year info")
+  val safeExtraLens = serializedExtraLens >=> safeStringLens("No extra info")
 
 }
