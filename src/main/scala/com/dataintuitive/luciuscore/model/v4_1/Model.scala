@@ -2,6 +2,7 @@ package com.dataintuitive.luciuscore
 package model.v4_1
 
 import filters._
+import model.v4.{Treatment, TRT_GENERIC}
 
 /**
  * The experimental information for the perturbation
