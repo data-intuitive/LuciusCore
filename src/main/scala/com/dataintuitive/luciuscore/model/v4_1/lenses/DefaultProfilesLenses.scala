@@ -3,6 +3,7 @@ package model.v4_1
 package lenses
 
 import scalaz.Lens
+import model.v4.{Profiles, Profile}
 
 object DefaultProfilesLenses extends Serializable {
 

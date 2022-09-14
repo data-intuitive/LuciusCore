@@ -7,6 +7,7 @@ import scalaz.Lens
 import CombinedPerturbationLenses.profileLens
 import CombinedPerturbationLenses.lengthLens
 import CombinedPerturbationLenses.pTypeLens
+import model.v4.Profile
 
 object Transformations extends Serializable {
 

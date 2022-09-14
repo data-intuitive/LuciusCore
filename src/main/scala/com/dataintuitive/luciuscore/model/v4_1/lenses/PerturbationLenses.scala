@@ -5,7 +5,8 @@ package lenses
 import scalaz.Lens
 
 import filters._
-import model.v4.Treatment
+import model.v4.{Treatment, Profiles}
+import model.v4.lenses.FilterLenses
 
 object PerturbationLenses extends Serializable {
 

@@ -2,7 +2,7 @@ package com.dataintuitive.luciuscore
 package model.v4_1
 
 import filters._
-import model.v4.{Treatment, TRT_GENERIC}
+import model.v4.{Treatment, TRT_GENERIC, Profiles}
 
 /**
  * The experimental information for the perturbation
@@ -20,37 +20,6 @@ case class InformationDetail(
   val year:  Option[String] = None,
   val extra: Option[String] = None
 ) extends Serializable
-
-/**
- * Container for the vectors connected to this perturbation
- *
- * The fs attribute (featureset) defines the type of vector and which translation
- * table to use.
- *
- * An entry for logFc is provided, but currently not yet used.
- *
- * Please note that we would use types if we could, but DataFrame encoding fails on it.
- */
-case class Profile(
-  val pType:  String = "",
-  val length: Int = 0,
-  val t:      Option[Array[Double]] = None,
-  val p:      Option[Array[Double]] = None,
-  val r:      Option[Array[Double]]  = None,
-  val logFc:  Option[Array[Double]] = None
-)
-
-/** 
- *  case class for 1 or more profiles
- *
- *  We will mostly have just 1 profile, but allow for storing multiple
- *  Some convencience methods are defined
- */
-case class Profiles(profiles:List[Profile] = Nil) {
-  def isDefined = profiles.length > 0
-  def profile:Option[Profile] = profile(0)
-  def profile(i:Int):Option[Profile] = profiles.lift(i)
-}
 
 /**
  * Perturbation models a record in the database
