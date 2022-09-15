@@ -29,7 +29,11 @@ object OptionLenses extends Serializable {
   )
 
   def serializeStringSeqLens = Lens.lensu[Seq[Option[String]], Option[String]](
-    (a, value) => value.map(_.split('|').map(Some(_)).toSeq).getOrElse(Seq.empty),
+    (a, value) => value.map(
+      _.split('|')
+        .map(Some(_).filter(_.trim.nonEmpty)) // Map String to Option[String] unless it's empty, then None
+        .toSeq
+    ).getOrElse(Seq.empty),
     a => Some(a.map(_.getOrElse("")).mkString("|"))
   )
 
