@@ -22,6 +22,15 @@ case class Information(
     val populatedExtra = serializedExtraLens.set(populatedYear, serializedExtraLens.get(this))
     populatedExtra
   }
+
+  // Expand the first element to an array and repeat the cell information to all array elements
+  def toExpandedCellInfo(): Information = {
+    val expanded = toExpanded()
+    val cells = cellLens.get(expanded)
+    val cellArr = Seq.fill(cells.length)(cells.headOption.flatten)
+    cellLens.set(expanded, cellArr)
+  }
+
 }
 
 case class InformationDetail(
