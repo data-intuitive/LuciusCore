@@ -2,11 +2,9 @@ package com.dataintuitive.luciuscore
 package model.v4_1
 package lenses
 
+import model.v4.Treatment
 import scalaz.Lens
-
 import filters._
-import model.v4.{Treatment, Profiles}
-import model.v4.lenses.FilterLenses
 
 object PerturbationLenses extends Serializable {
 
