@@ -12,25 +12,9 @@ case class Information(
   val processing_level: Int,
   val details: Seq[InformationDetail]
 ) extends Serializable {
+  // Expand the first element to an array
   def toExpanded(): Information = {
-    // Helper function to determine how many fields there are
-    def getLength(str: Option[String]) = {
-      str match {
-        case None => 0
-        case Some(s) if s.isEmpty => 0
-        case Some(s) => s.count(_ == '|') + 1
-      }
-    }
-
-    val newLength = Math.max(
-      Math.max(
-        Math.max(getLength(serializedCellLens.get(this)), getLength(serializedBatchLens.get(this))),
-        Math.max(getLength(serializedPlateLens.get(this)), getLength(serializedWellLens.get(this)))
-      ),
-      Math.max(getLength(serializedYearLens.get(this)), getLength(serializedExtraLens.get(this)))
-    )
-    val resizedInfo = replicatesLens.set(this, Some(newLength))
-    val populationCell = serializedCellLens.set(resizedInfo, serializedCellLens.get(this))
+    val populationCell = serializedCellLens.set(this, serializedCellLens.get(this))
     val populatedBatch = serializedBatchLens.set(populationCell, serializedBatchLens.get(this))
     val populatedPlate = serializedPlateLens.set(populatedBatch, serializedPlateLens.get(this))
     val populatedWell = serializedWellLens.set(populatedPlate, serializedWellLens.get(this))

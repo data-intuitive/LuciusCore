@@ -32,32 +32,32 @@ object InformationLenses extends Serializable {
   )
 
   val cellLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(cell = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(cell = b) }),
     a => a.details.map(_.cell)
   )
 
   val batchLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(batch = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(batch = b) }),
     a => a.details.map(_.batch)
   )
 
   val plateLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(plate = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(plate = b) }),
     a => a.details.map(_.plate)
   )
 
   val wellLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(well = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(well = b) }),
     a => a.details.map(_.well)
   )
 
   val yearLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(year = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(year = b) }),
     a => a.details.map(_.year)
   )
 
   val extraLens = Lens.lensu[Information, Seq[Option[String]]](
-    (a, value) => a.copy(details = a.details.zipWithIndex.collect({ case (a, b) => a.copy(extra = value.lift(b).flatten) })),
+    (a, value) => a.copy(details = a.details.zipAll(value, new InformationDetail, None).collect{ case (a, b) => a.copy(extra = b) }),
     a => a.details.map(_.extra)
   )
 
