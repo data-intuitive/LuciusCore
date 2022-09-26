@@ -64,17 +64,40 @@ case class Information(
           .map( f => f.map(_.length).getOrElse(0) )
           .max
 
+        implicit class RichSeq(seq: Option[Seq[String]]) {
+          def flatLift(i: Int): Option[String] = seq.flatMap(_.lift(i))
+        }
+
         (0 until replicates).map(i => fixed match {
-          case Some(Cell)  => InformationDetail(id.cell,        batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
-          case Some(Batch) => InformationDetail(cell.map(_(i)), id.batch,        plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
-          case Some(Plate) => InformationDetail(cell.map(_(i)), batch.map(_(i)), id.plate,        well.map(_(i)), year.map(_(i)), extra.map(_(i)))
-          case Some(Well)  => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), id.well       , year.map(_(i)), extra.map(_(i)))
-          case Some(Year)  => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), id.year,        extra.map(_(i)))
-          case Some(Extra) => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), id.extra       )
-          case None        => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
+          case Some(Cell)  => InformationDetail(id.cell,          batch.flatLift(i), plate.flatLift(i), well.map(_(i)),   year.flatLift(i), extra.flatLift(i))
+          case Some(Batch) => InformationDetail(cell.flatLift(i), id.batch,          plate.flatLift(i), well.flatLift(i), year.flatLift(i), extra.flatLift(i))
+          case Some(Plate) => InformationDetail(cell.flatLift(i), batch.flatLift(i), id.plate,          well.flatLift(i), year.flatLift(i), extra.flatLift(i))
+          case Some(Well)  => InformationDetail(cell.flatLift(i), batch.flatLift(i), plate.flatLift(i), id.well,          year.flatLift(i), extra.flatLift(i))
+          case Some(Year)  => InformationDetail(cell.flatLift(i), batch.flatLift(i), plate.flatLift(i), well.flatLift(i), id.year,          extra.flatLift(i))
+          case Some(Extra) => InformationDetail(cell.flatLift(i), batch.flatLift(i), plate.flatLift(i), well.flatLift(i), year.flatLift(i), id.extra         )
+          case None        => InformationDetail(cell.flatLift(i), batch.flatLift(i), plate.flatLift(i), well.flatLift(i), year.flatLift(i), extra.flatLift(i))
         })
       }
   )
+
+  /**
+    * Check whether all values are alike between entries, eg. all cell values Some(String) or all cell values None
+    * @return All is alike and normalized
+    */
+  def hasNormalizedInformationDetails(): Boolean = {
+    val length = details.length
+    val cells = details.map(_.cell)
+    val batches = details.map(_.batch)
+    val plates = details.map(_.plate)
+    val wells = details.map(_.well)
+    val years = details.map(_.year)
+    val extras = details.map(_.extra)
+
+    Seq(cells, batches, plates, wells, years, extras)
+      .map(v => v.count(_.isDefined))
+      .map(t => t == length || t == 0)
+      .forall(b => b)
+  }
 
 }
 
