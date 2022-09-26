@@ -2,8 +2,23 @@ package com.dataintuitive.luciuscore
 package model.v4_1
 
 import filters._
-import model.v4.{Treatment, TRT_GENERIC}
-import model.v4_1.lenses.InformationLenses._
+import model.v4.{TRT_GENERIC, Treatment}
+
+case class InformationDetail(
+  cell:  Option[String] = None,
+  batch: Option[String] = None,
+  plate: Option[String] = None,
+  well:  Option[String] = None,
+  year:  Option[String] = None,
+  extra: Option[String] = None
+) extends Serializable
+
+object InformationDetailFields extends Enumeration {
+  type InformationDetailFields = Value
+  val Cell, Batch, Plate, Well, Year, Extra = Value
+}
+
+import InformationDetailFields._
 
 /**
  * The experimental information for the perturbation
@@ -12,35 +27,56 @@ case class Information(
   val processing_level: Int,
   val details: Seq[InformationDetail]
 ) extends Serializable {
-  // Expand the first element to an array
-  def toExpanded(): Information = {
-    val populationCell = serializedCellLens.set(this, serializedCellLens.get(this))
-    val populatedBatch = serializedBatchLens.set(populationCell, serializedBatchLens.get(this))
-    val populatedPlate = serializedPlateLens.set(populatedBatch, serializedPlateLens.get(this))
-    val populatedWell = serializedWellLens.set(populatedPlate, serializedWellLens.get(this))
-    val populatedYear = serializedYearLens.set(populatedWell, serializedYearLens.get(this))
-    val populatedExtra = serializedExtraLens.set(populatedYear, serializedExtraLens.get(this))
-    populatedExtra
-  }
 
-  // Expand the first element to an array and repeat the cell information to all array elements
-  def toExpandedCellInfo(): Information = {
-    val expanded = toExpanded()
-    val cells = cellLens.get(expanded)
-    val cellArr = Seq.fill(cells.length)(cells.headOption.flatten)
-    cellLens.set(expanded, cellArr)
-  }
+  /**
+    * Convert '|' separated string to a sequence of strings
+    *
+    * "abc|def|ghi" => Seq("abc", "def", "ghi")
+    */
+  def deserializeInfoField(value: String): Seq[String] = value.split("\\|", -1).toSeq
+  def deserializeInfoField(value: Option[String]): Option[Seq[String]] = value.map(deserializeInfoField(_))
+
+  /**
+    * Convert a sequence of strings to a '|' separated string
+    *
+    * Seq("abc", "def", "ghi") => "abc|def|ghi"
+    */
+  def serializeInfoField(value: Seq[String]): String = value.mkString("|")
+  def serializeInfoField(value: Option[Seq[String]]): Option[String] = value.map(serializeInfoField(_))
+
+  /**
+    * Expands a serialized details field to multiple deserialized Information fields
+    * @param fixed Specifies which field to keep 'as-is'. This field won't be deserialized and instead be copied as-is to all new InformationDetails.
+    * @return Information with deserialized details
+    */
+  def expandInformationDetail(fixed: Option[InformationDetailFields] = Some(InformationDetailFields.Cell)): Information = this.copy(
+    details =
+      this.details.flatMap{ id =>
+
+        val cell = deserializeInfoField(id.cell)
+        val batch = deserializeInfoField(id.batch)
+        val plate = deserializeInfoField(id.plate)
+        val well = deserializeInfoField(id.well)
+        val year = deserializeInfoField(id.year)
+        val extra = deserializeInfoField(id.extra)
+
+        val replicates = Seq(cell, batch, plate, well, year, extra)
+          .map( f => f.map(_.length).getOrElse(0) )
+          .max
+
+        (0 until replicates).map(i => fixed match {
+          case Some(Cell)  => InformationDetail(id.cell,        batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
+          case Some(Batch) => InformationDetail(cell.map(_(i)), id.batch,        plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
+          case Some(Plate) => InformationDetail(cell.map(_(i)), batch.map(_(i)), id.plate,        well.map(_(i)), year.map(_(i)), extra.map(_(i)))
+          case Some(Well)  => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), id.well       , year.map(_(i)), extra.map(_(i)))
+          case Some(Year)  => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), id.year,        extra.map(_(i)))
+          case Some(Extra) => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), id.extra       )
+          case None        => InformationDetail(cell.map(_(i)), batch.map(_(i)), plate.map(_(i)), well.map(_(i)), year.map(_(i)), extra.map(_(i)))
+        })
+      }
+  )
 
 }
-
-case class InformationDetail(
-  val cell:  Option[String] = None,
-  val batch: Option[String] = None,
-  val plate: Option[String] = None,
-  val well:  Option[String] = None,
-  val year:  Option[String] = None,
-  val extra: Option[String] = None
-) extends Serializable
 
 /**
   * Container for the vectors connected to this perturbation
