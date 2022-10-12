@@ -38,6 +38,11 @@ object PerturbationLenses extends Serializable {
     _.filters
   )
 
+  val metaLens = Lens.lensu[Perturbation, Seq[MetaInformation]](
+    (a, value) => a.copy(meta = value),
+    _.meta
+  )
+
   val filtersMapLens = filtersLens >=> FilterLenses.seqFilterMapLens
 
 }
