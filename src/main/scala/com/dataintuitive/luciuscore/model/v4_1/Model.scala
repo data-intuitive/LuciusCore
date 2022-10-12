@@ -133,6 +133,11 @@ case class Profiles(profiles:List[Profile] = Nil) {
 }
 
 /**
+  * Generic class to create a map-like structure of keys and values
+  */
+case class MetaInformation(key: String, value: String) extends Serializable
+
+/**
  * Perturbation models a record in the database
  */
 case class Perturbation(
@@ -141,7 +146,8 @@ case class Perturbation(
   profiles: Profiles,
   trtType: String,
   trt: Treatment,
-  filters: Filters
+  filters: Filters,
+  meta: Seq[MetaInformation]
 ) extends Serializable
 
 object Perturbation {
@@ -150,7 +156,8 @@ object Perturbation {
     info: Information,
     profiles: Profiles,
     trt: TRT_GENERIC,
-    filters: Filters
+    filters: Filters,
+    meta: Seq[MetaInformation]
   ):Perturbation =
     Perturbation(
       id = id,
@@ -158,7 +165,8 @@ object Perturbation {
       profiles = profiles,
       trtType = trt.trtType,
       trt = Treatment(Some(trt)).toSpecific,
-      filters = filters
+      filters = filters,
+      meta = meta
     )
 }
 
