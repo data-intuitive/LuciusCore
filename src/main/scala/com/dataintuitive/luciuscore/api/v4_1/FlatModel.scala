@@ -1,4 +1,4 @@
-package com.dataintuitive.luciuscore.api
+package com.dataintuitive.luciuscore.api.v4_1
 
 case class FlatDbRow(
   id: String,

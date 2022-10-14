@@ -1,6 +1,6 @@
-package com.dataintuitive.luciuscore
+package com.dataintuitive.luciuscore.api
 
-package object api {
+package object v4_1 {
 
   val endpoints = List(
     AnnotatedIds,

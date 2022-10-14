@@ -1,5 +1,5 @@
 package com.dataintuitive.luciuscore
-package api
+package api.v4_1
 
 import scala.collection.immutable.Map
 
@@ -8,7 +8,7 @@ import org.apache.spark.sql.SparkSession
 
 import genes.GenesDB
 import utilities.SignedString
-import model.v4._
+import model.v4_1._
 
 object Statistics extends ApiFunctionTrait {
 

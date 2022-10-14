@@ -1,5 +1,5 @@
 package com.dataintuitive.luciuscore
-package api
+package api.v4
 
 import scala.collection.immutable.Map
 

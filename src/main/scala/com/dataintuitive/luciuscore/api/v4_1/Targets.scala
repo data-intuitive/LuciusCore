@@ -1,12 +1,12 @@
 package com.dataintuitive.luciuscore
-package api
+package api.v4_1
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.SparkSession
 import scala.collection.immutable.Map
 
-import model.v4._
+import model.v4_1._
 import genes._
 import lenses.CombinedPerturbationLenses._
 

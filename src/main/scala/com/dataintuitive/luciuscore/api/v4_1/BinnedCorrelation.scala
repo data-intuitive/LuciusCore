@@ -1,7 +1,7 @@
 package com.dataintuitive.luciuscore
-package api
+package api.v4_1
 
-import model.v4._
+import model.v4_1._
 import genes._
 import filters._
 import signatures._
