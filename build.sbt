@@ -1,6 +1,6 @@
 name := "LuciusCore"
 
-version in ThisBuild := "4.1.0.alpha15"
+version in ThisBuild := "4.1.0-alpha15"
 
 scalaVersion := "2.11.12"
 
