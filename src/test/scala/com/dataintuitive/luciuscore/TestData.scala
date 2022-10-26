@@ -1,6 +1,6 @@
 package com.dataintuitive.luciuscore
 
-import com.dataintuitive.luciuscore.api.Filters
+import com.dataintuitive.luciuscore.api.v4.Filters
 import model.v4._
 
 import org.apache.spark.sql.Dataset
@@ -100,7 +100,7 @@ trait TestData extends BaseSparkContextSpec {
   ).toDF.as[Perturbation]
 
   val flatData = testData.map( row =>
-      api.FlatDbRow(
+      api.v4.FlatDbRow(
         row.id,
         row.info.cell.getOrElse("N/A"),
         row.trt.trt_cp.map(_.dose).getOrElse("N/A"),
