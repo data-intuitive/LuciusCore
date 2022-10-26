@@ -115,6 +115,17 @@ object Extractors {
       "significantGenes"
     )
 
+    val informationDetails = List(
+      "processing_level",
+      "number_of_replicates",
+      "cell_details",
+      "batch_details",
+      "plate_details",
+      "well_details",
+      "year_details",
+      "extra_details"
+    )
+
   }
 
   object TreatmentExtractor {
