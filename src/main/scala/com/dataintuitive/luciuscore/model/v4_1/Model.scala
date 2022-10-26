@@ -24,7 +24,7 @@ import InformationDetailFields._
  * The experimental information for the perturbation
  */
 case class Information(
-  val processing_level: Int,
+  val processing_level: String,
   val details: Seq[InformationDetail]
 ) extends Serializable {
 

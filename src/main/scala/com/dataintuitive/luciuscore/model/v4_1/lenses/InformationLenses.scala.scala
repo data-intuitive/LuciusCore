@@ -8,8 +8,8 @@ import scalaz.Lens
 
 object InformationLenses extends Serializable {
 
-  val processingLevelLens = Lens.lensu[Information, Option[Int]](
-    (a, value) => a.copy(processing_level = value.getOrElse(-1)),
+  val processingLevelLens = Lens.lensu[Information, Option[String]](
+    (a, value) => a.copy(processing_level = value.getOrElse("")),
     a => Some(a.processing_level)
   )
 
@@ -68,7 +68,7 @@ object InformationLenses extends Serializable {
   val serializedYearLens = yearLens >=> serializeStringSeqLens
   val serializedExtraLens = extraLens >=> serializeStringSeqLens
 
-  val safeProcessingLevel = processingLevelLens >=> safeIntLens(-1)
+  val safeProcessingLevel = processingLevelLens >=> safeStringLens("No processing level info")
   val safeReplicates = replicatesLens >=> safeIntLens(0)
 
   val safeCellLens = serializedCellLens >=> safeStringLens("No cell info")
