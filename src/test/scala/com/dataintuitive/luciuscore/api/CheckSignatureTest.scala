@@ -1,5 +1,5 @@
 package com.dataintuitive.luciuscore
-package api
+package api.v4
 
 import model.v4._
 import CheckSignature._
