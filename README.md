@@ -4,6 +4,15 @@
 
 This is the core library containing the domain logic for the __ComPass__ application. For more information, please refer to the repository for the [web interface](https://github.com/data-intuitive/LuciusWeb).
 
+# Dependencies
+
+| LuciusWeb | LuciusProcessing | LuciusAPI | LuciusCore | Spark Jobserver | Spark |
+|-----------|------------------|-----------|------------|-----------------|-------|
+| 5.3.0     | /                | 5.0.1     | 4.0.11     | 0.11.1          | 2.4.7 |
+| 5.4.0     | 0.1.0            | 5.1.0     | 4.1.0      | 0.11.1          | 2.4.7 |
+
+# Model information
+
 ## Version 4.1
 
 In this incremental version we refined the perturbation information fields to store multiple similar perturbation measurements into a single perturbation data structure.
@@ -109,6 +118,4 @@ DbRow
     predictedTargets     Option[Seq[Gene]]
   filters                Seq[Filter]
 ```
-
-
 
