@@ -45,6 +45,14 @@ object CombinedPerturbationLenses extends Serializable {
       DefaultProfilesLenses.profileLens
 
   // Information Lenses
+  val processingLevelLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.processingLevelLens
+  
+  val replicatesLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.replicatesLens
+
   val batchLens =
     PerturbationLenses.infoLens >=>
       InformationLenses.serializedBatchLens
@@ -64,6 +72,34 @@ object CombinedPerturbationLenses extends Serializable {
   val yearLens =
     PerturbationLenses.infoLens >=>
       InformationLenses.serializedYearLens
+
+  val extraLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.serializedExtraLens
+
+  val batchDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.batchLens
+
+  val plateDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.plateLens
+
+  val wellDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.wellLens
+
+  val cellDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.cellLens
+
+  val yearDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.yearLens
+
+  val extraDetailsLens =
+    PerturbationLenses.infoLens >=>
+      InformationLenses.extraLens
 
   // Treatment lenses
   val trtTypeLens =
@@ -111,11 +147,22 @@ object CombinedPerturbationLenses extends Serializable {
       TreatmentLenses.targetsLens
 
   // Safe lenses
+  val safeProcessingLevelLens = processingLevelLens >=> OptionLenses.stringLens
+  val safeReplicatesLens = replicatesLens >=> OptionLenses.safeIntLens()
   val safeBatchLens = batchLens >=> OptionLenses.stringLens
   val safePlateLens = plateLens >=> OptionLenses.stringLens
   val safeWellLens = wellLens >=> OptionLenses.stringLens
   val safeCellLens = cellLens >=> OptionLenses.stringLens
   val safeYearLens = yearLens >=> OptionLenses.stringLens
+  val safeExtraLens = extraLens >=> OptionLenses.stringLens
+
+  val safeBatchDetailsLens = batchDetailsLens >=> OptionLenses.safeSeqStringLens
+  val safePlateDetailsLens = plateDetailsLens >=> OptionLenses.safeSeqStringLens
+  val safeWellDetailsLens = wellDetailsLens >=> OptionLenses.safeSeqStringLens
+  val safeCellDetailsLens = cellDetailsLens >=> OptionLenses.safeSeqStringLens
+  val safeYearDetailsLens = yearDetailsLens >=> OptionLenses.safeSeqStringLens
+  val safeExtraDetailsLens = batchDetailsLens >=> OptionLenses.safeSeqStringLens
+
   val safeSmilesLens = smilesLens >=> OptionLenses.stringLens
   val safeInchikeyLens = inchikeyLens >=> OptionLenses.stringLens
   val safePubchemIdLens = pubchemIdLens >=> OptionLenses.stringLens

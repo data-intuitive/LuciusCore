@@ -39,4 +39,13 @@ object QueryAlternatives {
   // Derived
   val SIGNIFICANTGENES = Set("significantGenes")
 
+  val PROCLEVELDETAILS     = Set("processing_level")
+  val NUMREPLICATESDETAILS = Set("number_of_replicates")
+  val BATCHDETAILS         = Set("batch_details")
+  val PLATEDETAILS         = Set("plate_details")
+  val WELLDETAILS          = Set("well_details")
+  val CELLDETAILS          = Set("cell_details")
+  val YEARDETAILS          = Set("year_details")
+  val EXTRADETAILS         = Set("extra_details")
+
 }

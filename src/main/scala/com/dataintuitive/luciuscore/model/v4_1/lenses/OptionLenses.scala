@@ -34,7 +34,16 @@ object OptionLenses extends Serializable {
         .map(Some(_).filter(_.trim.nonEmpty)) // Map String to Option[String] unless it's empty, then None
         .toSeq
     ).getOrElse(Seq.empty),
-    a => Some(a.map(_.getOrElse("")).mkString("|"))
+    a => 
+      if (a.count(_.isDefined) > 0)
+        Some(a.map(_.getOrElse("")).mkString("|"))
+      else
+        Some("")
+  )
+
+  def safeSeqStringLens = Lens.lensu[Seq[Option[String]], Seq[String]](
+    (a, value) => value.map(Some(_)),
+    a => a.map(_.getOrElse("N/A"))
   )
 
 }
