@@ -4,6 +4,10 @@
 
 This is the core library containing the domain logic for the __ComPass__ application. For more information, please refer to the repository for the [web interface](https://github.com/data-intuitive/LuciusWeb).
 
+# Dependencies
+
+This version is built for Spark 2.4.7 .
+
 # Model information
 
 ## Version 4.1
