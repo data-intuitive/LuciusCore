@@ -92,6 +92,16 @@ object Extractors {
         case x if TARGETS contains x       => targetsLens.get(r)
         case x if SIGNIFICANTGENES contains x   => pLens.get(r).map(_.count(_ <= pValue)).getOrElse(0)
         case x if FILTERS contains x       => filtersMapLens.get(r).map(x => Map("key" -> x._1, "value" -> x._2)).toSeq
+        // information details
+        case x if PROCLEVELDETAILS contains x => safeProcessingLevelLens.get(r)
+        case x if NUMREPLICATESDETAILS contains x => safeReplicatesLens.get(r)
+        case x if CELLDETAILS contains x   => safeCellDetailsLens.get(r)
+        case x if BATCHDETAILS contains x  => safeBatchDetailsLens.get(r)
+        case x if PLATEDETAILS contains x  => safePlateDetailsLens.get(r)
+        case x if WELLDETAILS contains x   => safeWellDetailsLens.get(r)
+        case x if YEARDETAILS contains x   => safeYearDetailsLens.get(r)
+        case x if EXTRADETAILS contains x  => safeExtraDetailsLens.get(r)
+
         // fallback
         case _                             => "Feature not found"
       }
