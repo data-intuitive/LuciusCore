@@ -46,9 +46,13 @@ object TreatmentToPerturbations extends ApiFunctionTrait {
       query.toSet.contains(s)
     }
 
-    // TODO: Check if we can simply match on compound-like / genetic-like
+    /** Depending on the treatment type, we match on 'name' or 
+     *  id'.
+     *
+     *  Please note that `RDD` is much faster in this case!
+     */
     val result =
-      db.filter { p => trtTypeLens.get(p) match {
+      db.rdd.filter { p => trtTypeLens.get(p) match {
           case "trt_lig" => isMatch(trtNameLens.get(p), treatmentQuery)
           case "trt_sh" => isMatch(trtNameLens.get(p), treatmentQuery)
           case "trt_oe" => isMatch(trtNameLens.get(p), treatmentQuery)
